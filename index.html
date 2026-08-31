@@ -1,10 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create a Listing</title>
+    <title>Crear Publicación - Autos Premium</title>
     <style>
+        /* Estilos base y variables de diseño premium */
+        :root {
+            --bg-dark: #0b0b0c;
+            --bg-card: #16161a;
+            --bg-input: #24242b;
+            --text-main: #f5f5f7;
+            --text-muted: #8e8e93;
+            --accent-color: #007aff;
+            --warning-color: #ff9500;
+            --border-color: #2c2c35;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,318 +25,344 @@
         }
 
         body {
-            background-color: #f2f2f7;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
-            padding: 20px;
+            flex-direction: column;
+            overflow-x: hidden;
         }
 
-        .phone-frame {
-            width: 375px;
-            min-height: 812px;
-            background: #ffffff;
-            border-radius: 40px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            overflow: hidden;
+        /* Banner de Sitio en Desarrollo */
+        .development-banner {
+            background-color: var(--warning-color);
+            color: #000000;
+            text-align: center;
+            padding: 12px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
             position: relative;
+            z-index: 20;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        /* Barra superior */
-        .status-bar {
-            height: 44px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 25px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        /* Encabezado */
+        /* Encabezado elegante sobrepuesto */
         .header {
             display: flex;
             align-items: center;
-            padding: 12px 20px;
-            border-bottom: 1px solid #e5e5e7;
+            padding: 30px 40px;
+            position: absolute;
+            top: 45px;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0));
         }
 
         .back-arrow {
-            font-size: 20px;
-            color: #007aff;
+            font-size: 28px;
+            color: var(--text-main);
             cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        
+        .back-arrow:hover {
+            transform: translateX(-3px);
         }
 
         .header-title {
             flex: 1;
             text-align: center;
-            font-size: 17px;
-            font-weight: 600;
-            margin-right: 20px;
-        }
-
-        /* Contenido */
-        .content {
-            padding: 20px;
-        }
-
-        .section-label {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #1d1d1f;
-        }
-
-        .required {
-            color: #ff3b30;
-        }
-
-        /* Subida de imágenes */
-        .upload-placeholder {
-            width: 100%;
-            height: 80px;
-            border: 2px dashed #d1d1d6;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-
-        .upload-icon {
             font-size: 24px;
-            color: #86868b;
+            font-weight: 700;
+            margin-right: 28px;
+            letter-spacing: -0.5px;
         }
 
-        .images-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 6px;
-        }
-
-        .image-card {
-            aspect-ratio: 4 / 3;
-            border-radius: 8px;
-            overflow: hidden;
+        /* Galería de Imágenes Panorámica */
+        .gallery-container {
+            width: 100%;
+            height: 60vh;
             position: relative;
-            cursor: pointer;
-            border: 3px solid transparent;
+            overflow: hidden;
+            background-color: #000000;
         }
 
-        .image-card.selected {
-            border-color: #7928ca;
+        .slider {
+            display: flex;
+            width: 300%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        .image-card img {
+        .slide {
+            width: 100vw;
+            height: 100%;
+            position: relative;
+        }
+
+        .slide img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .check-badge {
+        .slide::after {
+            content: '';
             position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 22px;
-            height: 22px;
-            background-color: #7928ca;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-            opacity: 0;
-            transition: opacity 0.2s;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(to top, var(--bg-dark), rgba(11,11,12,0));
         }
 
-        .image-card.selected .check-badge {
-            opacity: 1;
-        }
-
-        .remove-badge {
+        /* Etiqueta del modelo de auto */
+        .car-badge {
             position: absolute;
-            top: 5px;
-            left: 5px;
-            width: 22px;
-            height: 22px;
-            background-color: rgba(0,0,0,0.5);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .error-note {
-            color: #ff3b30;
-            font-size: 13px;
-            margin: 6px 0 24px;
-        }
-
-        /* Información general */
-        .info-heading {
+            bottom: 50px;
+            left: 40px;
+            background: rgba(22, 22, 26, 0.85);
+            color: var(--text-main);
+            padding: 12px 20px;
+            border-radius: 10px;
             font-size: 16px;
             font-weight: 600;
-            margin: 10px 0 16px;
-            color: #1d1d1f;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid var(--border-color);
+            z-index: 6;
         }
 
-        .info-row {
+        /* Indicadores de navegación (Puntos/Dots) */
+        .dots-container {
+            position: absolute;
+            bottom: 50px;
+            right: 40px;
             display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #e5e5e7;
+            gap: 8px;
+            z-index: 6;
         }
 
-        .field-name {
-            color: #86868b;
-            font-size: 15px;
+        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .field-value {
-            color: #1d1d1f;
-            font-size: 15px;
+        .dot.active {
+            background-color: var(--accent-color);
+            width: 28px;
+            border-radius: 5px;
         }
 
+        /* Contenedor Principal del Formulario */
+        .main-container {
+            flex: 1;
+            background: var(--bg-dark);
+            position: relative;
+            z-index: 5;
+            padding: 20px 40px 60px 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .content {
+            width: 100%;
+            max-width: 950px;
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* Rejillas organizadas */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            grid-column: span 2;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .required {
+            color: #ff453a;
+        }
+
+        /* Estilos de los campos de entrada */
         .input-field {
             width: 100%;
-            padding: 12px 0;
-            border: none;
-            border-bottom: 1px solid #e5e5e7;
-            font-size: 15px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 16px;
+            color: var(--text-main);
+            background-color: var(--bg-input);
             outline: none;
-            background: transparent;
+            transition: all 0.25s ease;
         }
 
         .input-field:focus {
-            border-bottom-color: #7928ca;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.25);
+        }
+
+        select.input-field {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://w3.org' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+            padding-right: 40px;
         }
 
         textarea.input-field {
-            min-height: 80px;
+            height: 130px;
             resize: none;
+            line-height: 1.6;
         }
 
-        /* Botón */
-        .submit-button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #7928ca, #5c1fb8);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
+        /* Entrada de precio */
+        .price-container {
+            position: relative;
+        }
+
+        .price-container .input-field {
+            padding-left: 38px;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
             font-weight: 600;
-            margin-top: 30px;
-            cursor: pointer;
-            transition: transform 0.2s;
+            color: var(--text-main);
         }
 
-        .submit-button:active {
-            transform: scale(0.98);
+        /* Botón de Publicación */
+        .footer {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .submit-btn {
+            width: 100%;
+            max-width: 280px;
+            padding: 18px;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.4);
+        }
+
+        .submit-btn:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 122, 255, 0.5);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Ajustes de adaptabilidad (Responsivo) */
+        @media (max-width: 900px) {
+            .specs-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .specs-grid {
+                grid-template-columns: 1fr;
+                grid-column: span 1;
+                gap: 20px;
+            }
+            .full-width {
+                grid-column: span 1;
+            }
+            .header {
+                padding: 20px;
+            }
+            .header-title {
+                font-size: 20px;
+            }
+            .gallery-container {
+                height: 45vh;
+            }
+            .main-container {
+                padding: 10px 15px 40px 15px;
+            }
+            .content {
+                padding: 24px 20px;
+                border-radius: 16px;
+            }
+            .car-badge {
+                bottom: 30px;
+                left: 20px;
+                font-size: 14px;
+            }
+            .dots-container {
+                bottom: 30px;
+                right: 20px;
+            }
+            .submit-btn {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="phone-frame">
-    <!-- Barra de estado -->
-    <div class="status-bar">
-        <span>3:30</span>
-        <span>📶 Wi-Fi 🔋</span>
+    <!-- Banner Superior de Advertencia -->
+    <div class="development-banner">
+        ⚠️ Este sitio está en desarrollo
     </div>
 
-    <!-- Cabecera -->
+    <!-- Encabezado Translúcido Flotante -->
     <div class="header">
-        <span class="back-arrow">←</span>
-        <h1 class="header-title">Create a Listing</h1>
-    </div>
-
-    <!-- Contenido principal -->
-    <div class="content">
-        <!-- Selección de imágenes -->
-        <h2 class="section-label">Select Image<span class="required">*</span></h2>
-
-        <div class="upload-placeholder">
-            <span class="upload-icon">📷</span>
-        </div>
-
-        <div class="images-grid">
-            <div class="image-card selected" onclick="toggleSelection(this)">
-                <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=200&q=60" alt="Car">
-                <div class="check-badge">✓</div>
-            </div>
-            <div class="image-card" onclick="toggleSelection(this)">
-                <img src="https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?auto=format&fit=crop&w=200&q=60" alt="Car">
-                <div class="check-badge">✓</div>
-            </div>
-            <div class="image-card">
-                <img src="https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=200&q=60" alt="Car">
-                <div class="remove-badge">×</div>
-            </div>
-            <div class="image-card selected" onclick="toggleSelection(this)">
-                <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=200&q=60" alt="Car">
-                <div class="check-badge">✓</div>
-            </div>
-            <div class="image-card" onclick="toggleSelection(this)">
-                <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=200&q=60" alt="Car">
-                <div class="check-badge">✓</div>
-            </div>
-            <div class="image-card" onclick="toggleSelection(this)">
-                <img src="https://images.unsplash.com/photo-1536911958045-fe60a30a1b85?auto=format&fit=crop&w=200&q=60" alt="Car">
-                <div class="check-badge">✓</div>
-            </div>
-        </div>
-
-        <p class="error-note">Please choose at least 1 image*</p>
-
-        <!-- Información General -->
-        <h2 class="info-heading">General Information</h2>
-
-        <div class="info-row">
-            <span class="field-name">Type</span>
-            <span class="field-value">Cars</span>
-        </div>
-
-        <div class="info-row">
-            <span class="field-name">Category</span>
-            <span class="field-value">Premium</span>
-        </div>
-
-        <div class="info-row">
-            <span class="field-name">Sub Category</span>
-            <span class="field-value">Audi</span>
-        </div>
-
-        <div class="info-row">
-            <span class="field-name">Make</span>
-            <span class="field-value">Test</span>
-        </div>
-
-        <div class="info-row">
-            <span class="field-name">Model</span>
-            <span class="field-value">Audi</span>
-        </div>
-
-        <input type="text" class="input-field" placeholder="Title*" value="Tata Nexon">
-
-        <textarea class="input-field" placeholder="Description*"></textarea>
-
-        <!-- Botón de enviar -->
-        <button class="submit-button">Submit</button>
-    </div>
-</div>
-
-<script>
-function toggleSelection(card) {
-    card.classList.toggle('selected');
-}
-</script>
-
-</body>
-</html>
+        <a href="#" class="back-arrow">&#9001;</a>
