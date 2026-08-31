@@ -3,366 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Publicación - Autos Premium</title>
+    <title>Publicar Auto con Foto</title>
     <style>
-        /* Estilos base y variables de diseño premium */
-        :root {
-            --bg-dark: #0b0b0c;
-            --bg-card: #16161a;
-            --bg-input: #24242b;
-            --text-main: #f5f5f7;
-            --text-muted: #8e8e93;
-            --accent-color: #007aff;
-            --warning-color: #ff9500;
-            --border-color: #2c2c35;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-        }
-
-        /* Banner de Sitio en Desarrollo */
-        .development-banner {
-            background-color: var(--warning-color);
-            color: #000000;
-            text-align: center;
-            padding: 12px 10px;
-            font-size: 13px;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            position: relative;
-            z-index: 20;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        /* Encabezado elegante sobrepuesto */
-        .header {
-            display: flex;
-            align-items: center;
-            padding: 30px 40px;
-            position: absolute;
-            top: 45px;
-            left: 0;
-            width: 100%;
-            z-index: 10;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0));
-        }
-
-        .back-arrow {
-            font-size: 28px;
-            color: var(--text-main);
-            cursor: pointer;
-            text-decoration: none;
-            transition: transform 0.2s;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+        body { background: #111; color: #fff; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .contenedor { width: 100%; max-width: 500px; background: #222; padding: 20px; border-radius: 10px; margin-top: 10px; }
+        .aviso { background: #ff9500; color: #000; text-align: center; padding: 8px; font-size: 12px; font-weight: bold; border-radius: 4px; margin-bottom: 15px; }
         
-        .back-arrow:hover {
-            transform: translateX(-3px);
-        }
-
-        .header-title {
-            flex: 1;
-            text-align: center;
-            font-size: 24px;
-            font-weight: 700;
-            margin-right: 28px;
-            letter-spacing: -0.5px;
-        }
-
-        /* Galería de Imágenes Panorámica */
-        .gallery-container {
-            width: 100%;
-            height: 60vh;
-            position: relative;
-            overflow: hidden;
-            background-color: #000000;
-        }
-
-        .slider {
-            display: flex;
-            width: 300%;
-            height: 100%;
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        .slide {
-            width: 100vw;
-            height: 100%;
-            position: relative;
-        }
-
-        .slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .slide::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 150px;
-            background: linear-gradient(to top, var(--bg-dark), rgba(11,11,12,0));
-        }
-
-        /* Etiqueta del modelo de auto */
-        .car-badge {
-            position: absolute;
-            bottom: 50px;
-            left: 40px;
-            background: rgba(22, 22, 26, 0.85);
-            color: var(--text-main);
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid var(--border-color);
-            z-index: 6;
-        }
-
-        /* Indicadores de navegación (Puntos/Dots) */
-        .dots-container {
-            position: absolute;
-            bottom: 50px;
-            right: 40px;
-            display: flex;
-            gap: 8px;
-            z-index: 6;
-        }
-
-        .dot {
-            width: 10px;
-            height: 10px;
-            background-color: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .dot.active {
-            background-color: var(--accent-color);
-            width: 28px;
-            border-radius: 5px;
-        }
-
-        /* Contenedor Principal del Formulario */
-        .main-container {
-            flex: 1;
-            background: var(--bg-dark);
-            position: relative;
-            z-index: 5;
-            padding: 20px 40px 60px 40px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .content {
-            width: 100%;
-            max-width: 950px;
-            background: var(--bg-card);
-            padding: 40px;
-            border-radius: 24px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        /* Rejillas organizadas */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-
-        .specs-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            grid-column: span 2;
-        }
-
-        .full-width {
-            grid-column: span 2;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .section-label {
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .required {
-            color: #ff453a;
-        }
-
-        /* Estilos de los campos de entrada */
-        .input-field {
-            width: 100%;
-            padding: 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            font-size: 16px;
-            color: var(--text-main);
-            background-color: var(--bg-input);
-            outline: none;
-            transition: all 0.25s ease;
-        }
-
-        .input-field:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.25);
-        }
-
-        select.input-field {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://w3.org' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 16px center;
-            background-size: 16px;
-            padding-right: 40px;
-        }
-
-        textarea.input-field {
-            height: 130px;
-            resize: none;
-            line-height: 1.6;
-        }
-
-        /* Entrada de precio */
-        .price-container {
-            position: relative;
-        }
-
-        .price-container .input-field {
-            padding-left: 38px;
-        }
-
-        .currency-symbol {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        /* Botón de Publicación */
-        .footer {
-            margin-top: 30px;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .submit-btn {
-            width: 100%;
-            max-width: 280px;
-            padding: 18px;
-            background-color: var(--accent-color);
-            color: #ffffff;
-            border: none;
-            border-radius: 14px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(0, 122, 255, 0.4);
-        }
-
-        .submit-btn:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 122, 255, 0.5);
-        }
-
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Ajustes de adaptabilidad (Responsivo) */
-        @media (max-width: 900px) {
-            .specs-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            .specs-grid {
-                grid-template-columns: 1fr;
-                grid-column: span 1;
-                gap: 20px;
-            }
-            .full-width {
-                grid-column: span 1;
-            }
-            .header {
-                padding: 20px;
-            }
-            .header-title {
-                font-size: 20px;
-            }
-            .gallery-container {
-                height: 45vh;
-            }
-            .main-container {
-                padding: 10px 15px 40px 15px;
-            }
-            .content {
-                padding: 24px 20px;
-                border-radius: 16px;
-            }
-            .car-badge {
-                bottom: 30px;
-                left: 20px;
-                font-size: 14px;
-            }
-            .dots-container {
-                bottom: 30px;
-                right: 20px;
-            }
-            .submit-btn {
-                max-width: 100%;
-            }
-        }
+        /* Estilos de la cámara y previsualización */
+        .camara-zona { position: relative; width: 100%; height: 250px; background: #000; border-radius: 8px; overflow: hidden; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; }
+        video, img { width: 100%; height: 100%; object-fit: cover; }
+        canvas { display: none; }
+        
+        label { display: block; margin: 10px 0 5px; color: #aaa; font-size: 14px; }
+        input, textarea { width: 100%; padding: 12px; background: #333; border: 1px solid #444; color: #fff; border-radius: 6px; font-size: 16px; outline: none; }
+        
+        /* Botones */
+        .btn-camara { position: absolute; bottom: 15px; background: rgba(0,0,0,0.7); border: 1px solid #fff; padding: 8px 15px; font-size: 14px; }
+        .btn-principal { width: 100%; padding: 15px; background: #007aff; border: none; color: #fff; font-size: 16px; font-weight: bold; border-radius: 6px; margin-top: 20px; cursor: pointer; }
+        button { color: #fff; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        button:hover { opacity: 0.9; }
+        
+        /* Vista de lo guardado */
+        .tarjeta-guardada { background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 8px; margin-top: 20px; width: 100%; max-width: 500px; }
+        .tarjeta-guardada img { height: 200px; border-radius: 6px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- Banner Superior de Advertencia -->
-    <div class="development-banner">
-        ⚠️ Este sitio está en desarrollo
+    <div class="contenedor">
+        <div class="aviso">⚠️ SITIO EN DESARROLLO</div>
+        
+        <!-- Zona de Cámara Dinámica -->
+        <div class="camara-zona">
+            <video id="video" autoplay playsinline></video>
+            <img id="fotoPrevia" style="display: none;" alt="Foto capturada">
+            <button class="btn-camara" id="btnCapturar">📸 Tomar Foto</button>
+        </div>
+        <canvas id="canvas"></canvas>
+
+        <!-- Formulario -->
+        <form id="formularioAuto">
+            <label>Título del Anuncio</label>
+            <input type="text" id="titulo" placeholder="Ej: Porsche 911" required>
+
+            <label>Precio (USD)</label>
+            <input type="text" id="precio" placeholder="Ej: 150.000" required>
+
+            <button type="submit" class="btn-principal">Guardar en la Página</button>
+        </form>
     </div>
 
-    <!-- Encabezado Translúcido Flotante -->
-    <div class="header">
-        <a href="#" class="back-arrow">&#9001;</a>
+    <!-- Sección donde se muestra el auto guardado permanentemente -->
+    <div id="vistaAnuncio"></div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const fotoPrevia = document.getElementById('fotoPrevia');
+        const btnCapturar = document.getElementById('btnCapturar');
+        let fotoBase64 = ""; // Aquí guardaremos el texto de la imagen
+
+        // 1. Activar la cámara automáticamente al abrir la página
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+            .then(stream => { video.srcObject = stream; })
+            .catch(err => { console.error("No se pudo acceder a la cámara: ", err); });
+
+        // 2. Capturar la foto al tocar el botón de la cámara
+        btnCapturar.addEventListener('click', () => {
+            if (video.style.display !== "none") {
+                // Tomar la foto desde el video
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                canvas.getContext('2d').drawImage(video, 0, 0);
+                
+                // Convertir la foto en un formato de texto largo (Base64)
+                fotoBase64 = canvas.toDataURL('image/jpeg');
+                
+                // Mostrar la imagen estática y ocultar el video en vivo
+                fotoPrevia.src = fotoBase64;
+                fotoPrevia.style.display = "block";
+                video.style.display = "none";
+                btnCapturar.innerText = "🔄 Repetir Foto";
+            } else {
+                // Volver a activar el video en vivo si quiere repetir la foto
+                fotoPrevia.style.display = "none";
+                video.style.display = "block";
+                btnCapturar.innerText = "📸 Tomar Foto";
+                fotoBase64 = "";
+            }
+        });
+
+        // 3. Guardar el auto completo en la memoria de la página al hacer el envío
+        document.getElementById('formularioAuto').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            if (!fotoBase64) {
+                alert("Por favor, toma una foto primero.");
+                return;
+            }
+
+            const autoGuardado = {
+                titulo: document.getElementById('titulo').value,
+                precio: document.getElementById('precio').value,
+                foto: fotoBase64
+            };
+
+            // Guardar en el disco duro del navegador
+            localStorage.setItem('autoAnuncio', JSON.stringify(autoGuardado));
+            
+            // Refrescar la vista para mostrarlo
+            mostrarAutoGuardado();
+        });
+
+        // 4. Buscar si ya había un auto guardado antes y mostrarlo en pantalla
+        function mostrarAutoGuardado() {
+            const datos = localStorage.getItem('autoAnuncio');
+            const contenedorVista = document.getElementById('vistaAnuncio');
+            
+            if (datos) {
+                const auto = JSON.parse(datos);
+                contenedorVista.innerHTML = `
+                    <div class="tarjeta-guardada">
+                        <h3 style="margin-bottom: 10px; color: #ff9500;">🚗 PUBLICADO EN LA PÁGINA:</h3>
+                        <img src="${auto.foto}">
+                        <h2>${auto.titulo}</h2>
+                        <p style="color: #4cd964; font-size: 18px; font-weight: bold; margin-top: 5px;">$${auto.precio} USD</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Mostrar el auto guardado apenas entres a la página
+        mostrarAutoGuardado();
+    </script>
+
+</body>
+</html>
