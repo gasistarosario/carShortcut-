@@ -1,142 +1,206 @@
+
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publicar Auto con Foto</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
-        body { background: #111; color: #fff; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .contenedor { width: 100%; max-width: 500px; background: #222; padding: 20px; border-radius: 10px; margin-top: 10px; }
-        .aviso { background: #ff9500; color: #000; text-align: center; padding: 8px; font-size: 12px; font-weight: bold; border-radius: 4px; margin-bottom: 15px; }
-        
-        /* Estilos de la cámara y previsualización */
-        .camara-zona { position: relative; width: 100%; height: 250px; background: #000; border-radius: 8px; overflow: hidden; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; }
-        video, img { width: 100%; height: 100%; object-fit: cover; }
-        canvas { display: none; }
-        
-        label { display: block; margin: 10px 0 5px; color: #aaa; font-size: 14px; }
-        input, textarea { width: 100%; padding: 12px; background: #333; border: 1px solid #444; color: #fff; border-radius: 6px; font-size: 16px; outline: none; }
-        
-        /* Botones */
-        .btn-camara { position: absolute; bottom: 15px; background: rgba(0,0,0,0.7); border: 1px solid #fff; padding: 8px 15px; font-size: 14px; }
-        .btn-principal { width: 100%; padding: 15px; background: #007aff; border: none; color: #fff; font-size: 16px; font-weight: bold; border-radius: 6px; margin-top: 20px; cursor: pointer; }
-        button { color: #fff; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        button:hover { opacity: 0.9; }
-        
-        /* Vista de lo guardado */
-        .tarjeta-guardada { background: #1a1a1a; border: 1px solid #333; padding: 15px; border-radius: 8px; margin-top: 20px; width: 100%; max-width: 500px; }
-        .tarjeta-guardada img { height: 200px; border-radius: 6px; margin-bottom: 10px; }
-    </style>
-</head>
-<body>
-
-    <div class="contenedor">
-        <div class="aviso">⚠️ SITIO EN DESARROLLO</div>
-        
-        <!-- Zona de Cámara Dinámica -->
-        <div class="camara-zona">
-            <video id="video" autoplay playsinline></video>
-            <img id="fotoPrevia" style="display: none;" alt="Foto capturada">
-            <button class="btn-camara" id="btnCapturar">📸 Tomar Foto</button>
-        </div>
-        <canvas id="canvas"></canvas>
-
-        <!-- Formulario -->
-        <form id="formularioAuto">
-            <label>Título del Anuncio</label>
-            <input type="text" id="titulo" placeholder="Ej: Porsche 911" required>
-
-            <label>Precio (USD)</label>
-            <input type="text" id="precio" placeholder="Ej: 150.000" required>
-
-            <button type="submit" class="btn-principal">Guardar en la Página</button>
-        </form>
-    </div>
-
-    <!-- Sección donde se muestra el auto guardado permanentemente -->
-    <div id="vistaAnuncio"></div>
-
-    <script>
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const fotoPrevia = document.getElementById('fotoPrevia');
-        const btnCapturar = document.getElementById('btnCapturar');
-        let fotoBase64 = ""; // Aquí guardaremos el texto de la imagen
-
-        // 1. Activar la cámara automáticamente al abrir la página
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-            .then(stream => { video.srcObject = stream; })
-            .catch(err => { console.error("No se pudo acceder a la cámara: ", err); });
-
-        // 2. Capturar la foto al tocar el botón de la cámara
-        btnCapturar.addEventListener('click', () => {
-            if (video.style.display !== "none") {
-                // Tomar la foto desde el video
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                canvas.getContext('2d').drawImage(video, 0, 0);
-                
-                // Convertir la foto en un formato de texto largo (Base64)
-                fotoBase64 = canvas.toDataURL('image/jpeg');
-                
-                // Mostrar la imagen estática y ocultar el video en vivo
-                fotoPrevia.src = fotoBase64;
-                fotoPrevia.style.display = "block";
-                video.style.display = "none";
-                btnCapturar.innerText = "🔄 Repetir Foto";
-            } else {
-                // Volver a activar el video en vivo si quiere repetir la foto
-                fotoPrevia.style.display = "none";
-                video.style.display = "block";
-                btnCapturar.innerText = "📸 Tomar Foto";
-                fotoBase64 = "";
-            }
-        });
-
-        // 3. Guardar el auto completo en la memoria de la página al hacer el envío
-        document.getElementById('formularioAuto').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            if (!fotoBase64) {
-                alert("Por favor, toma una foto primero.");
-                return;
-            }
-
-            const autoGuardado = {
-                titulo: document.getElementById('titulo').value,
-                precio: document.getElementById('precio').value,
-                foto: fotoBase64
-            };
-
-            // Guardar en el disco duro del navegador
-            localStorage.setItem('autoAnuncio', JSON.stringify(autoGuardado));
-            
-            // Refrescar la vista para mostrarlo
-            mostrarAutoGuardado();
-        });
-
-        // 4. Buscar si ya había un auto guardado antes y mostrarlo en pantalla
-        function mostrarAutoGuardado() {
-            const datos = localStorage.getItem('autoAnuncio');
-            const contenedorVista = document.getElementById('vistaAnuncio');
-            
-            if (datos) {
-                const auto = JSON.parse(datos);
-                contenedorVista.innerHTML = `
-                    <div class="tarjeta-guardada">
-                        <h3 style="margin-bottom: 10px; color: #ff9500;">🚗 PUBLICADO EN LA PÁGINA:</h3>
-                        <img src="${auto.foto}">
-                        <h2>${auto.titulo}</h2>
-                        <p style="color: #4cd964; font-size: 18px; font-weight: bold; margin-top: 5px;">$${auto.precio} USD</p>
-                    </div>
-                `;
-            }
-        }
-
-        // Mostrar el auto guardado apenas entres a la página
-        mostrarAutoGuardado();
-    </script>
-
-</body>
-</html>
+html lang="es">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Autos en Venta</title>
+     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+     <style>
+         * { box-sizing: border-box; margin: 0; padding: 0; }
+         body { font-family: sans-serif; padding: 20px; background: #f0f4f8; }
+         h1 { text-align: center; color: #1e293b; margin-bottom: 25px; }
+         form { background: white; padding: 25px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; }
+         form h3 { margin-bottom: 15px; color: #334155; }
+         input, textarea { width: 100%; padding: 12px; margin: 8px 0 15px 0; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; }
+         .foto-fila { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+         .foto-fila input { flex: 1; margin: 0; }
+         button { padding: 10px 18px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; }
+         .btn-camara { background: #3b82f6; color: white; white-space: nowrap; }
+         .btn-camara:hover { background: #2563eb; }
+         .preview { max-width: 100px; margin: 0 0 12px 0; border-radius: 6px; display: none; }
+         .btn-guardar { width: 100%; background: #16a34a; color: white; font-size: 17px; padding: 14px; margin-top: 10px; }
+         .btn-guardar:hover { background: #15803d; }
+         .contenedor-carrusel { max-width: 450px; margin: 0 auto; position: relative; overflow: hidden; }
+         .carrusel { display: flex; transition: transform 0.4s ease; }
+         .tarjeta { flex: 0 0 100%; padding: 10px; }
+         .tarjeta-interior { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); min-height: 520px; display: flex; flex-direction: column; }
+         .tarjeta h3 { font-size: 22px; color: #0f172a; margin-bottom: 8px; }
+         .precio { font-size: 24px; font-weight: bold; color: #16a34a; margin-bottom: 15px; }
+         .descripcion { color: #475569; line-height: 1.5; margin-bottom: 20px; flex-grow: 1; }
+         .fotos { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: auto; }
+         .fotos img { width: 100px; height: 75px; object-fit: cover; border-radius: 8px; }
+         .nav-botones { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+         .nav-btn { background: #e2e8f0; color: #334155; font-size: 22px; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0; }
+         .nav-btn:hover { background: #cbd5e1; }
+         .indicador { text-align: center; color: #64748b; font-size: 15px; font-weight: 500; }
+         .sin-autos { text-align: center; color: #64748b; padding: 40px; font-size: 17px; }
+     </style>
+ </head>
+ <body>
+ <h1>🚗 Autos en Venta</h1>
+ <form id="formAuto">
+     <h3>Agregar Auto</h3>
+     
+     <input type="text" id="marca" placeholder="Marca" required>
+     <input type="text" id="modelo" placeholder="Modelo" required>
+     <input type="number" id="precio" placeholder="Precio $" required>
+     <textarea id="descripcion" rows="3" placeholder="Descripción..."></textarea>
+     <div>
+         <label>Foto 1:</label>
+         <div class="foto-fila">
+             <input type="text" id="foto1_url" placeholder="Enlace de la foto">
+             <button type="button" class="btn-camara" onclick="abrirCamara(1)">📷 Cámara</button>
+         </div>
+         <img id="preview1" class="preview" alt="Vista previa">
+     </div>
+     <div>
+         <label>Foto 2:</label>
+         <div class="foto-fila">
+             <input type="text" id="foto2_url" placeholder="Enlace de la foto">
+             <button type="button" class="btn-camara" onclick="abrirCamara(2)">📷 Cámara</button>
+         </div>
+         <img id="preview2" class="preview" alt="Vista previa">
+     </div>
+     <div>
+         <label>Foto 3:</label>
+         <div class="foto-fila">
+             <input type="text" id="foto3_url" placeholder="Enlace de la foto">
+             <button type="button" class="btn-camara" onclick="abrirCamara(3)">📷 Cámara</button>
+         </div>
+         <img id="preview3" class="preview" alt="Vista previa">
+     </div>
+     <div>
+         <label>Foto 4:</label>
+         <div class="foto-fila">
+             <input type="text" id="foto4_url" placeholder="Enlace de la foto">
+             <button type="button" class="btn-camara" onclick="abrirCamara(4)">📷 Cámara</button>
+         </div>
+         <img id="preview4" class="preview" alt="Vista previa">
+     </div>
+     
+     <button type="submit" class="btn-guardar">✅ Guardar Auto</button>
+ </form>
+ <div class="contenedor-carrusel">
+     <div id="carrusel" class="carrusel"></div>
+     <div class="nav-botones">
+         <button class="nav-btn" id="btnAnterior">◀️</button>
+         <span id="indicador" class="indicador"></span>
+         <button class="nav-btn" id="btnSiguiente">▶️</button>
+     </div>
+ </div>
+ <script>
+ const SUPABASE_URL = 'https://cgwdahvstitjksphucqk.supabase.co';
+ const SUPABASE_KEY = 'sb_publicable_gQ1c0TNud-uR22ur4-TJQw_hAgmkBFr';
+ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+ let autos = [];
+ let posicionActual = 0;
+ function abrirCamara(numero) {
+     const entrada = document.createElement('input');
+     entrada.type = 'file';
+     entrada.accept = 'image/*';
+     entrada.capture = 'environment';
+     
+     entrada.onchange = function(e) {
+         const archivo = e.target.files[0];
+         if (!archivo) return;
+         const lector = new FileReader();
+         lector.onload = function(evento) {
+             const base64 = evento.target.result;
+             document.getElementById('foto' + numero + '_url').value = base64;
+             
+             const vista = document.getElementById('preview' + numero);
+             vista.src = base64;
+             vista.style.display = 'block';
+         };
+         lector.readAsDataURL(archivo);
+     };
+     entrada.click();
+ }
+ document.getElementById('formAuto').addEventListener('submit', async function(e) {
+     e.preventDefault();
+     
+     const marca = document.getElementById('marca').value;
+     const modelo = document.getElementById('modelo').value;
+     const precio = document.getElementById('precio').value;
+     const descripcion = document.getElementById('descripcion').value;
+     const foto1_url = document.getElementById('foto1_url').value;
+     const foto2_url = document.getElementById('foto2_url').value;
+     const foto3_url = document.getElementById('foto3_url').value;
+     const foto4_url = document.getElementById('foto4_url').value;
+     const { error } = await supabase
+         .from('autos')
+         .insert([{ marca, modelo, precio, descripcion, foto1_url, foto2_url, foto3_url, foto4_url }]);
+     if (error) {
+         console.error(error);
+         alert('Error: ' + error.message);
+     } else {
+         alert('¡Guardado correctamente! 🚗✨');
+         document.getElementById('formAuto').reset();
+         for (let i = 1; i <= 4; i++) {
+             document.getElementById('preview' + i).style.display = 'none';
+         }
+         posicionActual = 0;
+         cargarAutos();
+     }
+ });
+ async function cargarAutos() {
+     const { data, error } = await supabase
+         .from('autos')
+         .select('*')
+         .order('id', { ascending: false });
+     const carrusel = document.getElementById('carrusel');
+     autos = data || [];
+     if (error || autos.length === 0) {
+         carrusel.innerHTML = '<div class="sin-autos">No hay autos cargados aún</div>';
+         document.getElementById('indicador').textContent = '';
+         return;
+     }
+     carrusel.innerHTML = autos.map(function(auto) {
+         let fotos = '';
+         if (auto.foto1_url) fotos += '<img src="' + auto.foto1_url + '" alt="Foto">';
+         if (auto.foto2_url) fotos += '<img src="' + auto.foto2_url + '" alt="Foto">';
+         if (auto.foto3_url) fotos += '<img src="' + auto.foto3_url + '" alt="Foto">';
+         if (auto.foto4_url) fotos += '<img src="' + auto.foto4_url + '" alt="Foto">';
+         
+         return '<div class="tarjeta"><div class="tarjeta-interior"><h3>' + auto.marca + ' ' + auto.modelo + '</h3><p class="precio">$' + auto.precio + '</p><p class="descripcion">' + (auto.descripcion || 'Sin descripción') + '</p><div class="fotos">' + fotos + '</div></div></div>';
+     }).join('');
+     actualizarPosicion();
+ }
+ function actualizarPosicion() {
+     const carrusel = document.getElementById('carrusel');
+     carrusel.style.transform = 'translateX(-' + (posicionActual * 100) + '%)';
+     document.getElementById('indicador').textContent = autos.length > 0 ? (posicionActual + 1) + ' de ' + autos.length : '';
+ }
+ document.getElementById('btnAnterior').addEventListener('click', function() {
+     if (posicionActual > 0) {
+         posicionActual--;
+         actualizarPosicion();
+     }
+ });
+ document.getElementById('btnSiguiente').addEventListener('click', function() {
+     if (posicionActual < autos.length - 1) {
+         posicionActual++;
+         actualizarPosicion();
+     }
+ });
+ let xInicio = 0;
+ document.querySelector('.contenedor-carrusel').addEventListener('touchstart', function(e) {
+     xInicio = e.touches[0].clientX;
+ });
+ document.querySelector('.contenedor-carrusel').addEventListener('touchend', function(e) {
+     const xFin = e.changedTouches[0].clientX;
+     const diferencia = xInicio - xFin;
+     if (diferencia > 50 && posicionActual < autos.length - 1) {
+         posicionActual++;
+         actualizarPosicion();
+     }
+     if (diferencia < -50 && posicionActual > 0) {
+         posicionActual--;
+         actualizarPosicion();
+     }
+ });
+ cargarAutos();
+ </script>
+ </body>
+ </html>
