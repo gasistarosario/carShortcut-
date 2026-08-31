@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a Listing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f2f2f7;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .phone-frame {
+            width: 375px;
+            min-height: 812px;
+            background: #ffffff;
+            border-radius: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Barra superior */
+        .status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 25px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Encabezado */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e5e5e7;
+        }
+
+        .back-arrow {
+            font-size: 20px;
+            color: #007aff;
+            cursor: pointer;
+        }
+
+        .header-title {
+            flex: 1;
+            text-align: center;
+            font-size: 17px;
+            font-weight: 600;
+            margin-right: 20px;
+        }
+
+        /* Contenido */
+        .content {
+            padding: 20px;
+        }
+
+        .section-label {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1d1d1f;
+        }
+
+        .required {
+            color: #ff3b30;
+        }
+
+        /* Subida de imágenes */
+        .upload-placeholder {
+            width: 100%;
+            height: 80px;
+            border: 2px dashed #d1d1d6;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            font-size: 24px;
+            color: #86868b;
+        }
+
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .image-card {
+            aspect-ratio: 4 / 3;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            border: 3px solid transparent;
+        }
+
+        .image-card.selected {
+            border-color: #7928ca;
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .check-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 22px;
+            height: 22px;
+            background-color: #7928ca;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .image-card.selected .check-badge {
+            opacity: 1;
+        }
+
+        .remove-badge {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 22px;
+            height: 22px;
+            background-color: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .error-note {
+            color: #ff3b30;
+            font-size: 13px;
+            margin: 6px 0 24px;
+        }
+
+        /* Información general */
+        .info-heading {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 10px 0 16px;
+            color: #1d1d1f;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e5e7;
+        }
+
+        .field-name {
+            color: #86868b;
+            font-size: 15px;
+        }
+
+        .field-value {
+            color: #1d1d1f;
+            font-size: 15px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 0;
+            border: none;
+            border-bottom: 1px solid #e5e5e7;
+            font-size: 15px;
+            outline: none;
+            background: transparent;
+        }
+
+        .input-field:focus {
+            border-bottom-color: #7928ca;
+        }
+
+        textarea.input-field {
+            min-height: 80px;
+            resize: none;
+        }
+
+        /* Botón */
+        .submit-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #7928ca, #5c1fb8);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 30px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .submit-button:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-frame">
+    <!-- Barra de estado -->
+    <div class="status-bar">
+        <span>3:30</span>
+        <span>📶 Wi-Fi 🔋</span>
+    </div>
+
+    <!-- Cabecera -->
+    <div class="header">
+        <span class="back-arrow">←</span>
+        <h1 class="header-title">Create a Listing</h1>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="content">
+        <!-- Selección de imágenes -->
+        <h2 class="section-label">Select Image<span class="required">*</span></h2>
+
+        <div class="upload-placeholder">
+            <span class="upload-icon">📷</span>
+        </div>
+
+        <div class="images-grid">
+            <div class="image-card selected" onclick="toggleSelection(this)">
+                <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=200&q=60" alt="Car">
+                <div class="check-badge">✓</div>
+            </div>
+            <div class="image-card" onclick="toggleSelection(this)">
+                <img src="https://images.unsplash.com/photo-1532298229144-0ec0c57515c7?auto=format&fit=crop&w=200&q=60" alt="Car">
+                <div class="check-badge">✓</div>
+            </div>
+            <div class="image-card">
+                <img src="https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=200&q=60" alt="Car">
+                <div class="remove-badge">×</div>
+            </div>
+            <div class="image-card selected" onclick="toggleSelection(this)">
+                <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=200&q=60" alt="Car">
+                <div class="check-badge">✓</div>
+            </div>
+            <div class="image-card" onclick="toggleSelection(this)">
+                <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=200&q=60" alt="Car">
+                <div class="check-badge">✓</div>
+            </div>
+            <div class="image-card" onclick="toggleSelection(this)">
+                <img src="https://images.unsplash.com/photo-1536911958045-fe60a30a1b85?auto=format&fit=crop&w=200&q=60" alt="Car">
+                <div class="check-badge">✓</div>
+            </div>
+        </div>
+
+        <p class="error-note">Please choose at least 1 image*</p>
+
+        <!-- Información General -->
+        <h2 class="info-heading">General Information</h2>
+
+        <div class="info-row">
+            <span class="field-name">Type</span>
+            <span class="field-value">Cars</span>
+        </div>
+
+        <div class="info-row">
+            <span class="field-name">Category</span>
+            <span class="field-value">Premium</span>
+        </div>
+
+        <div class="info-row">
+            <span class="field-name">Sub Category</span>
+            <span class="field-value">Audi</span>
+        </div>
+
+        <div class="info-row">
+            <span class="field-name">Make</span>
+            <span class="field-value">Test</span>
+        </div>
+
+        <div class="info-row">
+            <span class="field-name">Model</span>
+            <span class="field-value">Audi</span>
+        </div>
+
+        <input type="text" class="input-field" placeholder="Title*" value="Tata Nexon">
+
+        <textarea class="input-field" placeholder="Description*"></textarea>
+
+        <!-- Botón de enviar -->
+        <button class="submit-button">Submit</button>
+    </div>
+</div>
+
+<script>
+function toggleSelection(card) {
+    card.classList.toggle('selected');
+}
+</script>
+
+</body>
+</html>
