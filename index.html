@@ -1,57 +1,133 @@
 
 <!DOCTYPE html>
-html lang="es">
- <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Catálogo de Autos en Venta</title>
-   <!-- Cargar Supabase -->
-   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-   <script>
-     // === TUS DATOS DE CONEXIÓN ===
-     const SUPABASE_URL = "https://cgwdahvstltjkzphucq.supabase.co";
-     
-     // 👇 PEGÁ TU CLAVE PUBLISHABLE ENTRE ESTAS COMILLAS 👇
-     const SUPABASE_ANON_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
-     // Conectar automáticamente
-     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-   </script>
- </head>
- <body>
-   <h1>Catálogo de Autos en Venta</h1>
-   <h2>Registrar Nuevo Auto</h2>
-   <form id="formulario-auto">
-     <label>Modelo / Nombre:</label><br>
-     <input type="text" id="modelo" placeholder="Ej: Toyota Corolla 2023" required><br><br>
-     <label>Precio (USD):</label><br>
-     <input type="number" id="precio" placeholder="Ej: 25000" required><br><br>
-     <label>Descripción:</label><br>
-     <textarea id="descripcion" placeholder="Detalles del vehículo..."></textarea><br><br>
-     <button type="submit" style="padding:10px 25px; font-size:16px; background:#00bfa5; color:white; border:none; border-radius:5px; cursor:pointer;">Guardar Auto</button>
-   </form>
-   <script>
-     const formulario = document.getElementById('formulario-auto');
-     formulario.addEventListener('submit', async (e) => {
-       e.preventDefault();
-       const modelo = document.getElementById('modelo').value;
-       const precio = parseFloat(document.getElementById('precio').value);
-       const descripcion = document.getElementById('descripcion').value;
-       // Toma la primera palabra como marca
-       const marca = modelo.split(' ')[0];
-       const { error } = await supabase.from('autos').insert([{
-         marca: marca,
-         modelo: modelo,
-         precio: precio,
-         descripcion: descripcion
-       }]);
-       if (error) {
-         alert("❌ Error: " + error.message);
-         console.error(error);
-       } else {
-         alert("✅ ¡Auto guardado correctamente! 🚗✨");
-         formulario.reset();
-       }
-     });
-   </script>
- </body>
- </html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tomar y Mostrar Foto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        video, #resultado-foto {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+            background-color: #ccc;
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #resultado-foto {
+            border: 3px solid #28a745; /* Marco verde para resaltar la foto tomada */
+            display: none; /* Oculto hasta que se tome la foto */
+        }
+        /* Ocultamos el canvas porque solo lo usamos internamente para procesar la imagen */
+        canvas {
+            display: none;
+        }
+        .contenedor-botones {
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        #boton-foto {
+            background-color: #007bff;
+            color: white;
+        }
+        #boton-guardar {
+            background-color: #28a745;
+            color: white;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Captura de Cámara</h2>
+    
+    <!-- 1. Cámara en vivo -->
+    <p>Cámara en vivo:</p>
+    <video id="camara" autoplay playsinline></video>
+    
+    <div class="contenedor-botones">
+        <button id="boton-foto">📸 Tomar Foto</button>
+        <button id="boton-guardar">💾 Guardar en Celular</button>
+    </div>
+    
+    <!-- 2. Foto mostrada en pantalla -->
+    <div id="seccion-resultado">
+        <p id="texto-resultado" style="display: none; font-weight: bold;">Foto capturada:</p>
+        <img id="resultado-foto" alt="Tu foto aparecerá aquí">
+    </div>
+
+    <!-- El canvas se queda oculto, trabajando detrás de escena -->
+    <canvas id="canvas-oculto"></canvas>
+
+    <script>
+        const video = document.getElementById('camara');
+        const canvas = document.getElementById('canvas-oculto');
+        const imgResultado = document.getElementById('resultado-foto');
+        const textoResultado = document.getElementById('texto-resultado');
+        
+        const botonFoto = document.getElementById('boton-foto');
+        const botonGuardar = document.getElementById('boton-guardar');
+        const ctx = canvas.getContext('2d');
+
+        // Pedir permiso para la cámara
+        navigator.mediaDevices.getUserMedia({ 
+            video: { facingMode: "environment" }, 
+            audio: false 
+        })
+        .then(stream => {
+            video.srcObject = stream;
+        })
+        .catch(err => {
+            console.error("Error de cámara: ", err);
+            alert("Por favor, permite el acceso a la cámara.");
+        });
+
+        // Al hacer clic en "Tomar Foto"
+        botonFoto.addEventListener('click', () => {
+            // Definir tamaño interno del canvas basado en el video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            // Dibujar el cuadro actual en el canvas oculto
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // Convertir el canvas a formato de imagen real (base64)
+            const uriImagen = canvas.toDataURL("image/png");
+            
+            // PASO CLAVE: Asignar la imagen al elemento <img> para mostrarla en pantalla
+            imgResultado.src = uriImagen;
+            imgResultado.style.display = "block";
+            textoResultado.style.display = "block";
+            
+            // Mostrar botón para guardar
+            botonGuardar.style.display = "inline-block";
+        });
+
+        // Al hacer clic en "Guardar"
+        botonGuardar.addEventListener('click', () => {
+            const enlaceDescarga = document.createElement('a');
+            enlaceDescarga.href = imgResultado.src; // Usa la imagen que se está mostrando
+            enlaceDescarga.download = `foto_${Date.now()}.png`;
+            enlaceDescarga.click(); // Pide confirmación de descarga al usuario
+        });
+    </script>
+
+</body>
+</html>
