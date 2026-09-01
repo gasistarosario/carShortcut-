@@ -44,7 +44,7 @@ html lang="es">
          descripcion: document.getElementById('descripcion').value
        };
        // Enviar a la base de datos
-       const { error } = await db.from('autos').insert([datos]);
+       const { error } = await db.from('Auto').insert([datos]);
        if (error) {
          alert("❌ Error: " + error.message);
          console.error(error);
