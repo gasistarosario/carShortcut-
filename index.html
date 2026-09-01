@@ -54,7 +54,7 @@ html lang="es">
              display: flex; align-items: center; justify-content: center; padding: 0; 
          }
          .nav-btn:hover { background: #cbd5e1; }
-         .indicador { text-align: center; color: #64748b; font-size: 15px; font-weight: 500; }
+         .indicador { text-align: center; color: #64748b; font-size: 15px; font-weight: 500; margin-top: 10px; }
          .sin-autos { text-align: center; color: #64748b; padding: 40px; font-size: 17px; }
      </style>
  </head>
@@ -114,12 +114,12 @@ html lang="es">
      </div>
  </div>
  <script>
- // ✅ TUS DATOS — ESTÁN BIEN PUESTOS, NO TOCAR ESTO 👇
+ // TUS DATOS - UNA SOLA VEZ ✅
  const SUPABASE_URL = 'https://cgwdahvstitjksphucqk.supabase.co';
  const SUPABASE_KEY = 'sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr';
- // ✅ CORREGIDO: declaramos UNA SOLA VEZ sin repetir
+ // ✅ CORREGIDO: nombre distinto = SIN REPETICIÓN
  const { createClient } = supabase;
- const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+ const cliente = createClient(SUPABASE_URL, SUPABASE_KEY);
  let autos = [];
  let posicionActual = 0;
  function abrirCamara(numero) {
@@ -149,17 +149,18 @@ html lang="es">
      const modelo = document.getElementById('modelo').value.trim();
      const precio = document.getElementById('precio').value;
      const descripcion = document.getElementById('descripcion').value.trim();
-     const foto1_url = document.getElementById('foto1_url').value.trim() || null;
-     const foto2_url = document.getElementById('foto2_url').value.trim() || null;
-     const foto3_url = document.getElementById('foto3_url').value.trim() || null;
-     const foto4_url = document.getElementById('foto4_url').value.trim() || null;
+     const f1 = document.getElementById('foto1_url').value.trim() || null;
+     const f2 = document.getElementById('foto2_url').value.trim() || null;
+     const f3 = document.getElementById('foto3_url').value.trim() || null;
+     const f4 = document.getElementById('foto4_url').value.trim() || null;
      if (!marca || !modelo || !precio) {
          alert('⚠️ Completá marca, modelo y precio');
          return;
      }
-     const { error } = await supabase.from('autos').insert([{
+     // ✅ USAMOS "cliente" EN LUGAR DE "supabase"
+     const { error } = await cliente.from('autos').insert([{
          marca, modelo, precio, descripcion,
-         foto1_url, foto2_url, foto3_url, foto4_url
+         foto1_url: f1, foto2_url: f2, foto3_url: f3, foto4_url: f4
      }]);
      if (error) {
          console.error(error);
@@ -175,7 +176,8 @@ html lang="es">
      }
  });
  async function cargarAutos() {
-     const { data, error } = await supabase
+     // ✅ USAMOS "cliente"
+     const { data, error } = await cliente
          .from('autos')
          .select('*')
          .order('id', { ascending: false });
@@ -192,6 +194,7 @@ html lang="es">
          if (auto.foto2_url) fotos += '<img src="' + auto.foto2_url + '" alt="Foto">';
          if (auto.foto3_url) fotos += '<img src="' + auto.foto3_url + '" alt="Foto">';
          if (auto.foto4_url) fotos += '<img src="' + auto.foto4_url + '" alt="Foto">';
+         
          return '<div class="tarjeta"><div class="tarjeta-interior">' +
              '<h3>' + auto.marca + ' ' + auto.modelo + '</h3>' +
              '<p class="precio">$' + Number(auto.precio).toLocaleString('es-AR') + '</p>' +
