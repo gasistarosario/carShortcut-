@@ -1,10 +1,11 @@
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tomar y Mostrar Foto</title>
+    <title>Tomar y Guardar Foto Automático</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,57 +24,55 @@
             margin-right: auto;
         }
         #resultado-foto {
-            border: 3px solid #28a745; /* Marco verde para resaltar la foto tomada */
-            display: none; /* Oculto hasta que se tome la foto */
+            border: 3px solid #28a745;
+            display: none; /* Oculto hasta tomar la foto */
         }
-        /* Ocultamos el canvas porque solo lo usamos internamente para procesar la imagen */
         canvas {
-            display: none;
+            display: none; /* Trabajando en segundo plano */
         }
         .contenedor-botones {
             margin-top: 15px;
             margin-bottom: 20px;
         }
         button {
-            padding: 12px 24px;
+            padding: 14px 28px;
             font-size: 16px;
             font-weight: bold;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin: 5px;
-        }
-        #boton-foto {
             background-color: #007bff;
             color: white;
+            transition: background 0.2s;
         }
-        #boton-guardar {
-            background-color: #28a745;
-            color: white;
-            display: none;
+        button:active {
+            background-color: #0056b3;
+        }
+        #mensaje-servidor {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #555;
         }
     </style>
 </head>
 <body>
 
-    <h2>Captura de Cámara</h2>
+    <h2>Captura y Envío Automático</h2>
     
-    <!-- 1. Cámara en vivo -->
     <p>Cámara en vivo:</p>
     <video id="camara" autoplay playsinline></video>
     
     <div class="contenedor-botones">
-        <button id="boton-foto">📸 Tomar Foto</button>
-        <button id="boton-guardar">💾 Guardar en Celular</button>
-    </div>
-    
-    <!-- 2. Foto mostrada en pantalla -->
-    <div id="seccion-resultado">
-        <p id="texto-resultado" style="display: none; font-weight: bold;">Foto capturada:</p>
-        <img id="resultado-foto" alt="Tu foto aparecerá aquí">
+        <!-- Único botón: captura, muestra y guarda a la vez -->
+        <button id="boton-foto">📸 Tomar y Guardar Foto</button>
     </div>
 
-    <!-- El canvas se queda oculto, trabajando detrás de escena -->
+    <p id="mensaje-servidor"></p>
+    
+    <p id="texto-resultado" style="display: none; font-weight: bold;">Foto capturada y enviada:</p>
+    <img id="resultado-foto" alt="Tu foto aparecerá aquí">
+
+    <!-- Canvas oculto para procesar la conversión a imagen -->
     <canvas id="canvas-oculto"></canvas>
 
     <script>
@@ -81,12 +80,11 @@
         const canvas = document.getElementById('canvas-oculto');
         const imgResultado = document.getElementById('resultado-foto');
         const textoResultado = document.getElementById('texto-resultado');
-        
+        const mensajeServidor = document.getElementById('mensaje-servidor');
         const botonFoto = document.getElementById('boton-foto');
-        const botonGuardar = document.getElementById('boton-guardar');
         const ctx = canvas.getContext('2d');
 
-        // Pedir permiso para la cámara
+        // 1. Iniciar la cámara trasera del celular automáticamente
         navigator.mediaDevices.getUserMedia({ 
             video: { facingMode: "environment" }, 
             audio: false 
@@ -99,35 +97,47 @@
             alert("Por favor, permite el acceso a la cámara.");
         });
 
-        // Al hacer clic en "Tomar Foto"
+        // 2. Evento al presionar el botón de capturar
         botonFoto.addEventListener('click', () => {
-            // Definir tamaño interno del canvas basado en el video
+            // Ajustar el canvas al tamaño del video del celular
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             
-            // Dibujar el cuadro actual en el canvas oculto
+            // Dibujar el fotograma actual en el canvas oculto
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             
-            // Convertir el canvas a formato de imagen real (base64)
+            // Convertir el canvas a formato de texto de imagen (Base64)
             const uriImagen = canvas.toDataURL("image/png");
             
-            // PASO CLAVE: Asignar la imagen al elemento <img> para mostrarla en pantalla
+            // Mostrar la foto capturada en la pantalla de inmediato
             imgResultado.src = uriImagen;
             imgResultado.style.display = "block";
             textoResultado.style.display = "block";
             
-            // Mostrar botón para guardar
-            botonGuardar.style.display = "inline-block";
-        });
+            // Notificar al usuario que el envío está en proceso
+            mensajeServidor.style.color = "#007bff";
+            mensajeServidor.innerText = "Subiendo foto al servidor...";
 
-        // Al hacer clic en "Guardar"
-        botonGuardar.addEventListener('click', () => {
-            const enlaceDescarga = document.createElement('a');
-            enlaceDescarga.href = imgResultado.src; // Usa la imagen que se está mostrando
-            enlaceDescarga.download = `foto_${Date.now()}.png`;
-            enlaceDescarga.click(); // Pide confirmación de descarga al usuario
+            // 3. ENVÍO AUTOMÁTICO AL SERVIDOR (guardar.php)
+            const formData = new FormData();
+            formData.append('foto_base64', uriImagen);
+
+            fetch('guardar.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(respuesta => respuesta.text())
+            .then(resultado => {
+                // Mostrar en pantalla la respuesta que da tu archivo PHP
+                mensajeServidor.style.color = "#28a745";
+                mensajeServidor.innerText = resultado; 
+            })
+            .catch(error => {
+                console.error("Error al subir:", error);
+                mensajeServidor.style.color = "#dc3545";
+                mensajeServidor.innerText = "Error: No se pudo guardar la foto.";
+            });
         });
     </script>
-
 </body>
 </html>
