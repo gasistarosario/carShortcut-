@@ -1,86 +1,57 @@
 
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar Autos</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: sans-serif; padding: 20px; background: #f0f4f8; }
-        h1 { text-align: center; color: #1e293b; margin-bottom: 25px; }
-        
-        form { 
-            background: white; padding: 25px; border-radius: 12px; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
-            max-width: 500px; margin: 0 auto; 
-        }
-        form h3 { margin-bottom: 15px; color: #334155; }
-        input, textarea { 
-            width: 100%; padding: 12px; margin: 8px 0 15px 0; 
-            border: 1px solid #cbd5e1; border-radius: 8px; font-size: 15px; 
-        }
-        .btn-guardar { 
-            width: 100%; background: #16a34a; color: white; 
-            border: none; border-radius: 8px; cursor: pointer;
-            font-size: 17px; padding: 14px; margin-top: 10px; 
-        }
-        .btn-guardar:hover { background: #15803d; }
-    </style>
-</head>
-<body>
-
-    <h1>Registro de Vehículos</h1>
-
-    <!-- Formulario simplificado: Solo para guardar datos -->
-    <form id="formulario-auto">
-        <h3>Registrar Nuevo Auto</h3>
-        
-        <label for="modelo">Modelo / Nombre:</label>
-        <input type="text" id="modelo" placeholder="Ej. Toyota Corolla 2023" required>
-
-        <label for="precio">Precio (USD):</label>
-        <input type="number" id="precio" placeholder="Ej. 25000" required>
-
-        <label for="descripcion">Descripción:</label>
-        <textarea id="descripcion" rows="4" placeholder="Detalles del vehículo..." required></textarea>
-
-        <button type="submit" class="btn-guardar">Guardar Auto</button>
-    </form>
-
-    <!-- Script modular para conectar con Supabase -->
-    <script type="module">
-        import { createClient } from 'https://esm.sh'
-
-        // CONFIGURACIÓN DE SUPABASE
-        // IMPORTANTE: Coloca aquí tus credenciales reales del panel de Supabase
-        const SUPABASE_URL = "https://cgwdahvstltjkzphucq.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
-        
-        const dbSupabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        const form = document.getElementById('formulario-auto');
-
-        // Escuchar el envío del formulario para guardar datos
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const modelo = document.getElementById('modelo').value;
-            const precio = document.getElementById('precio').value;
-            const descripcion = document.getElementById('descripcion').value;
-
-            // Envía los datos directamente a la tabla 'autos'
-            const { data, error } = await dbSupabase
-                .from('autos')
-                .insert([{ modelo, precio, descripcion }]);
-
-            if (error) {
-                alert('Error al guardar el auto: ' + error.message);
-            } else {
-                alert('¡Auto guardado con éxito en la base de datos!');
-                form.reset(); // Limpia los campos del formulario
-            }
-        });
-    </script>
-</body>
-</html>
+html lang="es">
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Catálogo de Autos en Venta</title>
+   <!-- Cargar Supabase -->
+   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+   <script>
+     // === TUS DATOS DE CONEXIÓN ===
+     const SUPABASE_URL = "https://cgwdahvstltjkzphucq.supabase.co";
+     
+     // 👇 PEGÁ TU CLAVE PUBLISHABLE ENTRE ESTAS COMILLAS 👇
+     const SUPABASE_ANON_KEY = "PEGÁ_TU_CLAVE_AQUÍ";
+     // Conectar automáticamente
+     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+   </script>
+ </head>
+ <body>
+   <h1>Catálogo de Autos en Venta</h1>
+   <h2>Registrar Nuevo Auto</h2>
+   <form id="formulario-auto">
+     <label>Modelo / Nombre:</label><br>
+     <input type="text" id="modelo" placeholder="Ej: Toyota Corolla 2023" required><br><br>
+     <label>Precio (USD):</label><br>
+     <input type="number" id="precio" placeholder="Ej: 25000" required><br><br>
+     <label>Descripción:</label><br>
+     <textarea id="descripcion" placeholder="Detalles del vehículo..."></textarea><br><br>
+     <button type="submit" style="padding:10px 25px; font-size:16px; background:#00bfa5; color:white; border:none; border-radius:5px; cursor:pointer;">Guardar Auto</button>
+   </form>
+   <script>
+     const formulario = document.getElementById('formulario-auto');
+     formulario.addEventListener('submit', async (e) => {
+       e.preventDefault();
+       const modelo = document.getElementById('modelo').value;
+       const precio = parseFloat(document.getElementById('precio').value);
+       const descripcion = document.getElementById('descripcion').value;
+       // Toma la primera palabra como marca
+       const marca = modelo.split(' ')[0];
+       const { error } = await supabase.from('autos').insert([{
+         marca: marca,
+         modelo: modelo,
+         precio: precio,
+         descripcion: descripcion
+       }]);
+       if (error) {
+         alert("❌ Error: " + error.message);
+         console.error(error);
+       } else {
+         alert("✅ ¡Auto guardado correctamente! 🚗✨");
+         formulario.reset();
+       }
+     });
+   </script>
+ </body>
+ </html>
