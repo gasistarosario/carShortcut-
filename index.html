@@ -4,55 +4,177 @@
 
 html lang="es">
  <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Guardar Auto</title>
-   <!-- Cargar Supabase -->
-   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-   <script>
-     // Tus datos — la URL ya está lista ✅
-     const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
-     
-     // 👇 PEGÁ TU CLAVE PUBLISHABLE ENTRE LAS COMILLAS 👇
-     const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
-     // Conectar
-     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-   </script>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Registrar Auto</title>
+     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+     <style>
+         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+         body { padding: 20px; background: #f0f4f8; max-width: 600px; margin: 0 auto; }
+         h1 { text-align: center; color: #1e293b; margin-bottom: 25px; }
+         form { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+         label { display: block; margin: 15px 0 5px; font-weight: bold; color: #334155; }
+         input, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; }
+         
+         .boton-camara { 
+             width: 100%; padding: 14px; background: #3b82f6; color: white; 
+             border: none; border-radius: 8px; font-size: 17px; font-weight: bold; 
+             margin: 15px 0; cursor: pointer;
+         }
+         .boton-camara:hover { background: #2563eb; }
+         
+         .fotos-lista { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0; }
+         .foto-item { 
+             position: relative; width: 100px; height: 100px; border-radius: 8px; 
+             overflow: hidden; border: 2px solid #e2e8f0;
+         }
+         .foto-item img { width: 100%; height: 100%; object-fit: cover; }
+         .foto-item .borrar {
+             position: absolute; top: 4px; right: 4px; background: red; color: white;
+             border: none; border-radius: 50%; width: 24px; height: 24px; 
+             font-size: 14px; cursor: pointer; line-height: 1;
+         }
+         .foto-item .numero {
+             position: absolute; bottom: 4px; left: 4px; background: rgba(0,0,0,0.6);
+             color: white; padding: 2px 6px; border-radius: 4px; font-size: 12px;
+         }
+         .max-aviso { color: #f59e0b; font-size: 14px; margin: 10px 0; }
+         
+         button[type="submit"] {
+             width: 100%; padding: 14px; background: #22c55e; color: white; 
+             border: none; border-radius: 8px; font-size: 18px; font-weight: bold; 
+             margin-top: 10px; cursor: pointer;
+         }
+         button[type="submit"]:hover { background: #16a34a; }
+         button:disabled { background: #94a3b8; cursor: not-allowed; }
+     </style>
  </head>
  <body>
-   <h1>Registrar Auto</h1>
-   <form id="formAuto">
-     <label>Marca:</label><br>
-     <input type="text" id="marca" required><br><br>
-     <label>Modelo:</label><br>
-     <input type="text" id="modelo" required><br><br>
-     <label>Precio:</label><br>
-     <input type="number" id="precio" required><br><br>
-     <label>Descripción:</label><br>
-     <textarea id="descripcion"></textarea><br><br>
-     <button type="submit">Guardar</button>
-   </form>
-   <script>
-     const form = document.getElementById('formAuto');
-     form.addEventListener('submit', async (e) => {
-       e.preventDefault();
-       // Tomar los valores del formulario
-       const datos = {
-         marca: document.getElementById('marca').value,
-         modelo: document.getElementById('modelo').value,
-         precio: Number(document.getElementById('precio').value),
-         descripcion: document.getElementById('descripcion').value
-       };
-       // Enviar a la base de datos
-       const { error } = await db.from('Auto').insert([datos]);
-       if (error) {
-         alert("❌ Error: " + error.message);
-         console.error(error);
-       } else {
-         alert("✅ ¡Guardado correctamente!");
-         form.reset(); // Limpiar formulario
-       }
-     });
-   </script>
+     <h1>🚗 Registrar Auto</h1>
+     <form id="formAuto">
+         <label>Marca:</label>
+         <input type="text" id="marca" required>
+         <label>Modelo:</label>
+         <input type="text" id="modelo" required>
+         <label>Precio:</label>
+         <input type="number" id="precio" required>
+         <label>Descripción:</label>
+         <textarea id="descripcion" rows="3"></textarea>
+         <hr style="margin: 25px 0; border: none; border-top: 1px solid #e2e8f0;">
+         <h3 style="color: #475569; margin-bottom: 10px;">📸 Fotos del auto</h3>
+         <input type="file" id="camara" accept="image/*" capture="environment" style="display: none;">
+         <button type="button" class="boton-camara" id="btnCamara">📷 Sacar Foto</button>
+         <p style="color: #64748b; font-size: 13px; margin-top: 5px;">Toca el botón y saca una por vez. Hasta 6 fotos.</p>
+         
+         <div class="fotos-lista" id="listaFotos"></div>
+         <p class="max-aviso" id="avisoMax" style="display:none;">✅ Llegaste al máximo de 6 fotos</p>
+         <button type="submit" id="btnGuardar">💾 Guardar Auto</button>
+     </form>
+     <script>
+         const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
+         const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
+         const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+         let fotos = [];
+         const inputCamara = document.getElementById('camara');
+         const btnCamara = document.getElementById('btnCamara');
+         const listaFotos = document.getElementById('listaFotos');
+         const avisoMax = document.getElementById('avisoMax');
+         const form = document.getElementById('formAuto');
+         const btnGuardar = document.getElementById('btnGuardar');
+         btnCamara.addEventListener('click', () => {
+             if (fotos.length >= 6) {
+                 alert('Ya tienes 6 fotos. Borra alguna si quieres cambiar.');
+                 return;
+             }
+             inputCamara.click();
+         });
+         inputCamara.addEventListener('change', (e) => {
+             const archivo = e.target.files[0];
+             if (!archivo) return;
+             fotos.push(archivo);
+             mostrarFotos();
+             inputCamara.value = '';
+         });
+         function mostrarFotos() {
+             listaFotos.innerHTML = '';
+             
+             fotos.forEach((foto, indice) => {
+                 const vista = new FileReader();
+                 vista.onload = function(e) {
+                     const caja = document.createElement('div');
+                     caja.className = 'foto-item';
+                     caja.innerHTML = `
+                         <img src="${e.target.result}" alt="foto ${indice+1}">
+                         <span class="numero">${indice + 1}</span>
+                         <button type="button" class="borrar" data-i="${indice}">×</button>
+                     `;
+                     listaFotos.appendChild(caja);
+                 };
+                 vista.readAsDataURL(foto);
+             });
+             document.querySelectorAll('.borrar').forEach(boton => {
+                 boton.addEventListener('click', () => {
+                     const i = parseInt(boton.getAttribute('data-i'));
+                     fotos.splice(i, 1);
+                     mostrarFotos();
+                 });
+             });
+             avisoMax.style.display = fotos.length >= 6 ? 'block' : 'none';
+             btnCamara.style.display = fotos.length >= 6 ? 'none' : 'block';
+         }
+         async function subirFoto(archivo) {
+             if (!archivo) return null;
+             const nombre = ${Date.now()}_${Math.random().toString(36).substring(2, 8)}.jpg;
+             
+             const { data, error } = await db.storage
+                 .from('fotos-autos')
+                 .upload(public/${nombre}, archivo);
+             
+             if (error) {
+                 console.error('Error subiendo:', error);
+                 return null;
+             }
+             const { data: { publicUrl } } = db.storage
+                 .from('fotos-autos')
+                 .getPublicUrl(public/${nombre});
+             
+             return publicUrl;
+         }
+         form.addEventListener('submit', async function(e) {
+             e.preventDefault();
+             
+             btnGuardar.disabled = true;
+             btnGuardar.textContent = 'Subiendo fotos...';
+             const urls = [];
+             for (const foto of fotos) {
+                 const url = await subirFoto(foto);
+                 urls.push(url);
+             }
+             const [foto1, foto2, foto3, foto4, foto5, foto6] = urls;
+             const datos = {
+                 marca: document.getElementById('marca').value,
+                 modelo: document.getElementById('modelo').value,
+                 precio: document.getElementById('precio').value,
+                 descripcion: document.getElementById('descripcion').value,
+                 foto1: foto1 || null,
+                 foto2: foto2 || null,
+                 foto3: foto3 || null,
+                 foto4: foto4 || null,
+                 foto5: foto5 || null,
+                 foto6: foto6 || null
+             };
+             const { error } = await db.from('Auto').insert([datos]);
+             btnGuardar.disabled = false;
+             btnGuardar.textContent = '💾 Guardar Auto';
+             if (error) {
+                 alert('❌ Error: ' + error.message);
+             } else {
+                 alert('✅ ¡Auto guardado con sus fotos!');
+                 form.reset();
+                 fotos = [];
+                 mostrarFotos();
+             }
+         });
+     </script>
  </body>
  </html>
