@@ -8,31 +8,80 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-    body { background: #84a6c7; min-height: 100vh; padding: 20px; }
+    body {
+      background: #84a6c7;
+      min-height: 100vh;
+      padding: 20px;
+    }
     .contenedor { max-width: 550px; margin: 0 auto; }
     .pantalla { display: none; }
     #pantalla-inicio { display: block; }
-    .tarjeta { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 20px; }
-    h1 { color: white; text-align: center; margin: 20px 0; }
+    .tarjeta {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: white;
+      text-align: center;
+      margin: 20px 0;
+    }
     h2 { text-align: center; margin-bottom: 20px; }
-    .boton-principal { display: block; background: #2563eb; color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-size: 18px; cursor: pointer; margin: 10px 0; }
+    .boton-principal {
+      display: block;
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 15px;
+      width: 100%;
+      border-radius: 12px;
+      font-size: 18px;
+      cursor: pointer;
+      margin: 10px 0;
+    }
     .boton-principal:hover { background: #1d4ed8; }
-    .boton-volver { background: #6b7280; margin-bottom: 20px; }
+    .boton-volver {
+      background: #6b7280;
+      margin-bottom: 20px;
+    }
     .boton-volver:hover { background: #4b5563; }
     .seccion { margin-bottom: 15px; }
     label { display: block; margin-bottom: 5px; font-weight: bold; }
-    input, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
-    .checkbox-grupo { display: flex; gap: 15px; flex-wrap: wrap; margin: 10px 0; }
-    .checkbox-grupo label { display: flex; align-items: center; gap: 5px; font-weight: normal; }
-    .auto-tarjeta { background: #f9fafb; padding: 20px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid #2563eb; }
-    .auto-foto { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin: 10px 0; background: #eee; }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    .checkbox-grupo {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin: 10px 0;
+    }
+    .checkbox-grupo label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: normal;
+    }
+    .auto-tarjeta {
+      background: #f9fafb;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      border-left: 4px solid #2563eb;
+    }
   </style>
 </head>
 <body>
   <div class="contenedor">
     <h1>🚗 Autos en Venta</h1>
 
-    <!-- INICIO -->
+    <!-- PANTALLA DE INICIO -->
     <div id="pantalla-inicio" class="pantalla">
       <div class="tarjeta">
         <button class="boton-principal" onclick="irA('pantalla-cargar')">📝 Ingresar Auto</button>
@@ -40,20 +89,44 @@
       </div>
     </div>
 
-    <!-- CARGA -->
+    <!-- PANTALLA DE CARGA -->
     <div id="pantalla-cargar" class="pantalla">
       <button class="boton-principal boton-volver" onclick="irA('pantalla-inicio')">← Volver</button>
       <div class="tarjeta">
         <h2>Cargar Vehículo</h2>
         <form id="formAuto">
-          <div class="seccion"><label>Marca:</label><input type="text" id="marca" required></div>
-          <div class="seccion"><label>Modelo:</label><input type="text" id="modelo" required></div>
-          <div class="seccion"><label>Versión:</label><input type="text" id="version"></div>
-          <div class="seccion"><label>Año:</label><input type="number" id="anio"></div>
-          <div class="seccion"><label>Precio:</label><input type="number" step="0.01" id="precio" required></div>
-          <div class="seccion"><label>Dueño:</label><input type="text" id="dueno"></div>
-          <div class="seccion"><label>Dirección:</label><input type="text" id="direccion"></div>
-          <div class="seccion"><label>Teléfono:</label><input type="text" id="telefono"></div>
+          <div class="seccion">
+            <label>Marca:</label>
+            <input type="text" id="marca" required>
+          </div>
+          <div class="seccion">
+            <label>Modelo:</label>
+            <input type="text" id="modelo" required>
+          </div>
+          <div class="seccion">
+            <label>Versión:</label>
+            <input type="text" id="version">
+          </div>
+          <div class="seccion">
+            <label>Año:</label>
+            <input type="number" id="anio">
+          </div>
+          <div class="seccion">
+            <label>Precio ($):</label>
+            <input type="number" step="0.01" id="precio" required>
+          </div>
+          <div class="seccion">
+            <label>Dueño:</label>
+            <input type="text" id="dueno">
+          </div>
+          <div class="seccion">
+            <label>Dirección:</label>
+            <input type="text" id="direccion">
+          </div>
+          <div class="seccion">
+            <label>Teléfono:</label>
+            <input type="text" id="telefono">
+          </div>
           <div class="seccion">
             <label>Forma de pago:</label>
             <div class="checkbox-grupo">
@@ -62,34 +135,24 @@
               <label><input type="checkbox" id="credito"> Crédito</label>
             </div>
           </div>
-          <div class="seccion"><label>Deuda:</label><input type="number" step="0.01" id="deuda"></div>
-          <div class="seccion"><label>Patentes / Multas:</label><textarea id="patentes_multas" rows="2"></textarea></div>
-          <div class="seccion"><label>Estado:</label><textarea id="estado" rows="3"></textarea></div>
           <div class="seccion">
-            <label>📸 Fotos:</label>
-            <input type="file" accept="image/*" capture="environment" id="foto1"><br>
-            <input type="file" accept="image/*" capture="environment" id="foto2"><br>
-            <input type="file" accept="image/*" capture="environment" id="foto3"><br>
-            <input type="file" accept="image/*" capture="environment" id="foto4"><br>
-            <input type="file" accept="image/*" capture="environment" id="foto5"><br>
-            <input type="file" accept="image/*" capture="environment" id="foto6_1"><br>
-            <input type="file" accept="image/*" capture="environment" id="foto6_2"><br>
-            <input type="file" accept="image/*" capture="environment" id="foto6_3"><br>
-            <input type="file" accept="image/*" capture="environment" id="foto6_4"><br>
-            <input type="file" accept="image/*" capture="environment" id="foto7_1"><br>
-            <input type="file" accept="image/*" capture="environment" id="foto7_2"><br>
-            <input type="file" accept="image/*" capture="environment" id="foto7_3"><br>
-            <input type="file" accept="image/*" capture="environment" id="foto7_4"><br>
-            <input type="file" accept="image/*" capture="environment" id="foto8"><br>
-            <input type="file" accept="image/*" capture="environment" id="foto9"><br>
-            <input type="file" accept="image/*" capture="environment" id="foto10">
+            <label>Deuda ($):</label>
+            <input type="number" step="0.01" id="deuda">
+          </div>
+          <div class="seccion">
+            <label>Patentes / Multas:</label>
+            <textarea id="patentes_multas" rows="2"></textarea>
+          </div>
+          <div class="seccion">
+            <label>Estado del vehículo:</label>
+            <textarea id="estado" rows="3"></textarea>
           </div>
           <button type="submit" class="boton-principal">✅ Guardar Vehículo</button>
         </form>
       </div>
     </div>
 
-    <!-- LISTA -->
+    <!-- PANTALLA DE LISTA -->
     <div id="pantalla-lista" class="pantalla">
       <button class="boton-principal boton-volver" onclick="irA('pantalla-inicio')">← Volver</button>
       <div class="tarjeta">
@@ -100,12 +163,8 @@
   </div>
 
 <script>
-// ==============================================
-// PONÉ TUS DATOS ACÁ ABAJO 👇
-// ==============================================
 const SUPABASE_URL = 'https://cgdahvstitjksphucqk.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_gQlcOTNud-ur22ur4-TJQw_hAgmkBfr';
-// ==============================================
 
 const { createClient } = supabase;
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -137,17 +196,6 @@ formulario.addEventListener('submit', async e => {
     patentes_multas: document.getElementById('patentes_multas').value,
     estado: document.getElementById('estado').value
   };
-
-  const camposFoto = ['foto1','foto2','foto3','foto4','foto5','foto6_1','foto6_2','foto6_3','foto6_4','foto7_1','foto7_2','foto7_3','foto7_4','foto8','foto9','foto10'];
-  
-  for (const campo of camposFoto) {
-    const input = document.getElementById(campo);
-    if (input.files && input.files[0]) {
-      datos[campo + '_url'] = 'subida_pendiente';
-    } else {
-      datos[campo + '_url'] = '';
-    }
-  }
 
   const { error } = await supabase.from('autos').insert([datos]);
   if (error) {
@@ -183,6 +231,12 @@ async function cargarAutos() {
         <p><strong>Precio:</strong> $${auto.precio || '-'}</p>
         <p><strong>Dueño:</strong> ${auto.dueno || '-'}</p>
         <p><strong>Teléfono:</strong> ${auto.telefono || '-'}</p>
+        <p><strong>Dirección:</strong> ${auto.direccion || '-'}</p>
+        <p><strong>Permuta:</strong> ${auto.permuta ? 'Sí' : 'No'}</p>
+        <p><strong>Contado:</strong> ${auto.contado ? 'Sí' : 'No'}</p>
+        <p><strong>Crédito:</strong> ${auto.credito ? 'Sí' : 'No'}</p>
+        <p><strong>Deuda:</strong> $${auto.deuda || '0'}</p>
+        <p><strong>Patentes/Multas:</strong> ${auto.patentes_multas || 'Ninguna'}</p>
         <p><strong>Estado:</strong> ${auto.estado || '-'}</p>
       </div>
     `;
