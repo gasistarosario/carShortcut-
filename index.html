@@ -1,62 +1,71 @@
 
 
 <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guardar Auto</title>
+  <!-- Cargar Supabase -->
+  <script src="https://jsdelivr.net"></script>
+  <script>
+    const SUPABASE_URL = "https://supabase.co";
+    const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
+    
+    // Conectar a Supabase
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  </script>
+</head>
+<body>
 
-html lang="es">
- <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Guardar Auto</title>
-   <!-- Cargar Supabase -->
-   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-   <script>
-     // Tus datos — la URL ya está lista ✅
-     const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
-     
-     // 👇 PEGÁ TU CLAVE PUBLISHABLE ENTRE LAS COMILLAS 👇
-     const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
-     // Conectar
-     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-   </script>
- </head>
- <body>
-   <h1>Registrar Auto</h1>
-   <form id="formAuto">
-     <label>Marca:</label><br>
-     <input type="text" id="marca" required><br><br>
-     <label>Modelo:</label><br>
-     <input type="text" id="modelo" required><br><br>
-     <label>Precio:</label><br>
-     <input type="number" id="precio" required><br><br>
- <label>Telefono:</label><br>
-     <input type="number" id="telefono" required><br><br>
+  <h1>Registrar Auto</h1>
+  
+  <form id="formAuto">
+    <label>Marca:</label><br>
+    <input type="text" id="marca" required><br><br>
+    
+    <label>Modelo:</label><br>
+    <input type="text" id="modelo" required><br><br>
+    
+    <label>Precio:</label><br>
+    <input type="number" id="precio" required><br><br>
+    
+    <label>Teléfono:</label><br>
+    <input type="text" id="telefono" required><br><br>
+    
     <label>Descripción:</label><br>
-     <textarea id="descripcion"></textarea><br><br>
-     <button type="submit">Guardar</button>
-   </form>
-   <script>
-     const form = document.getElementById('formAuto');
-     form.addEventListener('submit', async (e) => {
-       e.preventDefault();
-       // Tomar los valores del formulario
-       const datos = {
-         marca: document.getElementById('marca').value,
-         modelo: document.getElementById('modelo').value,
-         precio: Number(document.getElementById('precio').value),
-         telefono: Number(document.getElementById('telefono').value),
-         descripcion: document.getElementById('descripcion').value
-       
-       };
-       // Enviar a la base de datos
-       const { error } = await db.from('Auto').insert([datos]);
-       if (error) {
-         alert("❌ Error: " + error.message);
-         console.error(error);
-       } else {
-         alert("✅ ¡Guardado correctamente!");
-         form.reset(); // Limpiar formulario
-       }
-     });
-   </script>
- </body>
- </html>
+    <textarea id="descripcion"></textarea><br><br>
+    
+    <button type="submit">Guardar</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('formAuto');
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Tomar los valores del formulario
+      const datos = {
+        marca: document.getElementById('marca').value,
+        modelo: document.getElementById('modelo').value,
+        precio: Number(document.getElementById('precio').value),
+        telefono: document.getElementById('telefono').value, // Enviado como texto plano
+        descripcion: document.getElementById('descripcion').value
+      };
+      
+      // Enviar a la base de datos
+      const { error } = await db.from('Auto').insert([datos]);
+      
+      if (error) {
+        alert("❌ Error: " + error.message);
+        console.error(error);
+      } else {
+        alert("✅ ¡Guardado correctamente!");
+        form.reset(); // Limpiar formulario
+      }
+    });
+  </script>
+
+</body>
+</html>
