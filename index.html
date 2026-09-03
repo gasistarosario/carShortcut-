@@ -9,11 +9,13 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
     body {
-      background: #4a6cf7;
+      background: #84a6c7;
       min-height: 100vh;
       padding: 20px;
     }
     .contenedor { max-width: 550px; margin: 0 auto; }
+    .pantalla { display: none; }
+    #pantalla-inicio { display: block; }
     .tarjeta {
       background: white;
       padding: 30px;
@@ -21,403 +23,312 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       margin-bottom: 20px;
     }
-    h1, h2 {
-      color: #1e40af;
-      text-align: center;
-      margin-bottom: 25px;
-    }
-    h2 { font-size: 1.3em; margin-top: 10px; }
-    label {
+    h1, h2 { text-align: center; margin-bottom: 20px; }
+    .boton-principal {
       display: block;
-      margin-top: 14px;
-      font-weight: 500;
-      color: #374151;
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 15px;
+      width: 100%;
+      border-radius: 12px;
+      font-size: 18px;
+      cursor: pointer;
+      margin: 10px 0;
     }
+    .boton-principal:hover { background: #1d4ed8; }
+    .boton-volver {
+      background: #6b7280;
+      margin-bottom: 20px;
+    }
+    .boton-volver:hover { background: #4b5563; }
+    .seccion { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
     input, textarea {
       width: 100%;
       padding: 10px;
-      margin-top: 6px;
-      border: 1px solid #d1d5db;
-      border-radius: 6px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
       font-size: 16px;
     }
-    .fila-doble {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    button {
-      width: 100%;
-      padding: 14px;
-      font-size: 1.1em;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-    .btn-verde { background: #22c55e; color: white; }
-    .btn-verde:hover { background: #16a34a; }
-    .btn-gris { background: #e5e7eb; color: #374151; margin-top: 10px; }
-    .btn-gris:hover { background: #d1d5db; }
-    .btn-azul { background: #3b82f6; color: white; }
-    .btn-azul:hover { background: #2563eb; }
-    .seccion {
-      border-top: 1px dashed #ddd;
-      margin-top: 20px;
-      padding-top: 15px;
-    }
-    .btn-camara {
-      display: block;
-      background: #22c55e;
-      color: white;
-      padding: 12px;
-      border-radius: 8px;
-      text-align: center;
-      cursor: pointer;
-      font-weight: bold;
-      margin-top: 8px;
-    }
-    .btn-camara:hover { background: #16a34a; }
-    .vista-previa {
-      margin-top: 8px;
-      max-width: 160px;
-      border-radius: 8px;
-      display: none;
-      border: 2px solid #22c55e;
-    }
-    .opciones {
-      display: flex;
-      gap: 15px;
-      margin-top: 8px;
-      flex-wrap: wrap;
-    }
-    .opciones label { display: inline; margin: 0; font-weight: normal; }
-    .aviso {
-      background: #fef3c7;
-      padding: 10px;
-      border-radius: 6px;
-      margin-top: 8px;
-      font-size: 0.9em;
-      color: #92400e;
-    }
-    .subfoto { margin-left: 15px; margin-top: 10px; }
+    .checkbox-grupo { display: flex; gap: 15px; flex-wrap: wrap; margin: 10px 0; }
+    .checkbox-grupo label { display: flex; align-items: center; gap: 5px; font-weight: normal; }
     .auto-tarjeta {
-      border: 1px solid #e5e7eb;
-      padding: 16px;
-      margin: 12px 0;
-      border-radius: 10px;
-      text-align: left;
+      background: #f9fafb;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      border-left: 4px solid #2563eb;
     }
-    .auto-tarjeta h3 { color: #1e40af; margin-bottom: 8px; }
     .auto-foto {
-      max-width: 100px;
-      border-radius: 6px;
-      margin: 4px;
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin: 10px 0;
+      background: #eee;
     }
   </style>
 </head>
 <body>
+  <div class="contenedor">
 
-<div class="contenedor">
-  <!-- PANTALLA PRINCIPAL -->
-  <div id="pantallaInicio">
-    <div class="tarjeta">
-      <h1>🚗 Autos en Venta</h1>
-      <button class="btn-verde" onclick="irA('pantallaFormulario')">➕ Ingresar Auto</button>
-      <button class="btn-azul" onclick="cargarLista()">👁️ Ver Autos</button>
+    <!-- PANTALLA DE INICIO -->
+    <div id="pantalla-inicio" class="pantalla">
+      <h1 style="color:white; margin-top: 20px;">🚗 Autos en Venta</h1>
+      <div class="tarjeta">
+        <button class="boton-principal" onclick="irA('pantalla-cargar')">📝 Ingresar Auto</button>
+        <button class="boton-principal" onclick="irA('pantalla-lista')">📋 Ver Autos Cargados</button>
+      </div>
     </div>
-  </div>
 
-  <!-- FORMULARIO -->
-  <div id="pantallaFormulario" style="display: none;">
-    <div class="tarjeta">
-      <h2>Ingresar Auto</h2>
-      
-      <form id="formAuto">
-        <label>Dueño o Agencia:</label>
-        <input type="text" id="dueno">
-
-        <label>Dirección:</label>
-        <input type="text" id="direccion">
-
-        <label>Teléfono:</label>
-        <input type="text" id="telefono">
-
-        <div class="seccion">
-          <label>Precio ($):</label>
-          <input type="number" step="0.01" id="precio">
-
-          <label>Opciones de pago:</label>
-          <div class="opciones">
-            <label><input type="checkbox" id="permuta"> Permuta</label>
-            <label><input type="checkbox" id="contado"> Contado</label>
-            <label><input type="checkbox" id="credito"> Crédito</label>
+    <!-- PANTALLA DE CARGA -->
+    <div id="pantalla-cargar" class="pantalla">
+      <button class="boton-principal boton-volver" onclick="irA('pantalla-inicio')">← Volver</button>
+      <div class="tarjeta">
+        <h2>Cargar Vehículo</h2>
+        <form id="formAuto">
+          <div class="seccion">
+            <label>Marca:</label>
+            <input type="text" id="marca" required>
           </div>
-        </div>
-
-        <div class="seccion">
-          <label>Marca:</label>
-          <input type="text" id="marca">
-          <div class="fila-doble">
-            <div><label>Año:</label><input type="number" id="anio"></div>
-            <div><label>Versión:</label><input type="text" id="version"></div>
+          <div class="seccion">
+            <label>Modelo / Año:</label>
+            <input type="text" id="modelo" placeholder="Ej: Corolla 2020" required>
           </div>
-        </div>
-
-        <div class="seccion">
-          <label>Deuda ($):</label>
-          <input type="number" step="0.01" id="deuda">
-          <label>Patentes / Multas:</label>
-          <textarea id="patentes_multas" rows="2" placeholder="Detallar si hay..."></textarea>
-        </div>
-
-        <div class="seccion">
-          <label>Estado del vehículo:</label>
-          <textarea id="estado" rows="3" placeholder="Describir estado..."></textarea>
-        </div>
-
-        <!-- FOTOS ORDENADAS COMO PEDISTE 📸 -->
-        <div class="seccion">
-          <h2>📸 Sacar Fotos</h2>
-          <p class="aviso">💡 Cuando pregunte → elegí <strong>"Cámara"</strong></p>
-          
-          <!-- 1 - Frente -->
-          <label>1 - Frente:</label>
-          <input type="file" id="foto1" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto1_url','v1')">
-          <span class="btn-camara" onclick="document.getElementById('foto1').click()">📷 Sacar foto</span>
-          <img id="v1" class="vista-previa">
-
-          <!-- 2 - Lateral izquierdo -->
-          <label>2 - Lateral izquierdo:</label>
-          <input type="file" id="foto2" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto2_url','v2')">
-          <span class="btn-camara" onclick="document.getElementById('foto2').click()">📷 Sacar foto</span>
-          <img id="v2" class="vista-previa">
-
-          <!-- 3 - Lateral derecho -->
-          <label>3 - Lateral derecho:</label>
-          <input type="file" id="foto3" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto3_url','v3')">
-          <span class="btn-camara" onclick="document.getElementById('foto3').click()">📷 Sacar foto</span>
-          <img id="v3" class="vista-previa">
-
-          <!-- 4 - Trasera -->
-          <label>4 - Trasera:</label>
-          <input type="file" id="foto4" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto4_url','v4')">
-          <span class="btn-camara" onclick="document.getElementById('foto4').click()">📷 Sacar foto</span>
-          <img id="v4" class="vista-previa">
-
-          <!-- 5 - Motor -->
-          <label>5 - Motor:</label>
-          <input type="file" id="foto5" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto5_url','v5')">
-          <span class="btn-camara" onclick="document.getElementById('foto5').click()">📷 Sacar foto</span>
-          <img id="v5" class="vista-previa">
-
-          <!-- 6 - Interior → 4 fotos -->
-          <label>6 - Interior:</label>
-          <div class="subfoto">
-            <label>6.1 - Asientos delanteros:</label>
-            <input type="file" id="foto6_1" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto6_1_url','v6_1')">
-            <span class="btn-camara" onclick="document.getElementById('foto6_1').click()">📷 Sacar foto</span>
-            <img id="v6_1" class="vista-previa">
-
-            <label>6.2 - Asientos traseros:</label>
-            <input type="file" id="foto6_2" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto6_2_url','v6_2')">
-            <span class="btn-camara" onclick="document.getElementById('foto6_2').click()">📷 Sacar foto</span>
-            <img id="v6_2" class="vista-previa">
-
-            <label>6.3 - Tablero y volante:</label>
-            <input type="file" id="foto6_3" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto6_3_url','v6_3')">
-            <span class="btn-camara" onclick="document.getElementById('foto6_3').click()">📷 Sacar foto</span>
-            <img id="v6_3" class="vista-previa">
-
-            <label>6.4 - Baúl / Detalle interior:</label>
-            <input type="file" id="foto6_4" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto6_4_url','v6_4')">
-            <span class="btn-camara" onclick="document.getElementById('foto6_4').click()">📷 Sacar foto</span>
-            <img id="v6_4" class="vista-previa">
+          <div class="seccion">
+            <label>Versión:</label>
+            <input type="text" id="version">
           </div>
-
-          <!-- 7 - Ruedas → 4 fotos -->
-          <label>7 - Ruedas:</label>
-          <div class="subfoto">
-            <label>7.1 - Delantera izquierda:</label>
-            <input type="file" id="foto7_1" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto7_1_url','v7_1')">
-            <span class="btn-camara" onclick="document.getElementById('foto7_1').click()">📷 Sacar foto</span>
-            <img id="v7_1" class="vista-previa">
-
-            <label>7.2 - Delantera derecha:</label>
-            <input type="file" id="foto7_2" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto7_2_url','v7_2')">
-            <span class="btn-camara" onclick="document.getElementById('foto7_2').click()">📷 Sacar foto</span>
-            <img id="v7_2" class="vista-previa">
-
-            <label>7.3 - Trasera izquierda:</label>
-            <input type="file" id="foto7_3" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto7_3_url','v7_3')">
-            <span class="btn-camara" onclick="document.getElementById('foto7_3').click()">📷 Sacar foto</span>
-            <img id="v7_3" class="vista-previa">
-
-            <label>7.4 - Trasera derecha:</label>
-            <input type="file" id="foto7_4" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto7_4_url','v7_4')">
-            <span class="btn-camara" onclick="document.getElementById('foto7_4').click()">📷 Sacar foto</span>
-            <img id="v7_4" class="vista-previa">
+          <div class="seccion">
+            <label>Año:</label>
+            <input type="number" id="anio" min="1990" max="2026">
           </div>
-
-          <!-- 8, 9, 10 - Detalles extras -->
-          <label>8 - Detalle extra:</label>
-          <input type="file" id="foto8" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto8_url','v8')">
-          <span class="btn-camara" onclick="document.getElementById('foto8').click()">📷 Sacar foto</span>
-          <img id="v8" class="vista-previa">
-
-          <label>9 - Detalle extra:</label>
-          <input type="file" id="foto9" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto9_url','v9')">
-          <span class="btn-camara" onclick="document.getElementById('foto9').click()">📷 Sacar foto</span>
-          <img id="v9" class="vista-previa">
-
-          <label>10 - Detalle extra:</label>
-          <input type="file" id="foto10" accept="image/*" capture="environment" style="display:none" onchange="guardarFoto(this,'foto10_url','v10')">
-          <span class="btn-camara" onclick="document.getElementById('foto10').click()">📷 Sacar foto</span>
-          <img id="v10" class="vista-previa">
-        </div>
-
-        <button type="submit" class="btn-verde">✅ Guardar Auto</button>
-        <button type="button" class="btn-gris" onclick="irA('pantallaInicio')">Volver</button>
-      </form>
+          <div class="seccion">
+            <label>Precio ($):</label>
+            <input type="number" step="0.01" id="precio" required>
+          </div>
+          <div class="seccion">
+            <label>Dueño:</label>
+            <input type="text" id="dueno">
+          </div>
+          <div class="seccion">
+            <label>Dirección:</label>
+            <input type="text" id="direccion">
+          </div>
+          <div class="seccion">
+            <label>Teléfono:</label>
+            <input type="text" id="telefono">
+          </div>
+          <div class="seccion">
+            <label>Forma de pago:</label>
+            <div class="checkbox-grupo">
+              <label><input type="checkbox" id="permuta"> Permuta</label>
+              <label><input type="checkbox" id="contado"> Contado</label>
+              <label><input type="checkbox" id="credito"> Crédito</label>
+            </div>
+          </div>
+          <div class="seccion">
+            <label>Deuda ($):</label>
+            <input type="number" step="0.01" id="deuda">
+          </div>
+          <div class="seccion">
+            <label>Patentes / Multas:</label>
+            <textarea id="patentes_multas" rows="2" placeholder="Detallar si hay..."></textarea>
+          </div>
+          <div class="seccion">
+            <label>Estado del vehículo:</label>
+            <textarea id="estado" rows="3" placeholder="Describir estado..."></textarea>
+          </div>
+          <div class="seccion">
+            <h3>📸 Fotos</h3>
+            <input type="file" accept="image/*" capture="environment" id="foto1" style="margin: 5px 0;">
+            <input type="file" accept="image/*" capture="environment" id="foto2" style="margin: 5px 0;">
+            <input type="file" accept="image/*" capture="environment" id="foto3" style="margin: 5px 0;">
+            <input type="file" accept="image/*" capture="environment" id="foto4" style="margin: 5px 0;">
+            <input type="file" accept="image/*" capture="environment" id="foto5" style="margin: 5px 0;">
+            <input type="file" accept="image/*" capture="environment" id="foto6_1" style="margin: 5px 0;">
+            <input type="file" accept="image/*" capture="environment" id="foto6_2" style="margin: 5px 0;">
+            <input type="file" accept="image/*" capture="environment" id="foto6_3" style="margin: 5px 0;">
+            <input type="file" accept="image/*" capture="environment" id="foto6_4" style="margin: 5px 0;">
+            <input type="file" accept="image/*" capture="environment" id="foto7_1" style="margin: 5px 0;">
+            <input type="file" accept="image/*" capture="environment" id="foto7_2" style="margin: 5px 0;">
+            <input type="file" accept="image/*" capture="environment" id="foto7_3" style="margin: 5px 0;">
+            <input type="file" accept="image/*" capture="environment" id="foto7_4" style="margin: 5px 0;">
+            <input type="file" accept="image/*" capture="environment" id="foto8" style="margin: 5px 0;">
+            <input type="file" accept="image/*" capture="environment" id="foto9" style="margin: 5px 0;">
+            <input type="file" accept="image/*" capture="environment" id="foto10" style="margin: 5px 0;">
+          </div>
+          <button type="submit" class="boton-principal">✅ Guardar Vehículo</button>
+        </form>
+      </div>
     </div>
-  </div>
 
-  <!-- LISTA DE AUTOS -->
-  <div id="pantallaLista" style="display: none;">
-    <div class="tarjeta">
-      <h2>Autos Cargados</h2>
-      <div id="lista"></div>
-      <button class="btn-gris" onclick="irA('pantallaInicio')">Volver</button>
+    <!-- PANTALLA DE LISTA -->
+    <div id="pantalla-lista" class="pantalla">
+      <button class="boton-principal boton-volver" onclick="irA('pantalla-inicio')">← Volver</button>
+      <div class="tarjeta">
+        <h2>Lista de Vehículos</h2>
+        <div id="listaAutos"></div>
+      </div>
     </div>
+
   </div>
-</div>
 
 <script>
-// === TUS DATOS DE SUPABASE AQUÍ ===
-const SUPABASE_URL = 'https://cgwdahvstitjksphucqk.supabase.co';
+// ==============================================
+// 🔴 PONÉ TUS DATOS DE SUPABASE ACÁ ABAJO 🔴
+// ==============================================
+const SUPABASE_URL = 'https://cgwdahvstitjksphucqk.supabase.co/rest';
 const SUPABASE_KEY = 'sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr';
-// ===================================
+// ==============================================
 
-const { createClient } = window.supabase;
+const { createClient } = supabase;
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Guardamos las fotos temporalmente
-const fotos = {};
-
-// Cambiar pantalla
 function irA(id) {
-  document.querySelectorAll('.contenedor > div').forEach(p => p.style.display = 'none');
+  document.querySelectorAll('.pantalla').forEach(pantalla => {
+    pantalla.style.display = 'none';
+  });
   document.getElementById(id).style.display = 'block';
+  if (id === 'pantalla-lista') cargarAutos();
 }
 
-// Guardar foto como base64 y mostrar vista previa
-function guardarFoto(input, campo, idVista) {
-  if (input.files && input.files[0]) {
-    const lector = new FileReader();
-    lector.onload = function(e) {
-      fotos[campo] = e.target.result;
-      document.getElementById(idVista).src = e.target.result;
-      document.getElementById(idVista).style.display = 'block';
-    };
-    lector.readAsDataURL(input.files[0]);
-  }
-}
+const formulario = document.getElementById('formAuto');
+const lista = document.getElementById('listaAutos');
 
-// Enviar a la base de datos
-document.getElementById('formAuto').addEventListener('submit', async function(e) {
+formulario.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const datos = {
-    dueno: document.getElementById('dueno').value || null,
-    direccion: document.getElementById('direccion').value || null,
-    telefono: document.getElementById('telefono').value || null,
-    precio: document.getElementById('precio').value ? Number(document.getElementById('precio').value) : null,
+    marca: document.getElementById('marca').value,
+    modelo: document.getElementById('modelo').value,
+    version: document.getElementById('version').value,
+    anio: parseInt(document.getElementById('anio').value) || null,
+    precio: parseFloat(document.getElementById('precio').value) || 0,
+    dueno: document.getElementById('dueno').value,
+    direccion: document.getElementById('direccion').value,
+    telefono: document.getElementById('telefono').value,
     permuta: document.getElementById('permuta').checked,
     contado: document.getElementById('contado').checked,
     credito: document.getElementById('credito').checked,
-    marca: document.getElementById('marca').value || null,
-    anio: document.getElementById('anio').value ? Number(document.getElementById('anio').value) : null,
-    version: document.getElementById('version').value || null,
-    deuda: document.getElementById('deuda').value ? Number(document.getElementById('deuda').value) : null,
-    patentes_multas: document.getElementById('patentes_multas').value || null,
-    estado: document.getElementById('estado').value || null,
-    ...fotos
+    deuda: parseFloat(document.getElementById('deuda').value) || 0,
+    patentes_multas: document.getElementById('patentes_multas').value,
+    estado: document.getElementById('estado').value,
+    foto1_url: '',
+    foto2_url: '',
+    foto3_url: '',
+    foto4_url: '',
+    foto5_url: '',
+    foto6_1_url: '',
+    foto6_2_url: '',
+    foto6_3_url: '',
+    foto6_4_url: '',
+    foto7_1_url: '',
+    foto7_2_url: '',
+    foto7_3_url: '',
+    foto7_4_url: '',
+    foto8_url: '',
+    foto9_url: '',
+    foto10_url: ''
   };
+
+  const camposFotos = [
+    'foto1','foto2','foto3','foto4','foto5',
+    'foto6_1','foto6_2','foto6_3','foto6_4',
+    'foto7_1','foto7_2','foto7_3','foto7_4',
+    'foto8','foto9','foto10'
+  ];
+
+  for (const campo of camposFotos) {
+    const input = document.getElementById(campo);
+    if (input.files.length > 0) {
+      const archivo = input.files[0];
+      const nombreArchivo = `${Date.now()}_${campo}.jpg`;
+      
+      const { data, error } = await supabase.storage
+        .from('fotos-autos')
+        .upload(nombreArchivo, archivo);
+
+      if (!error) {
+        const { data: { publicUrl } } = supabase.storage
+          .from('fotos-autos')
+          .getPublicUrl(nombreArchivo);
+        
+        datos[`${campo}_url`] = publicUrl;
+      }
+    }
+  }
 
   const { error } = await supabase.from('autos').insert([datos]);
 
   if (error) {
-    alert('❌ Error: ' + error.message);
+    alert('❌ Error al guardar: ' + error.message);
   } else {
-    alert('✅ ¡Guardado con éxito!');
-    this.reset();
-    Object.keys(fotos).forEach(k => delete fotos[k]);
-    document.querySelectorAll('.vista-previa').forEach(img => img.style.display = 'none');
-    irA('pantallaInicio');
+    alert('✅ Vehículo guardado correctamente');
+    formulario.reset();
+    irA('pantalla-lista');
   }
 });
 
-// Cargar lista de autos
-async function cargarLista() {
-  irA('pantallaLista');
+async function cargarAutos() {
+  lista.innerHTML = '<p style="text-align:center;">Cargando...</p>';
   
   const { data: autos, error } = await supabase
     .from('autos')
     .select('*')
     .order('id', { ascending: false });
 
-  const lista = document.getElementById('lista');
-  
   if (error) {
-    lista.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+    lista.innerHTML = '<p style="color:red;">Error al cargar: ' + error.message + '</p>';
     return;
   }
-  
-  if (!autos.length) {
-    lista.innerHTML = '<p>No hay autos cargados todavía</p>';
+
+  if (!autos || autos.length === 0) {
+    lista.innerHTML = '<p style="text-align:center; color:#666;">No hay autos cargados todavía</p>';
     return;
   }
-  
+
   lista.innerHTML = '';
   autos.forEach(auto => {
     lista.innerHTML += `
       <div class="auto-tarjeta">
-        <h3>${auto.marca || 'Sin marca'} ${auto.version || ''} — ${auto.anio || ''}</h3>
-        ${auto.dueno ? `<p><strong>Dueño:</strong> ${auto.dueno}</p>` : ''}
-        ${auto.direccion ? `<p><strong>Dirección:</strong> ${auto.direccion}</p>` : ''}
-        ${auto.telefono ? `<p><strong>Teléfono:</strong> ${auto.telefono}</p>` : ''}
-        ${auto.precio ? `<p><strong>Precio:</strong> $${auto.precio}</p>` : ''}
-        <p><strong>Forma de pago:</strong> 
-          ${auto.permuta ? '🔄 Permuta ' : ''}
-          ${auto.contado ? '💵 Contado ' : ''}
-          ${auto.credito ? '📅 Crédito' : ''}
+        <h3>${auto.marca || 'Sin marca'} ${auto.modelo || ''} ${auto.anio || ''}</h3>
+        <p><strong>Versión:</strong> ${auto.version || '-'}</p>
+        <p><strong>Dueño:</strong> ${auto.dueno || '-'}</p>
+        <p><strong>Dirección:</strong> ${auto.direccion || '-'}</p>
+        <p><strong>Teléfono:</strong> ${auto.telefono || '-'}</p>
+        <p><strong>Precio:</strong> $${auto.precio || '-'}</p>
+        <p><strong>Forma de pago:</strong>
+          ${auto.permuta ? '✅ Permuta ' : ''}
+          ${auto.contado ? '✅ Contado ' : ''}
+          ${auto.credito ? '✅ Crédito ' : ''}
+          ${!auto.permuta && !auto.contado && !auto.credito ? 'No especificada' : ''}
         </p>
-        ${auto.deuda ? `<p><strong>Deuda:</strong> $${auto.deuda}</p>` : ''}
-        ${auto.estado ? `<p><strong>Estado:</strong> ${auto.estado}</p>` : ''}
-        <div>
-          ${auto.foto1_url ? `<img src="${auto.foto1_url}" class="auto-foto" alt="Frente">` : ''}
-          ${auto.foto2_url ? `<img src="${auto.foto2_url}" class="auto-foto" alt="Lateral izquierdo">` : ''}
-          ${auto.foto3_url ? `<img src="${auto.foto3_url}" class="auto-foto" alt="Lateral derecho">` : ''}
-          ${auto.foto4_url ? `<img src="${auto.foto4_url}" class="auto-foto" alt="Trasera">` : ''}
-          ${auto.foto5_url ? `<img src="${auto.foto5_url}" class="auto-foto" alt="Motor">` : ''}
-          ${auto.foto6_1_url ? `<img src="${auto.foto6_1_url}" class="auto-foto" alt="Interior 6.1">` : ''}
-          ${auto.foto6_2_url ? `<img src="${auto.foto6_2_url}" class="auto-foto" alt="Interior 6.2">` : ''}
-          ${auto.foto6_3_url ? `<img src="${auto.foto6_3_url}" class="auto-foto" alt="Interior 6.3">` : ''}
-          ${auto.foto6_4_url ? `<img src="${auto.foto6_4_url}" class="auto-foto" alt="Interior 6.4">` : ''}
-          ${auto.foto7_1_url ? `<img src="${auto.foto7_1_url}" class="auto-foto" alt="Rueda 7.1">` : ''}
-          ${auto.foto7_2_url ? `<img src="${auto.foto7_2_url}" class="auto-foto" alt="Rueda 7.2">` : ''}
-          ${auto.foto7_3_url ? `<img src="${auto.foto7_3_url}" class="auto-foto" alt="Rueda 7.3">` : ''}
-          ${auto.foto7_4_url ? `<img src="${auto.foto7_4_url}" class="auto-foto" alt="Rueda 7.4">` : ''}
-          ${auto.foto8_url ? `<img src="${auto.foto8_url}" class="auto-foto" alt="Detalle 8">` : ''}
-          ${auto.foto9_url ? `<img src="${auto.foto9_url}" class="auto-foto" alt="Detalle 9">` : ''}
-          ${auto.foto10_url ? `<img src="${auto.foto10_url}" class="auto-foto" alt="Detalle 10">` : ''}
-        </div>
+        <p><strong>Deuda:</strong> $${auto.deuda || '0'}</p>
+        <p><strong>Patentes/Multas:</strong> ${auto.patentes_multas || 'Ninguna'}</p>
+        <p><strong>Estado:</strong> ${auto.estado || 'No especificado'}</p>
+        
+        ${auto.foto1_url ? `<img src="${auto.foto1_url}" class="auto-foto" alt="Foto">` : ''}
+        ${auto.foto2_url ? `<img src="${auto.foto2_url}" class="auto-foto" alt="Foto">` : ''}
+        ${auto.foto3_url ? `<img src="${auto.foto3_url}" class="auto-foto" alt="Foto">` : ''}
+        ${auto.foto4_url ? `<img src="${auto.foto4_url}" class="auto-foto" alt="Foto">` : ''}
+        ${auto.foto5_url ? `<img src="${auto.foto5_url}" class="auto-foto" alt="Foto">` : ''}
+        ${auto.foto6_1_url ? `<img src="${auto.foto6_1_url}" class="auto-foto" alt="Foto">` : ''}
+        ${auto.foto6_2_url ? `<img src="${auto.foto6_2_url}" class="auto-foto" alt="Foto">` : ''}
+        ${auto.foto6_3_url ? `<img src="${auto.foto6_3_url}" class="auto-foto" alt="Foto">` : ''}
+        ${auto.foto6_4_url ? `<img src="${auto.foto6_4_url}" class="auto-foto" alt="Foto">` : ''}
+        ${auto.foto7_1_url ? `<img src="${auto.foto7_1_url}" class="auto-foto" alt="Foto">` : ''}
+        ${auto.foto7_2_url ? `<img src="${auto.foto7_2_url}" class="auto-foto" alt="Foto">` : ''}
+        ${auto.foto7_3_url ? `<img src="${auto.foto7_3_url}" class="auto-foto" alt="Foto">` : ''}
+        ${auto.foto7_4_url ? `<img src="${auto.foto7_4_url}" class="auto-foto" alt="Foto">` : ''}
+        ${auto.foto8_url ? `<img src="${auto.foto8_url}" class="auto-foto" alt="Foto">` : ''}
+        ${auto.foto9_url ? `<img src="${auto.foto9_url}" class="auto-foto" alt="Foto">` : ''}
+        ${auto.foto10_url ? `<img src="${auto.foto10_url}" class="auto-foto" alt="Foto">` : ''}
       </div>
     `;
   });
 }
 </script>
-
 </body>
 </html>
