@@ -1,71 +1,238 @@
 
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Guardar Auto</title>
-  <!-- Cargar Supabase -->
-  <script src="https://jsdelivr.net"></script>
-  <script>
-    const SUPABASE_URL = "https://supabase.co";
-    const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
-    
-    // Conectar a Supabase
-    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  </script>
+  <title>Autos en Venta</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body {
+      background: #4a6cf7;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .contenedor { max-width: 550px; margin: 0 auto; }
+    .tarjeta {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      margin-bottom: 20px;
+    }
+    h1, h2 {
+      color: #1e40af;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    h2 { font-size: 1.3em; margin-top: 10px; }
+    label {
+      display: block;
+      margin-top: 14px;
+      font-weight: 500;
+      color: #374151;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    .fila-doble {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    .btn-verde { background: #22c55e; color: white; }
+    .btn-verde:hover { background: #16a34a; }
+    .btn-gris { background: #e5e7eb; color: #374151; margin-top: 10px; }
+    .btn-gris:hover { background: #d1d5db; }
+    .seccion {
+      border-top: 1px dashed #ddd;
+      margin-top: 20px;
+      padding-top: 15px;
+    }
+    .btn-camara {
+      display: block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 14px;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+    .btn-camara:hover { background: #bfdbfe; }
+    .vista-previa {
+      margin-top: 10px;
+      max-width: 180px;
+      border-radius: 8px;
+      display: none;
+      border: 2px solid #22c55e;
+    }
+    .opciones {
+      display: flex;
+      gap: 15px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .opciones label { display: inline; margin: 0; font-weight: normal; }
+  </style>
 </head>
 <body>
 
-  <h1>Registrar Auto</h1>
-  
-  <form id="formAuto">
-    <label>Marca:</label><br>
-    <input type="text" id="marca" required><br><br>
-    
-    <label>Modelo:</label><br>
-    <input type="text" id="modelo" required><br><br>
-    
-    <label>Precio:</label><br>
-    <input type="number" id="precio" required><br><br>
-    
-    <label>Teléfono:</label><br>
-    <input type="text" id="telefono" required><br><br>
-    
-    <label>Descripción:</label><br>
-    <textarea id="descripcion"></textarea><br><br>
-    
-    <button type="submit">Guardar</button>
-  </form>
+<div class="contenedor">
+  <!-- PANTALLA PRINCIPAL -->
+  <div id="pantallaInicio">
+    <div class="tarjeta">
+      <h1>🚗 Autos en Venta</h1>
+      <button class="btn-verde" onclick="irA('pantallaFormulario')">➕ Ingresar Auto</button>
+      <button class="btn-verde" onclick="alert('Próximamente')">👁️ Ver Autos</button>
+    </div>
+  </div>
 
-  <script>
-    const form = document.getElementById('formAuto');
-    
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+  <!-- FORMULARIO -->
+  <div id="pantallaFormulario" style="display: none;">
+    <div class="tarjeta">
+      <h2>Ingresar Auto</h2>
       
-      // Tomar los valores del formulario
-      const datos = {
-        marca: document.getElementById('marca').value,
-        modelo: document.getElementById('modelo').value,
-        precio: Number(document.getElementById('precio').value),
-        telefono: document.getElementById('telefono').value, // Enviado como texto plano
-        descripcion: document.getElementById('descripcion').value
-      };
-      
-      // Enviar a la base de datos
-      const { error } = await db.from('Auto').insert([datos]);
-      
-      if (error) {
-        alert("❌ Error: " + error.message);
-        console.error(error);
-      } else {
-        alert("✅ ¡Guardado correctamente!");
-        form.reset(); // Limpiar formulario
-      }
-    });
-  </script>
+      <form>
+        <label>Dueño o Agencia:</label>
+        <input type="text" id="dueno">
+
+        <label>Dirección:</label>
+        <input type="text" id="direccion">
+
+        <label>Teléfono:</label>
+        <input type="text" id="telefono">
+
+        <div class="seccion">
+          <label>Precio ($):</label>
+          <input type="number" step="0.01" id="precio">
+
+          <label>Opciones de pago:</label>
+          <div class="opciones">
+            <label><input type="checkbox" id="permuta"> Permuta</label>
+            <label><input type="checkbox" id="contado"> Contado</label>
+            <label><input type="checkbox" id="credito"> Crédito</label>
+          </div>
+        </div>
+
+        <div class="seccion">
+          <label>Marca:</label>
+          <input type="text" id="marca">
+          <div class="fila-doble">
+            <div><label>Año:</label><input type="number" id="anio"></div>
+            <div><label>Versión:</label><input type="text" id="version"></div>
+          </div>
+        </div>
+
+        <div class="seccion">
+          <label>Deuda ($):</label>
+          <input type="number" step="0.01" id="deuda">
+          <label>Patentes / Multas:</label>
+          <textarea id="patentes" rows="2" placeholder="Detallar si hay..."></textarea>
+        </div>
+
+        <div class="seccion">
+          <label>Estado del vehículo:</label>
+          <textarea id="estado" rows="3" placeholder="Describir estado..."></textarea>
+        </div>
+
+        <!-- FOTOS — SOLO CÁMARA 📸 -->
+        <div class="seccion">
+          <h2>📸 Sacar Fotos</h2>
+          
+          <label>1 - Frente:</label>
+          <input type="file" id="foto1" accept="image/*" capture="environment" style="display:none" onchange="mostrarVista(this,'v1')">
+          <span class="btn-camara" onclick="document.getElementById('foto1').click()">📷 Sacar foto</span>
+          <img id="v1" class="vista-previa">
+
+          <label>2 - Lateral izquierdo:</label>
+          <input type="file" id="foto2" accept="image/*" capture="environment" style="display:none" onchange="mostrarVista(this,'v2')">
+          <span class="btn-camara" onclick="document.getElementById('foto2').click()">📷 Sacar foto</span>
+          <img id="v2" class="vista-previa">
+
+          <label>3 - Lateral derecho:</label>
+          <input type="file" id="foto3" accept="image/*" capture="environment" style="display:none" onchange="mostrarVista(this,'v3')">
+          <span class="btn-camara" onclick="document.getElementById('foto3').click()">📷 Sacar foto</span>
+          <img id="v3" class="vista-previa">
+
+          <label>4 - Trasera:</label>
+          <input type="file" id="foto4" accept="image/*" capture="environment" style="display:none" onchange="mostrarVista(this,'v4')">
+          <span class="btn-camara" onclick="document.getElementById('foto4').click()">📷 Sacar foto</span>
+          <img id="v4" class="vista-previa">
+
+          <label>5 - Motor:</label>
+          <input type="file" id="foto5" accept="image/*" capture="environment" style="display:none" onchange="mostrarVista(this,'v5')">
+          <span class="btn-camara" onclick="document.getElementById('foto5').click()">📷 Sacar foto</span>
+          <img id="v5" class="vista-previa">
+
+          <label>6 - Interior:</label>
+          <input type="file" id="foto6" accept="image/*" capture="environment" style="display:none" onchange="mostrarVista(this,'v6')">
+          <span class="btn-camara" onclick="document.getElementById('foto6').click()">📷 Sacar foto</span>
+          <img id="v6" class="vista-previa">
+
+          <label>7 - Ruedas:</label>
+          <input type="file" id="foto7" accept="image/*" capture="environment" style="display:none" onchange="mostrarVista(this,'v7')">
+          <span class="btn-camara" onclick="document.getElementById('foto7').click()">📷 Sacar foto</span>
+          <img id="v7" class="vista-previa">
+
+          <label>8 - Detalle:</label>
+          <input type="file" id="foto8" accept="image/*" capture="environment" style="display:none" onchange="mostrarVista(this,'v8')">
+          <span class="btn-camara" onclick="document.getElementById('foto8').click()">📷 Sacar foto</span>
+          <img id="v8" class="vista-previa">
+
+          <label>9 - Detalle:</label>
+          <input type="file" id="foto9" accept="image/*" capture="environment" style="display:none" onchange="mostrarVista(this,'v9')">
+          <span class="btn-camara" onclick="document.getElementById('foto9').click()">📷 Sacar foto</span>
+          <img id="v9" class="vista-previa">
+
+          <label>10 - Detalle:</label>
+          <input type="file" id="foto10" accept="image/*" capture="environment" style="display:none" onchange="mostrarVista(this,'v10')">
+          <span class="btn-camara" onclick="document.getElementById('foto10').click()">📷 Sacar foto</span>
+          <img id="v10" class="vista-previa">
+        </div>
+
+        <button type="button" class="btn-verde" onclick="alert('✅ Datos guardados')">Guardar</button>
+        <button type="button" class="btn-gris" onclick="irA('pantallaInicio')">Volver</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function irA(id) {
+  document.getElementById('pantallaInicio').style.display = 'none';
+  document.getElementById('pantallaFormulario').style.display = 'none';
+  document.getElementById(id).style.display = 'block';
+}
+
+function mostrarVista(input, idImg) {
+  if (input.files && input.files[0]) {
+    const lector = new FileReader();
+    lector.onload = e => {
+      const img = document.getElementById(idImg);
+      img.src = e.target.result;
+      img.style.display = 'block';
+    };
+    lector.readAsDataURL(input.files[0]);
+  }
+}
+</script>
 
 </body>
 </html>
