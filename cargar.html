@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ingresar Auto</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body { background: #84a6c7; min-height: 100vh; padding: 20px; }
+    .contenedor { max-width: 550px; margin: 0 auto; }
+    .tarjeta { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+    h2 { text-align: center; margin-bottom: 25px; color: #2563eb; }
+    .boton-volver { display: inline-block; background: #6b7280; color: white; text-decoration: none; padding: 10px 20px; border-radius: 10px; margin-bottom: 20px; }
+    h3 { margin: 18px 0 10px; color: #2563eb; font-size: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+    .seccion { margin-bottom: 12px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+    input, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
+    .checkbox-grupo { display: flex; gap: 15px; flex-wrap: wrap; margin: 10px 0; }
+    .checkbox-grupo label { display: flex; align-items: center; gap: 5px; font-weight: normal; }
+    .boton-guardar { background: #2563eb; color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; font-size: 17px; cursor: pointer; margin-top: 10px; }
+    .boton-guardar:hover { background: #1d4ed8; }
+    .foto-nombre { font-size: 13px; color: #555; }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <a href="index.html" class="boton-volver">← Volver al Inicio</a>
+    <div class="tarjeta">
+      <h2>📝 Cargar Vehículo</h2>
+      <form id="formAuto">
+        
+        <h3>👤 Responsable</h3>
+        <div class="seccion">
+          <label>Dueño o Agencia: *</label>
+          <input type="text" id="dueno_agencia" required placeholder="Nombre o razón social">
+        </div>
+        <div class="seccion">
+          <label>Dirección:</label>
+          <input type="text" id="direccion" placeholder="Ej: Calle 123, Rosario">
+        </div>
+        <div class="seccion">
+          <label>Teléfono:</label>
+          <input type="text" id="telefono" placeholder="Ej: 341 1234567">
+        </div>
+        
+        <h3>🚘 Datos del Vehículo</h3>
+        <div class="seccion">
+          <label>Marca: *</label>
+          <input type="text" id="marca" required placeholder="Ej: Toyota, Ford...">
+        </div>
+        <div class="seccion">
+          <label>Modelo: *</label>
+          <input type="text" id="modelo" required placeholder="Ej: Corolla, Fiesta...">
+        </div>
+        <div class="seccion">
+          <label>Versión:</label>
+          <input type="text" id="version" placeholder="Ej: XLS, Sport...">
+        </div>
+        <div class="seccion">
+          <label>Año:</label>
+          <input type="number" id="anio" placeholder="Ej: 2018">
+        </div>
+        <div class="seccion">
+          <label>Precio ($): *</label>
+          <input type="number" step="0.01" id="precio" required placeholder="Ej: 9500000">
+        </div>
+        
+        <h3>💵 Forma de Pago</h3>
+        <div class="checkbox-grupo">
+          <label><input type="checkbox" id="permuta"> Permuta</label>
+          <label><input type="checkbox" id="contado"> Contado</label>
+          <label><input type="checkbox" id="credito"> Crédito</label>
+        </div>
+        
+        <h3>📄 Deudas y Estado</h3>
+        <div class="seccion">
+          <label>Deuda ($):</label>
+          <input type="number" step="0.01" id="deuda" placeholder="Si tiene deuda pendiente">
+        </div>
+        <div class="seccion">
+          <label>Patentes / Multas:</label>
+          <textarea id="patentes_multas" rows="2" placeholder="Detalle de deudas en patentes o multas"></textarea>
+        </div>
+        <div class="seccion">
+          <label>Estado del vehículo:</label>
+          <textarea id="estado" rows="3" placeholder="Ej: Único dueño, al día, detalles de carrocería..."></textarea>
+        </div>
+        
+        <h3>📸 Enlaces de las Fotos</h3>
+        <p style="font-size:12px; color:#666; margin-bottom:10px;">Pegá el enlace directo de cada foto (puedes dejar vacío si no tienes)</p>
+        
+        <div class="seccion">
+          <label class="foto-nombre">1 — Frente:</label>
+          <input type="text" id="foto_frente_url" placeholder="Enlace de la foto de frente">
+        </div>
+        <div class="seccion">
+          <label class="foto-nombre">2 — Lateral izquierdo:</label>
+          <input type="text" id="foto_lat_izq_url" placeholder="Enlace del lado izquierdo">
+        </div>
+        <div class="seccion">
+          <label class="foto-nombre">3 — Lateral derecho:</label>
+          <input type="text" id="foto_lat_der_url" placeholder="Enlace del lado derecho">
+        </div>
+        <div class="seccion">
+          <label class="foto-nombre">4 — Trasera:</label>
+          <input type="text" id="foto_trasera_url" placeholder="Enlace de la parte de atrás">
+        </div>
+        <div class="seccion">
+          <label class="foto-nombre">5 — Motor:</label>
+          <input type="text" id="foto_motor_url" placeholder="Enlace del motor">
+        </div>
+        <div class="seccion">
+          <label class="foto-nombre">6 — Interior:</label>
+          <input type="text" id="foto_interior_url" placeholder="Enlace del interior">
+        </div>
+        <div class="seccion">
+          <label class="foto-nombre">7 — Ruedas:</label>
+          <input type="text" id="foto_ruedas_url" placeholder="Enlace de las ruedas">
+        </div>
+        <div class="seccion">
+          <label class="foto-nombre">8 — Foto adicional 1:</label>
+          <input type="text" id="foto_extra1_url" placeholder="Otra foto">
+        </div>
+        <div class="seccion">
+          <label class="foto-nombre">9 — Foto adicional 2:</label>
+          <input type="text" id="foto_extra2_url" placeholder="Otra foto">
+        </div>
+        <div class="seccion">
+          <label class="foto-nombre">10 — Foto adicional 3:</label>
+          <input type="text" id="foto_extra3_url" placeholder="Otra foto">
+        </div>
+        
+        <button type="submit" class="boton-guardar">✅ Guardar Auto</button>
+      </form>
+    </div>
+  </div>
+
+<script>
+const SUPABASE_URL = 'https://cgdahvstitjksphucqk.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_gQlcOTNud-ur22ur4-TJQw_hAgmkBfr';
+
+let supabase;
+
+async function esperarSupabase() {
+  while (!window.supabase) {
+    await new Promise(r => setTimeout(r, 100));
+  }
+  const { createClient } = window.supabase;
+  supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+}
+
+const formulario = document.getElementById('formAuto');
+formulario.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  if (!supabase) await esperarSupabase();
+  
+  if (!confirm('¿Guardar este vehículo en la base de datos?')) {
+    return;
+  }
+  
+  const datosDelAuto = {
+    dueno_agencia: document.getElementById('dueno_agencia').value.trim(),
+    direccion: document.getElementById('direccion').value.trim() || null,
+    telefono: document.getElementById('telefono').value.trim() || null,
+    marca: document.getElementById('marca').value.trim(),
+    modelo: document.getElementById('modelo').value.trim(),
+    version: document.getElementById('version').value.trim() || null,
+    anio: parseInt(document.getElementById('anio').value) || null,
+    precio: parseFloat(document.getElementById('precio').value) || 0,
+    permuta: document.getElementById('permuta').checked,
+    contado: document.getElementById('contado').checked,
+    credito: document.getElementById('credito').checked,
+    deuda: parseFloat(document.getElementById('deuda').value) || null,
+    patentes_multas: document.getElementById('patentes_multas').value.trim() || null,
+    estado: document.getElementById('estado').value.trim() || null,
+    foto_frente_url: document.getElementById('foto_frente_url').value.trim() || null,
+    foto_lat_izq_url: document.getElementById('foto_lat_izq_url').value.trim() || null,
+    foto_lat_der_url: document.getElementById('foto_lat_der_url').value.trim() || null,
+    foto_trasera_url: document.getElementById('foto_trasera_url').value.trim() || null,
+    foto_motor_url: document.getElementById('foto_motor_url').value.trim() || null,
+    foto_interior_url: document.getElementById('foto_interior_url').value.trim() || null,
+    foto_ruedas_url: document.getElementById('foto_ruedas_url').value.trim() || null,
+    foto_extra1_url: document.getElementById('foto_extra1_url').value.trim() || null,
+    foto_extra2_url: document.getElementById('foto_extra2_url').value.trim() || null,
+    foto_extra3_url: document.getElementById('foto_extra3_url').value.trim() || null
+  };
+
+  const { error } = await supabase.from('autos').insert([datosDelAuto]);
+
+  if (error) {
+    alert('❌ NO se pudo guardar:\n' + error.message);
+    console.error('Error:', error);
+  } else {
+    alert('✅ Auto guardado correctamente');
+    formulario.reset();
+    window.location.href = 'ver.html';
+  }
+});
+
+esperarSupabase();
+</script>
+</body>
+</html>
