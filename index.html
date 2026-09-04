@@ -1,216 +1,25 @@
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Autos en Venta</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-    body { background: #84a6c7; min-height: 100vh; padding: 20px; }
-    .contenedor { max-width: 550px; margin: 0 auto; }
-    .pantalla { display: none; }
-    #pantalla-inicio { display: block; }
-    .tarjeta { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 20px; }
-    h1 { color: white; text-align: center; margin: 20px 0; }
-    h2 { text-align: center; margin-bottom: 20px; }
-    h3 { margin: 18px 0 10px; color: #2563eb; font-size: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-    .boton-principal { display: block; background: #2563eb; color: white; border: none; padding: 14px; width: 100%; border-radius: 12px; font-size: 17px; cursor: pointer; margin: 10px 0; }
-    .boton-principal:hover { background: #1d4ed8; }
-    .boton-volver { background: #6b7280; margin-bottom: 20px; }
-    .boton-volver:hover { background: #4b5563; }
-    .seccion { margin-bottom: 12px; }
-    label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
-    input, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; }
-    .checkbox-grupo { display: flex; gap: 15px; flex-wrap: wrap; margin: 10px 0; }
-    .checkbox-grupo label { display: flex; align-items: center; gap: 5px; font-weight: normal; }
-    .auto-tarjeta { background: #f9fafb; padding: 18px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid #2563eb; }
-    .fotos-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
-    .foto-item { text-align: center; }
-    .foto-item img { max-width: 100%; border-radius: 8px; margin-top: 5px; }
+    body { background: #84a6c7; min-height: 100vh; padding: 20px; display: flex; align-items: center; justify-content: center; }
+    .tarjeta { background: white; padding: 40px 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 450px; width: 100%; text-align: center; }
+    h1 { color: #2563eb; margin-bottom: 40px; font-size: 28px; }
+    .boton { display: block; background: #2563eb; color: white; text-decoration: none; padding: 16px; border-radius: 12px; font-size: 18px; margin: 12px 0; transition: background 0.2s; }
+    .boton:hover { background: #1d4ed8; }
   </style>
 </head>
 <body>
-  <div class="contenedor">
+  <div class="tarjeta">
     <h1>🚗 Autos en Venta</h1>
-
-    <div id="pantalla-inicio" class="pantalla">
-      <div class="tarjeta">
-        <button class="boton-principal" onclick="irA('pantalla-cargar')">📝 Ingresar Auto</button>
-        <button class="boton-principal" onclick="irA('pantalla-lista')">📋 Ver Autos Cargados</button>
-      </div>
-    </div>
-
-    <div id="pantalla-cargar" class="pantalla">
-      <button class="boton-principal boton-volver" onclick="irA('pantalla-inicio')">← Volver</button>
-      <div class="tarjeta">
-        <h2>Cargar Vehículo</h2>
-        <form id="formAuto">
-          <h3>Datos del Vehículo</h3>
-          <div class="seccion"><label>Marca:</label><input type="text" id="marca" required></div>
-          <div class="seccion"><label>Modelo:</label><input type="text" id="modelo" required></div>
-          <div class="seccion"><label>Versión:</label><input type="text" id="version"></div>
-          <div class="seccion"><label>Año:</label><input type="number" id="anio"></div>
-          <div class="seccion"><label>Precio ($):</label><input type="number" step="0.01" id="precio" required></div>
-          
-          <h3>Datos del Dueño</h3>
-          <div class="seccion"><label>Nombre:</label><input type="text" id="dueno"></div>
-          <div class="seccion"><label>Dirección:</label><input type="text" id="direccion"></div>
-          <div class="seccion"><label>Teléfono:</label><input type="text" id="telefono"></div>
-          
-          <h3>Forma de Pago</h3>
-          <div class="checkbox-grupo">
-            <label><input type="checkbox" id="permuta"> Permuta</label>
-            <label><input type="checkbox" id="contado"> Contado</label>
-            <label><input type="checkbox" id="credito"> Crédito</label>
-          </div>
-          
-          <h3>Detalles</h3>
-          <div class="seccion"><label>Deuda ($):</label><input type="number" step="0.01" id="deuda"></div>
-          <div class="seccion"><label>Patentes / Multas:</label><textarea id="patentes_multas" rows="2"></textarea></div>
-          <div class="seccion"><label>Estado del vehículo:</label><textarea id="estado" rows="3"></textarea></div>
-          
-          <h3>📸 Fotos</h3>
-          <div class="seccion"><label>Foto 1:</label><input type="text" id="foto1_url" placeholder="Enlace de la foto"></div>
-          <div class="seccion"><label>Foto 2:</label><input type="text" id="foto2_url" placeholder="Enlace de la foto"></div>
-          <div class="seccion"><label>Foto 3:</label><input type="text" id="foto3_url" placeholder="Enlace de la foto"></div>
-          <div class="seccion"><label>Foto 4:</label><input type="text" id="foto4_url" placeholder="Enlace de la foto"></div>
-          <div class="seccion"><label>Foto 5:</label><input type="text" id="foto5_url" placeholder="Enlace de la foto"></div>
-          <div class="seccion"><label>Foto 6:</label><input type="text" id="foto6_url" placeholder="Enlace de la foto"></div>
-          <div class="seccion"><label>Foto 6.1:</label><input type="text" id="foto6_1_url" placeholder="Enlace de la foto"></div>
-          <div class="seccion"><label>Foto 6.2:</label><input type="text" id="foto6_2_url" placeholder="Enlace de la foto"></div>
-          <div class="seccion"><label>Foto 6.4:</label><input type="text" id="foto6_4_url" placeholder="Enlace de la foto"></div>
-          <div class="seccion"><label>Foto 7.1:</label><input type="text" id="foto7_1_url" placeholder="Enlace de la foto"></div>
-          <div class="seccion"><label>Foto 7.2:</label><input type="text" id="foto7_2_url" placeholder="Enlace de la foto"></div>
-          <div class="seccion"><label>Foto 7.3:</label><input type="text" id="foto7_3_url" placeholder="Enlace de la foto"></div>
-          <div class="seccion"><label>Foto 7.4:</label><input type="text" id="foto7_4_url" placeholder="Enlace de la foto"></div>
-          <div class="seccion"><label>Foto 8:</label><input type="text" id="foto8_url" placeholder="Enlace de la foto"></div>
-          <div class="seccion"><label>Foto 9:</label><input type="text" id="foto9_url" placeholder="Enlace de la foto"></div>
-          <div class="seccion"><label>Foto 10:</label><input type="text" id="foto10_url" placeholder="Enlace de la foto"></div>
-          
-          <button type="submit" class="boton-principal">✅ Guardar Vehículo</button>
-        </form>
-      </div>
-    </div>
-
-    <div id="pantalla-lista" class="pantalla">
-      <button class="boton-principal boton-volver" onclick="irA('pantalla-inicio')">← Volver</button>
-      <div class="tarjeta">
-        <h2>Lista de Vehículos</h2>
-        <div id="listaAutos"></div>
-      </div>
-    </div>
+    <a href="cargar.html" class="boton">📝 Ingresar Auto</a>
+    <a href="ver.html" class="boton">📋 Ver Autos Cargados</a>
   </div>
-
-<script>
-const SUPABASE_URL = 'https://cgdahvstitjksphucqk.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_gQlcOTNud-ur22ur4-TJQw_hAgmkBfr';
-
-function irA(id) {
-  document.querySelectorAll('.pantalla').forEach(p => p.style.display = 'none');
-  document.getElementById(id).style.display = 'block';
-  if (id === 'pantalla-lista') cargarAutos();
-}
-
-const { createClient } = supabase;
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-const formulario = document.getElementById('formAuto');
-const lista = document.getElementById('listaAutos');
-
-formulario.addEventListener('submit', async e => {
-  e.preventDefault();
-  const datos = {
-    marca: document.getElementById('marca').value,
-    modelo: document.getElementById('modelo').value,
-    version: document.getElementById('version').value || null,
-    anio: parseInt(document.getElementById('anio').value) || null,
-    precio: parseFloat(document.getElementById('precio').value) || 0,
-    dueno: document.getElementById('dueno').value || null,
-    direccion: document.getElementById('direccion').value || null,
-    telefono: document.getElementById('telefono').value || null,
-    permuta: document.getElementById('permuta').checked,
-    contado: document.getElementById('contado').checked,
-    credito: document.getElementById('credito').checked,
-    deuda: parseFloat(document.getElementById('deuda').value) || null,
-    patentes_multas: document.getElementById('patentes_multas').value || null,
-    estado: document.getElementById('estado').value || null,
-    foto1_url: document.getElementById('foto1_url').value || null,
-    foto2_url: document.getElementById('foto2_url').value || null,
-    foto3_url: document.getElementById('foto3_url').value || null,
-    foto4_url: document.getElementById('foto4_url').value || null,
-    foto5_url: document.getElementById('foto5_url').value || null,
-    foto6_url: document.getElementById('foto6_url').value || null,
-    foto6_1_url: document.getElementById('foto6_1_url').value || null,
-    foto6_2_url: document.getElementById('foto6_2_url').value || null,
-    foto6_4_url: document.getElementById('foto6_4_url').value || null,
-    foto7_1_url: document.getElementById('foto7_1_url').value || null,
-    foto7_2_url: document.getElementById('foto7_2_url').value || null,
-    foto7_3_url: document.getElementById('foto7_3_url').value || null,
-    foto7_4_url: document.getElementById('foto7_4_url').value || null,
-    foto8_url: document.getElementById('foto8_url').value || null,
-    foto9_url: document.getElementById('foto9_url').value || null,
-    foto10_url: document.getElementById('foto10_url').value || null
-  };
-
-  const { error } = await supabase.from('autos').insert([datos]);
-  if (error) {
-    alert('❌ Error: ' + error.message);
-    console.error(error);
-  } else {
-    alert('✅ Guardado correctamente');
-    formulario.reset();
-    irA('pantalla-lista');
-  }
-});
-
-async function cargarAutos() {
-  lista.innerHTML = '<p style="text-align:center;">Cargando...</p>';
-  const { data: autos, error } = await supabase.from('autos').select('*').order('id', { ascending: false });
-  
-  if (error) {
-    lista.innerHTML = '<p style="color:red;">Error: ' + error.message + '</p>';
-    return;
-  }
-  
-  if (!autos || autos.length === 0) {
-    lista.innerHTML = '<p style="text-align:center; color:#666;">No hay autos cargados todavía</p>';
-    return;
-  }
-  
-  lista.innerHTML = '';
-  autos.forEach(auto => {
-    let fotosHtml = '';
-    const camposFotos = [
-      'foto1_url','foto2_url','foto3_url','foto4_url','foto5_url','foto6_url',
-      'foto6_1_url','foto6_2_url','foto6_4_url','foto7_1_url','foto7_2_url',
-      'foto7_3_url','foto7_4_url','foto8_url','foto9_url','foto10_url'
-    ];
-    camposFotos.forEach(campo => {
-      if (auto[campo]) {
-        fotosHtml += `<div class="foto-item"><img src="${auto[campo]}" alt="${campo.replace('_url','').toUpperCase()}"></div>`;
-      }
-    });
-    
-    lista.innerHTML += `
-      <div class="auto-tarjeta">
-        <h3>${auto.marca || ''} ${auto.modelo || ''} ${auto.anio || ''}</h3>
-        <p><strong>Versión:</strong> ${auto.version || '-'}</p>
-        <p><strong>Precio:</strong> $${auto.precio || '-'}</p>
-        <p><strong>Dueño:</strong> ${auto.dueno || '-'}</p>
-        <p><strong>Teléfono:</strong> ${auto.telefono || '-'}</p>
-        <p><strong>Dirección:</strong> ${auto.direccion || '-'}</p>
-        <p><strong>Forma de pago:</strong> ${auto.permuta ? 'Permuta ' : ''}${auto.contado ? 'Contado ' : ''}${auto.credito ? 'Crédito' : '-'}</p>
-        <p><strong>Deuda:</strong> ${auto.deuda ? '$'+auto.deuda : '-'}</p>
-        <p><strong>Patentes/Multas:</strong> ${auto.patentes_multas || '-'}</p>
-        <p><strong>Estado:</strong> ${auto.estado || '-'}</p>
-        ${fotosHtml ? `<div class="fotos-grid">${fotosHtml}</div>` : ''}
-      </div>
-    `;
-  });
-}
-</script>
 </body>
 </html>
-
