@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autos en Venta</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: #d4edf9;  /* Fondo celeste hermoso 💙 */
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .caja-principal {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 45px 35px;
+      width: 100%;
+      max-width: 520px;
+      box-shadow: 0 6px 20px rgba(49, 130, 206, 0.15);
+      text-align: center;
+    }
+
+    h1 {
+      color: #2b6cb0;
+      font-size: 34px;
+      margin-bottom: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .boton {
+      display: block;
+      background: #3182ce;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 600;
+      padding: 18px 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .boton:hover {
+      background: #2b6cb0;
+      transform: translateY(-2px);
+    }
+
+    .boton:last-child {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="caja-principal">
+    <h1>🚗 Autos en Venta</h1>
+
+    <a href="cargar.html" class="boton">📄 Ingresar Auto</a>
+    <a href="ver.html" class="boton">📋 Ver Autos Cargados</a>
+    <a href="buscar.html" class="boton">🔍 Buscar Auto</a>
+  </div>
+
+</body>
+</html>
