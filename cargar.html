@@ -4,118 +4,379 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cargar Vehiculo</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>Ingresar Vehículo</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-    body { background: #84a6c7; min-height: 100vh; padding: 20px; }
-    .contenedor { max-width: 520px; margin: 0 auto; }
-    .tarjeta { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-    h2 { text-align: center; margin-bottom: 25px; color: #2563eb; }
-    .campo { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; font-size: 14px; }
-    input {
-      width: 100%; padding: 12px; border: 1px solid #ddd;
-      border-radius: 8px; font-size: 15px;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
     }
-    .fila-doble { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .boton-guardar {
-      width: 100%; padding: 16px; background: #2563eb; color: white;
-      border: none; border-radius: 12px; font-size: 18px; font-weight: bold;
-      margin-top: 10px; cursor: pointer;
+    body {
+      background: #d4edf9;
+      padding: 15px;
+      max-width: 850px;
+      margin: 0 auto;
     }
-    .boton-guardar:hover { background: #1d4ed8; }
-    .boton-volver {
-      display: inline-block; margin-bottom: 20px; color: #2563eb;
-      text-decoration: none; font-weight: bold;
+    h1 {
+      text-align: center;
+      color: #2d3748;
+      margin-bottom: 25px;
+      font-size: 22px;
+    }
+    .form-container {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .fila {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .campo {
+      flex: 1 1 45%;
+      min-width: 160px;
+    }
+    .campo-completo {
+      flex: 1 1 100%;
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #4a5568;
+      font-size: 14px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+      background: white;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #3182ce;
+      box-shadow: 0 0 0 3px rgba(49,130,206,0.2);
+    }
+    .fila-chk {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .campo-chk {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .campo-chk input {
+      width: auto;
+      margin: 0;
+    }
+    .boton {
+      width: 100%;
+      padding: 14px;
+      background: #3182ce;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .boton:hover { background: #2b6cb0; }
+    .boton:disabled { background: #a0aec0; cursor: not-allowed; }
+    .mensaje {
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 8px;
+      display: none;
+      font-weight: 500;
+      font-size: 15px;
+    }
+    .exito { background: #f0fff4; color: #22543d; border: 1px solid #9ae6b4; }
+    .error { background: #fed7d7; color: #742a2a; border: 1px solid #feb2b2; }
+    .volver {
+      display: inline-block;
+      margin-top: 18px;
+      color: #3182ce;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .volver:hover { text-decoration: underline; }
+    h3 {
+      color: #2d3748;
+      margin: 25px 0 15px;
+      font-size: 18px;
+    }
+    h4 {
+      margin: 18px 0 10px;
+      color: #4a5568;
+      font-size: 15px;
     }
   </style>
 </head>
 <body>
-  <div class="contenedor">
-    <a href="index.html" class="boton-volver">← Volver al inicio</a>
-    <div class="tarjeta">
-      <h2>📝 Cargar Vehiculo</h2>
+
+  <h1>🚗 Ingresar Vehículo</h1>
+  <div class="form-container">
+    
+    <form id="formAuto">
       
-      <form id="formAuto">
-        <div class="fila-doble">
-          <div class="campo">
-            <label>Marca *</label>
-            <input type="text" id="marca" required placeholder="Ej: Toyota">
-          </div>
-          <div class="campo">
-            <label>Modelo *</label>
-            <input type="text" id="modelo" required placeholder="Ej: Corolla">
-          </div>
-        </div>
-        <div class="fila-doble">
-          <div class="campo">
-            <label>Version</label>
-            <input type="text" id="version" placeholder="Ej: XLS / Sport">
-          </div>
-          <div class="campo">
-            <label>Anio</label>
-            <input type="number" id="anio" placeholder="Ej: 2018">
-          </div>
+      <div class="fila">
+        <div class="campo">
+          <label>Marca</label>
+          <input type="text" id="marca" placeholder="Ej: Toyota" required>
         </div>
         <div class="campo">
-          <label>Precio ($) *</label>
-          <input type="number" step="0.01" id="precio" required placeholder="Valor del vehiculo">
+          <label>Modelo</label>
+          <input type="text" id="modelo" placeholder="Ej: Corolla" required>
+        </div>
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label>Versión</label>
+          <input type="text" id="version" placeholder="Ej: XEi 1.8" required>
         </div>
         <div class="campo">
-          <label>Dueno o Agencia *</label>
-          <input type="text" id="dueno" required placeholder="Nombre o razon social">
+          <label>Año</label>
+          <input type="number" id="anio" placeholder="Ej: 2019" required>
+        </div>
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label>Precio</label>
+          <input type="text" id="precio" placeholder="Ej: $15.000.000" required>
         </div>
         <div class="campo">
-          <label>Direccion</label>
-          <input type="text" id="direccion" placeholder="Calle y numero, ciudad">
+          <label>Dueño / Agencia</label>
+          <input type="text" id="dueno" placeholder="Ej: Juan Pérez" required>
+        </div>
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label>Dirección</label>
+          <input type="text" id="direccion" placeholder="Ej: Av. San Martín 1234" required>
         </div>
         <div class="campo">
-          <label>Telefono</label>
-          <input type="text" id="telefono" placeholder="Ej: 341 1234567">
+          <label>Teléfono / WhatsApp</label>
+          <input type="tel" id="telefono" placeholder="Ej: 341 123-4567" required>
         </div>
-        
-        <button type="submit" class="boton-guardar">✅ Guardar Vehiculo</button>
-      </form>
-    </div>
+      </div>
+
+      <div class="fila-chk">
+        <div class="campo-chk">
+          <input type="checkbox" id="permuta">
+          <label for="permuta">Acepta permuta</label>
+        </div>
+        <div class="campo-chk">
+          <input type="checkbox" id="contado">
+          <label for="contado">Solo contado</label>
+        </div>
+      </div>
+
+      <div class="campo-completo">
+        <label>Deuda / Patentes / Multas</label>
+        <textarea id="deuda" rows="2" placeholder="Ej: Sin deudas / Patente al día"></textarea>
+      </div>
+
+      <div class="campo-completo">
+        <label>Descripción</label>
+        <textarea id="descripcion" rows="4" placeholder="Ej: Único dueño, aire acondicionado, listo para transferir..."></textarea>
+      </div>
+
+      <!-- 📸 FOTOS DEL VEHÍCULO -->
+      <h3>📸 Fotos del vehículo</h3>
+
+      <label>Frente</label>
+      <input type="file" id="foto1" accept="image/*" capture="environment" style="margin-bottom: 12px;">
+
+      <label>Lateral derecho</label>
+      <input type="file" id="foto2" accept="image/*" capture="environment" style="margin-bottom: 12px;">
+
+      <label>Lateral izquierdo</label>
+      <input type="file" id="foto3" accept="image/*" capture="environment" style="margin-bottom: 12px;">
+
+      <label>Trasera</label>
+      <input type="file" id="foto4" accept="image/*" capture="environment" style="margin-bottom: 12px;">
+
+      <label>Motor</label>
+      <input type="file" id="foto5" accept="image/*" capture="environment" style="margin-bottom: 12px;">
+
+      <h4>Interior</h4>
+      
+      <label>Interior</label>
+      <input type="file" id="foto6_1" accept="image/*" capture="environment" style="margin-bottom: 12px;">
+
+      <label>Interior</label>
+      <input type="file" id="foto6_2" accept="image/*" capture="environment" style="margin-bottom: 12px;">
+
+      <label>Interior</label>
+      <input type="file" id="foto6_3" accept="image/*" capture="environment" style="margin-bottom: 12px;">
+
+      <label>Interior</label>
+      <input type="file" id="foto6_4" accept="image/*" capture="environment" style="margin-bottom: 12px;">
+
+      <h4>Fotos extras</h4>
+      
+      <label>Interior</label>
+      <input type="file" id="foto7" accept="image/*" capture="environment" style="margin-bottom: 12px;">
+
+      <label>Interior</label>
+      <input type="file" id="foto8" accept="image/*" capture="environment" style="margin-bottom: 12px;">
+
+      <label>Interior</label>
+      <input type="file" id="foto9" accept="image/*" capture="environment" style="margin-bottom: 12px;">
+
+      <label>Interior</label>
+      <input type="file" id="foto10" accept="image/*" capture="environment" style="margin-bottom: 12px;">
+
+      <button type="submit" class="boton" id="btnGuardar">💾 Guardar Auto</button>
+      
+      <div id="mensaje" class="mensaje"></div>
+    </form>
+
+    <a href="index.html" class="volver">← Volver al inicio</a>
   </div>
 
   <script>
-    const SUPABASE_URL = "https://cgdahvstitjksphucqk.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_gQlcOTNud-ur22ur4-TJQw_hAgmkBfr";
-    
-    const { createClient } = supabase;
-    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    // ==============================================
+    // TUS DATOS DE SUPABASE — COMPLETÁ ACÁ ABAJO
+    // ==============================================
+    const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_gQic0TNud-UR22ur4-TJQw_hAgmkBfr";
+    const BUCKET_FOTOS = "fotos-autos"; // Nombre del depósito que creás en Storage
 
-    const form = document.getElementById('formAuto');
-    
-    form.addEventListener('submit', async (e) => {
+    // Cargar librería de Supabase
+    async function cargarSupabase() {
+      if (!window.supabase) {
+        await new Promise(res => {
+          const s = document.createElement('script');
+          s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+          s.onload = res;
+          document.head.appendChild(s);
+        });
+      }
+      return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    }
+
+    // Subir una foto al almacén de Supabase
+    async function subirFoto(archivo, nombreArchivo) {
+      if (!archivo) return null;
+      
+      try {
+        const supabase = await cargarSupabase();
+        const { data, error } = await supabase.storage
+          .from(BUCKET_FOTOS)
+          .upload(nombreArchivo, archivo);
+          
+        if (error) {
+          console.error('Error subiendo:', error);
+          return null;
+        }
+        
+        const { data: { publicUrl } } = supabase.storage
+          .from(BUCKET_FOTOS)
+          .getPublicUrl(nombreArchivo);
+          
+        return publicUrl;
+      } catch (e) {
+        console.error('Error:', e);
+        return null;
+      }
+    }
+
+    // Guardar todo al apretar el botón
+    document.getElementById('formAuto').addEventListener('submit', async e => {
       e.preventDefault();
       
-      const datos = {
-        marca: document.getElementById('marca').value,
-        modelo: document.getElementById('modelo').value,
-        version: document.getElementById('version').value || null,
-        anio: document.getElementById('anio').value ? parseInt(document.getElementById('anio').value) : null,
-        precio: parseFloat(document.getElementById('precio').value),
-        dueno: document.getElementById('dueno').value,
-        direccion: document.getElementById('direccion').value,
-        telefono: document.getElementById('telefono').value
-      };
+      const btn = document.getElementById('btnGuardar');
+      const mensaje = document.getElementById('mensaje');
+      
+      btn.disabled = true;
+      btn.textContent = "Guardando...";
+      mensaje.style.display = "none";
 
-      const { error } = await supabase
-        .from('autos')
-        .insert([datos]);
+      try {
+        const supabase = await cargarSupabase();
+        const fecha = Date.now(); // Para que cada nombre sea único
 
-      if (error) {
-        alert('❌ No se pudo guardar:\n' + error.message);
-        console.error('Error:', error);
-      } else {
-        alert('✅ Auto guardado correctamente');
-        form.reset();
-        window.location.href = 'ver.html';
+        // Subir TODAS las fotos
+        const [
+          foto1_url, foto2_url, foto3_url, foto4_url, foto5_url,
+          foto6_1_url, foto6_2_url, foto6_3_url, foto6_4_url,
+          foto7_url, foto8_url, foto9_url, foto10_url
+        ] = await Promise.all([
+          subirFoto(document.getElementById('foto1').files[0], `foto1-${fecha}.jpg`),
+          subirFoto(document.getElementById('foto2').files[0], `foto2-${fecha}.jpg`),
+          subirFoto(document.getElementById('foto3').files[0], `foto3-${fecha}.jpg`),
+          subirFoto(document.getElementById('foto4').files[0], `foto4-${fecha}.jpg`),
+          subirFoto(document.getElementById('foto5').files[0], `foto5-${fecha}.jpg`),
+          subirFoto(document.getElementById('foto6_1').files[0], `foto6-1-${fecha}.jpg`),
+          subirFoto(document.getElementById('foto6_2').files[0], `foto6-2-${fecha}.jpg`),
+          subirFoto(document.getElementById('foto6_3').files[0], `foto6-3-${fecha}.jpg`),
+          subirFoto(document.getElementById('foto6_4').files[0], `foto6-4-${fecha}.jpg`),
+          subirFoto(document.getElementById('foto7').files[0], `foto7-${fecha}.jpg`),
+          subirFoto(document.getElementById('foto8').files[0], `foto8-${fecha}.jpg`),
+          subirFoto(document.getElementById('foto9').files[0], `foto9-${fecha}.jpg`),
+          subirFoto(document.getElementById('foto10').files[0], `foto10-${fecha}.jpg`)
+        ]);
+
+        // Guardar datos en la tabla
+        const datos = {
+          marca: document.getElementById('marca').value.trim(),
+          modelo: document.getElementById('modelo').value.trim(),
+          version: document.getElementById('version').value.trim(),
+          anio: parseInt(document.getElementById('anio').value),
+          precio: document.getElementById('precio').value.trim(),
+          dueno: document.getElementById('dueno').value.trim(),
+          direccion: document.getElementById('direccion').value.trim(),
+          telefono: document.getElementById('telefono').value.trim(),
+          permuta: document.getElementById('permuta').checked,
+          contado: document.getElementById('contado').checked,
+          deuda: document.getElementById('deuda').value.trim(),
+          descripcion: document.getElementById('descripcion').value.trim(),
+          foto1_url, foto2_url, foto3_url, foto4_url, foto5_url,
+          foto6_1_url, foto6_2_url, foto6_3_url, foto6_4_url,
+          foto7_url, foto8_url, foto9_url, foto10_url
+        };
+
+        const { error } = await supabase.from('autos').insert([datos]);
+        
+        if (error) throw error;
+
+        mensaje.textContent = "✅ Auto guardado correctamente";
+        mensaje.className = "mensaje exito";
+        mensaje.style.display = "block";
+        document.getElementById('formAuto').reset();
+
+      } catch (err) {
+        console.error("Error:", err);
+        let texto = "❌ Error: ";
+        if (err.message?.includes('Failed to fetch')) {
+          texto += "No se conecta con Supabase. Revisá la URL, la clave y los permisos.";
+        } else {
+          texto += err.message || "Desconocido";
+        }
+        mensaje.textContent = texto;
+        mensaje.className = "mensaje error";
+        mensaje.style.display = "block";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "💾 Guardar Auto";
       }
     });
   </script>
 </body>
 </html>
+
