@@ -114,6 +114,40 @@
       font-size: 14px;
       margin-bottom: 20px;
     }
+
+    /* === ESTILOS DE LAS FOTOS === */
+    .fotos-titulo {
+      margin-top: 16px;
+      font-weight: 700;
+      color: #2b6cb0;
+      font-size: 15px;
+    }
+    .fotos-cuadricula {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .foto-caja {
+      text-align: center;
+    }
+    .foto-ver {
+      width: 100%;
+      aspect-ratio: 4/3;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #e2e8f0;
+    }
+    .foto-ver img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .foto-nombre {
+      font-size: 10px;
+      color: #718096;
+      padding: 3px 0;
+    }
   </style>
 </head>
 <body>
@@ -153,6 +187,12 @@
     const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
     const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
 
+    // === NOMBRES DE CADA FOTO ===
+    const nombresFotos = [
+      'Motor', 'Frente', 'Lateral izquierdo', 'Lateral derecho', 'Parte trasera',
+      'Interior', 'Interior', 'Interior', 'Interior', 'Ruedas', 'Extras', 'Extras'
+    ];
+
     let sbClient = null;
 
     async function getSupabase() {
@@ -171,7 +211,6 @@
     }
 
     async function buscarAutos() {
-      // Obtener lo que escribió la persona
       const marca = document.getElementById('buscar_marca').value.trim();
       const modelo = document.getElementById('buscar_modelo').value.trim();
       const anio = document.getElementById('buscar_anio').value.trim();
@@ -183,7 +222,6 @@
 
       const sb = await getSupabase();
 
-      // Armar la búsqueda
       let consulta = sb.from('autos').select('*');
 
       if (marca) consulta = consulta.ilike('marca', `%${marca}%`);
@@ -202,8 +240,21 @@
         return;
       }
 
-      // Mostrar resultados
       autos.forEach(auto => {
+        let fotosHtml = '';
+        for (let i = 1; i <= 12; i++) {
+          const foto = auto[`foto${i}`];
+          if (foto) {
+            fotosHtml += `
+              <div class="foto-caja">
+                <div class="foto-ver"><img src="${foto}" alt="${nombresFotos[i-1]}"></div>
+                <div class="foto-nombre">${nombresFotos[i-1]}</div>
+              </div>
+            `;
+          }
+        }
+        const hayFotos = fotosHtml !== '';
+
         const tarjeta = document.createElement('div');
         tarjeta.className = 'tarjeta';
         tarjeta.innerHTML = `
@@ -215,6 +266,13 @@
           <div class="dato"><span class="etiqueta">Teléfono:</span> ${auto.telefono || '-'}</div>
           <div class="dato"><span class="etiqueta">Deuda:</span> ${auto.deuda || 'Sin deudas'}</div>
           <div class="dato"><span class="etiqueta">Descripción:</span> ${auto.descripcion || '-'}</div>
+          
+          ${hayFotos ? `
+          <div class="fotos-titulo">📸 Fotos del auto</div>
+          <div class="fotos-cuadricula">
+            ${fotosHtml}
+          </div>
+          ` : ''}
         `;
         caja.appendChild(tarjeta);
       });
