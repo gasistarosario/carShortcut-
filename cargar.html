@@ -12,8 +12,9 @@
       padding: 0;
       font-family: sans-serif;
     }
+    /* ✅ FONDO DE LA PÁGINA CELESTE */
     body {
-      background: #d4edf9;
+      background: #d4edf9;  /* Celeste suave */
       padding: 15px;
       max-width: 850px;
       margin: 0 auto;
@@ -51,13 +52,17 @@
       color: #4a5568;
       font-size: 14px;
     }
+    /* ✅ TODOS LOS CAMPOS BLANCOS, INCLUIDO DESCRIPCIÓN */
     input, textarea {
       width: 100%;
       padding: 10px 12px;
       border: 1px solid #ddd;
       border-radius: 8px;
       font-size: 15px;
-      background: white;
+      background: white;  /* Blanco */
+    }
+    input::placeholder, textarea::placeholder {
+      color: #a0aec0;
     }
     input:focus, textarea:focus {
       outline: none;
@@ -111,66 +116,56 @@
       font-weight: 500;
     }
     .volver:hover { text-decoration: underline; }
-    h3 {
-      color: #2d3748;
-      margin: 25px 0 15px;
-      font-size: 18px;
-    }
-    h4 {
-      margin: 18px 0 10px;
-      color: #4a5568;
-      font-size: 15px;
-    }
   </style>
 </head>
 <body>
 
   <h1>🚗 Ingresar Vehículo</h1>
+
   <div class="form-container">
-    
     <form id="formAuto">
       
       <div class="fila">
         <div class="campo">
           <label>Marca</label>
-          <input type="text" id="marca" placeholder="Ej: Toyota" required>
+          <input type="text" id="marca" placeholder="Ej: Toyota, Ford, Chevrolet" required>
         </div>
         <div class="campo">
           <label>Modelo</label>
-          <input type="text" id="modelo" placeholder="Ej: Corolla" required>
+          <input type="text" id="modelo" placeholder="Ej: Corolla, Fiesta, Cruze" required>
         </div>
       </div>
 
       <div class="fila">
         <div class="campo">
           <label>Versión</label>
-          <input type="text" id="version" placeholder="Ej: XEi 1.8" required>
+          <input type="text" id="version" placeholder="Ej: XEi, 1.6 LT, Limited" required>
         </div>
         <div class="campo">
           <label>Año</label>
-          <input type="number" id="anio" placeholder="Ej: 2019" required>
+          <input type="number" id="anio" placeholder="Ej: 2018" required>
         </div>
       </div>
 
       <div class="fila">
         <div class="campo">
           <label>Precio</label>
-          <input type="text" id="precio" placeholder="Ej: $15.000.000" required>
+          <input type="text" id="precio" placeholder="Ej: 12.500.000 o USD 8.500" required>
         </div>
         <div class="campo">
           <label>Dueño / Agencia</label>
-          <input type="text" id="dueno" placeholder="Ej: Juan Pérez" required>
+          <input type="text" id="dueno" placeholder="Ej: Juan Pérez o Autos SRL" required>
         </div>
       </div>
 
       <div class="fila">
         <div class="campo">
           <label>Dirección</label>
-          <input type="text" id="direccion" placeholder="Ej: Av. San Martín 1234" required>
+          <input type="text" id="direccion" placeholder="Ej: Av. San Martín 1234, Rosario" required>
         </div>
         <div class="campo">
           <label>Teléfono / WhatsApp</label>
-          <input type="tel" id="telefono" placeholder="Ej: 341 123-4567" required>
+          <input type="tel" id="telefono" placeholder="Ej: +54 9 341 123-4567" required>
         </div>
       </div>
 
@@ -187,59 +182,14 @@
 
       <div class="campo-completo">
         <label>Deuda / Patentes / Multas</label>
-        <textarea id="deuda" rows="2" placeholder="Ej: Sin deudas / Patente al día"></textarea>
+        <textarea id="deuda" rows="2" placeholder="Ej: Sin deudas / Patente al día / Deuda $15.000"></textarea>
       </div>
 
+      <!-- ✅ DESCRIPCIÓN BLANCA COMO ANTES -->
       <div class="campo-completo">
         <label>Descripción</label>
-        <textarea id="descripcion" rows="4" placeholder="Ej: Único dueño, aire acondicionado, listo para transferir..."></textarea>
+        <textarea id="descripcion" rows="4" placeholder="Ej: Único dueño, aire acondicionado, alarma, cubiertas nuevas, listo para transferir..."></textarea>
       </div>
-
-      <!-- 📸 FOTOS DEL VEHÍCULO -->
-      <h3>📸 Fotos del vehículo</h3>
-
-      <label>Frente</label>
-      <input type="file" id="foto1" accept="image/*" capture="environment" style="margin-bottom: 12px;">
-
-      <label>Lateral derecho</label>
-      <input type="file" id="foto2" accept="image/*" capture="environment" style="margin-bottom: 12px;">
-
-      <label>Lateral izquierdo</label>
-      <input type="file" id="foto3" accept="image/*" capture="environment" style="margin-bottom: 12px;">
-
-      <label>Trasera</label>
-      <input type="file" id="foto4" accept="image/*" capture="environment" style="margin-bottom: 12px;">
-
-      <label>Motor</label>
-      <input type="file" id="foto5" accept="image/*" capture="environment" style="margin-bottom: 12px;">
-
-      <h4>Interior</h4>
-      
-      <label>Interior</label>
-      <input type="file" id="foto6_1" accept="image/*" capture="environment" style="margin-bottom: 12px;">
-
-      <label>Interior</label>
-      <input type="file" id="foto6_2" accept="image/*" capture="environment" style="margin-bottom: 12px;">
-
-      <label>Interior</label>
-      <input type="file" id="foto6_3" accept="image/*" capture="environment" style="margin-bottom: 12px;">
-
-      <label>Interior</label>
-      <input type="file" id="foto6_4" accept="image/*" capture="environment" style="margin-bottom: 12px;">
-
-      <h4>Fotos extras</h4>
-      
-      <label>Interior</label>
-      <input type="file" id="foto7" accept="image/*" capture="environment" style="margin-bottom: 12px;">
-
-      <label>Interior</label>
-      <input type="file" id="foto8" accept="image/*" capture="environment" style="margin-bottom: 12px;">
-
-      <label>Interior</label>
-      <input type="file" id="foto9" accept="image/*" capture="environment" style="margin-bottom: 12px;">
-
-      <label>Interior</label>
-      <input type="file" id="foto10" accept="image/*" capture="environment" style="margin-bottom: 12px;">
 
       <button type="submit" class="boton" id="btnGuardar">💾 Guardar Auto</button>
       
@@ -250,14 +200,10 @@
   </div>
 
   <script>
-    // ==============================================
-    // TUS DATOS DE SUPABASE — COMPLETÁ ACÁ ABAJO
-    // ==============================================
+    // === PONÉ TUS DATOS DE SUPABASE AQUÍ ===
     const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_gQic0TNud-UR22ur4-TJQw_hAgmkBfr";
-    const BUCKET_FOTOS = "fotos-autos"; // Nombre del depósito que creás en Storage
+    const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
 
-    // Cargar librería de Supabase
     async function cargarSupabase() {
       if (!window.supabase) {
         await new Promise(res => {
@@ -270,33 +216,6 @@
       return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     }
 
-    // Subir una foto al almacén de Supabase
-    async function subirFoto(archivo, nombreArchivo) {
-      if (!archivo) return null;
-      
-      try {
-        const supabase = await cargarSupabase();
-        const { data, error } = await supabase.storage
-          .from(BUCKET_FOTOS)
-          .upload(nombreArchivo, archivo);
-          
-        if (error) {
-          console.error('Error subiendo:', error);
-          return null;
-        }
-        
-        const { data: { publicUrl } } = supabase.storage
-          .from(BUCKET_FOTOS)
-          .getPublicUrl(nombreArchivo);
-          
-        return publicUrl;
-      } catch (e) {
-        console.error('Error:', e);
-        return null;
-      }
-    }
-
-    // Guardar todo al apretar el botón
     document.getElementById('formAuto').addEventListener('submit', async e => {
       e.preventDefault();
       
@@ -309,30 +228,7 @@
 
       try {
         const supabase = await cargarSupabase();
-        const fecha = Date.now(); // Para que cada nombre sea único
 
-        // Subir TODAS las fotos
-        const [
-          foto1_url, foto2_url, foto3_url, foto4_url, foto5_url,
-          foto6_1_url, foto6_2_url, foto6_3_url, foto6_4_url,
-          foto7_url, foto8_url, foto9_url, foto10_url
-        ] = await Promise.all([
-          subirFoto(document.getElementById('foto1').files[0], `foto1-${fecha}.jpg`),
-          subirFoto(document.getElementById('foto2').files[0], `foto2-${fecha}.jpg`),
-          subirFoto(document.getElementById('foto3').files[0], `foto3-${fecha}.jpg`),
-          subirFoto(document.getElementById('foto4').files[0], `foto4-${fecha}.jpg`),
-          subirFoto(document.getElementById('foto5').files[0], `foto5-${fecha}.jpg`),
-          subirFoto(document.getElementById('foto6_1').files[0], `foto6-1-${fecha}.jpg`),
-          subirFoto(document.getElementById('foto6_2').files[0], `foto6-2-${fecha}.jpg`),
-          subirFoto(document.getElementById('foto6_3').files[0], `foto6-3-${fecha}.jpg`),
-          subirFoto(document.getElementById('foto6_4').files[0], `foto6-4-${fecha}.jpg`),
-          subirFoto(document.getElementById('foto7').files[0], `foto7-${fecha}.jpg`),
-          subirFoto(document.getElementById('foto8').files[0], `foto8-${fecha}.jpg`),
-          subirFoto(document.getElementById('foto9').files[0], `foto9-${fecha}.jpg`),
-          subirFoto(document.getElementById('foto10').files[0], `foto10-${fecha}.jpg`)
-        ]);
-
-        // Guardar datos en la tabla
         const datos = {
           marca: document.getElementById('marca').value.trim(),
           modelo: document.getElementById('modelo').value.trim(),
@@ -345,14 +241,13 @@
           permuta: document.getElementById('permuta').checked,
           contado: document.getElementById('contado').checked,
           deuda: document.getElementById('deuda').value.trim(),
-          descripcion: document.getElementById('descripcion').value.trim(),
-          foto1_url, foto2_url, foto3_url, foto4_url, foto5_url,
-          foto6_1_url, foto6_2_url, foto6_3_url, foto6_4_url,
-          foto7_url, foto8_url, foto9_url, foto10_url
+          descripcion: document.getElementById('descripcion').value.trim()
         };
 
-        const { error } = await supabase.from('autos').insert([datos]);
-        
+        const { error } = await supabase
+          .from('autos')
+          .insert([datos]);
+
         if (error) throw error;
 
         mensaje.textContent = "✅ Auto guardado correctamente";
@@ -362,13 +257,7 @@
 
       } catch (err) {
         console.error("Error:", err);
-        let texto = "❌ Error: ";
-        if (err.message?.includes('Failed to fetch')) {
-          texto += "No se conecta con Supabase. Revisá la URL, la clave y los permisos.";
-        } else {
-          texto += err.message || "Desconocido";
-        }
-        mensaje.textContent = texto;
+        mensaje.textContent = "❌ Error: " + err.message;
         mensaje.className = "mensaje error";
         mensaje.style.display = "block";
       } finally {
@@ -377,6 +266,6 @@
       }
     });
   </script>
+
 </body>
 </html>
-
