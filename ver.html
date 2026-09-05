@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -21,6 +22,41 @@
     .vacio {text-align: center; padding: 40px 20px; color: #718096; font-size: 16px;}
     .boton-eliminar {margin-top: 12px; padding: 8px 16px; background: #fed7d7; color: #9b2c2c; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;}
     .boton-eliminar:hover {background: #feb2b2;}
+
+    /* === ESTILOS DE LAS FOTOS === */
+    .fotos-titulo {
+      margin-top: 18px;
+      font-weight: 700;
+      color: #2b6cb0;
+      font-size: 16px;
+    }
+    .fotos-cuadricula {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .foto-caja {
+      text-align: center;
+    }
+    .foto-ver {
+      width: 100%;
+      aspect-ratio: 4/3;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+    }
+    .foto-ver img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .foto-nombre {
+      font-size: 11px;
+      color: #718096;
+      padding: 4px 0;
+    }
   </style>
 </head>
 <body>
@@ -37,6 +73,12 @@
     // === DATOS DE SUPABASE ===
     const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
     const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
+
+    // === NOMBRES DE CADA FOTO ===
+    const nombresFotos = [
+      'Motor', 'Frente', 'Lateral izquierdo', 'Lateral derecho', 'Parte trasera',
+      'Interior', 'Interior', 'Interior', 'Interior', 'Ruedas', 'Extras', 'Extras'
+    ];
 
     let sbClient = null;
 
@@ -74,7 +116,23 @@
         return;
       }
 
-      caja.innerHTML = autos.map(auto => `
+      caja.innerHTML = autos.map(auto => {
+        // Armar las fotos
+        let fotosHtml = '';
+        for (let i = 1; i <= 12; i++) {
+          const foto = auto[`foto${i}`];
+          if (foto) {
+            fotosHtml += `
+              <div class="foto-caja">
+                <div class="foto-ver"><img src="${foto}" alt="${nombresFotos[i-1]}"></div>
+                <div class="foto-nombre">${nombresFotos[i-1]}</div>
+              </div>
+            `;
+          }
+        }
+        const hayFotos = fotosHtml !== '';
+
+        return `
         <div class="tarjeta">
           <div class="titulo-auto">${auto.marca || ''} ${auto.modelo || ''} — ${auto.anio || ''}</div>
           <div class="fila"><strong>Versión:</strong> ${auto.version || '-'}</div>
@@ -88,9 +146,18 @@
           </div>
           <div class="fila" style="margin-top: 10px;"><strong>Deuda:</strong> ${auto.deuda || 'Sin deudas'}</div>
           <div class="fila"><strong>Descripción:</strong> ${auto.descripcion || '-'}</div>
+          
+          ${hayFotos ? `
+          <div class="fotos-titulo">📸 Fotos del auto</div>
+          <div class="fotos-cuadricula">
+            ${fotosHtml}
+          </div>
+          ` : ''}
+          
           <button class="boton-eliminar" onclick="borrarAuto(${auto.id})">🗑️ Eliminar este auto</button>
         </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     async function borrarAuto(id) {
