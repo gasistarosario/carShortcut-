@@ -411,14 +411,38 @@
       }
     }
 
-    // === LEER FOTO COMO TEXTO PARA GUARDAR ===
-    function leerArchivoComoTexto(archivo) {
+    // === NUEVO: ACHICAR FOTO AUTOMÁTICAMENTE ===
+    function reducirFoto(archivo, maxAncho = 900, calidad = 0.75) {
       return new Promise((resolver) => {
-        if (!archivo) return resolver(null);
         const lector = new FileReader();
-        lector.onload = e => resolver(e.target.result);
+        lector.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            const lienzo = document.createElement('canvas');
+            let ancho = img.width;
+            let alto = img.height;
+            
+            if (ancho > maxAncho) {
+              alto = alto * (maxAncho / ancho);
+              ancho = maxAncho;
+            }
+            
+            lienzo.width = ancho;
+            lienzo.height = alto;
+            const ctx = lienzo.getContext('2d');
+            ctx.drawImage(img, 0, 0, ancho, alto);
+            resolver(lienzo.toDataURL('image/jpeg', calidad));
+          };
+          img.src = e.target.result;
+        };
         lector.readAsDataURL(archivo);
       });
+    }
+
+    // === LEER FOTO YA ACHICADA ===
+    async function leerArchivoComoTexto(archivo) {
+      if (!archivo) return null;
+      return await reducirFoto(archivo);
     }
 
     async function cargarSupabase() {
@@ -430,7 +454,9 @@
           document.head.appendChild(s);
         });
       }
-      return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+        timeout: 30000 // ⏱️ Más tiempo para subir todo
+      });
     }
 
     document.getElementById('formAuto').addEventListener('submit', async e => {
@@ -446,7 +472,7 @@
       try {
         const supabase = await cargarSupabase();
 
-        // Leer las 12 fotos
+        // Leer las 12 fotos (ya achicadas solas)
         const fotos = {};
         for (let i = 1; i <= 12; i++) {
           const input = document.getElementById(`foto${i}`);
