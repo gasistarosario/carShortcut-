@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscar Auto</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+    body {
+      background: #d4edf9;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    .contenedor {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 35px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #2b6cb0;
+      margin-bottom: 30px;
+    }
+    .campo {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #4a5568;
+    }
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #cbd5e0;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    input:focus {
+      outline: none;
+      border-color: #3182ce;
+      box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+    }
+    .boton {
+      width: 100%;
+      padding: 14px;
+      background: #3182ce;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .boton:hover {
+      background: #2b6cb0;
+    }
+    .volver {
+      display: block;
+      text-align: center;
+      margin-top: 25px;
+      color: #3182ce;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .volver:hover {
+      text-decoration: underline;
+    }
+    .resultado {
+      margin-top: 30px;
+    }
+    .tarjeta {
+      background: #f7fafc;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border-left: 4px solid #3182ce;
+    }
+    .tarjeta h3 {
+      color: #2b6cb0;
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+    .dato {
+      margin-bottom: 8px;
+    }
+    .etiqueta {
+      font-weight: 600;
+      color: #4a5568;
+      display: inline-block;
+      min-width: 100px;
+    }
+    .sin-resultado {
+      text-align: center;
+      color: #718096;
+      padding: 30px;
+      font-size: 16px;
+    }
+    .leyenda {
+      text-align: center;
+      color: #718096;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="contenedor">
+    <h1>🔍 Buscar Auto</h1>
+
+    <p class="leyenda">Escribí lo que querés buscar y dejá vacío lo que no importa ✨</p>
+
+    <div class="campo">
+      <label>Marca</label>
+      <input type="text" id="buscar_marca" placeholder="Ej: Toyota, Ford, Chevrolet...">
+    </div>
+
+    <div class="campo">
+      <label>Modelo</label>
+      <input type="text" id="buscar_modelo" placeholder="Ej: Corolla, Fiesta, Cruze...">
+    </div>
+
+    <div class="campo">
+      <label>Año</label>
+      <input type="text" id="buscar_anio" placeholder="Ej: 2019, 2020...">
+    </div>
+
+    <button class="boton" onclick="buscarAutos()">🔍 Buscar</button>
+
+    <div class="resultado" id="caja_resultado"></div>
+    <div class="sin-resultado" id="sin_resultado" style="display:none;">
+      📭 No se encontraron autos con esos datos
+    </div>
+
+    <a href="index.html" class="volver">← Volver al Inicio</a>
+  </div>
+
+  <script>
+    // === TUS DATOS DE SUPABASE ===
+    const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
+
+    let sbClient = null;
+
+    async function getSupabase() {
+      if (!sbClient) {
+        if (!window.supabase) {
+          await new Promise(res => {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+            script.onload = res;
+            document.head.appendChild(script);
+          });
+        }
+        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      }
+      return sbClient;
+    }
+
+    async function buscarAutos() {
+      // Obtener lo que escribió la persona
+      const marca = document.getElementById('buscar_marca').value.trim();
+      const modelo = document.getElementById('buscar_modelo').value.trim();
+      const anio = document.getElementById('buscar_anio').value.trim();
+
+      const caja = document.getElementById('caja_resultado');
+      const sinRes = document.getElementById('sin_resultado');
+      caja.innerHTML = '';
+      sinRes.style.display = 'none';
+
+      const sb = await getSupabase();
+
+      // Armar la búsqueda
+      let consulta = sb.from('autos').select('*');
+
+      if (marca) consulta = consulta.ilike('marca', `%${marca}%`);
+      if (modelo) consulta = consulta.ilike('modelo', `%${modelo}%`);
+      if (anio) consulta = consulta.ilike('anio', `%${anio}%`);
+
+      const { data: autos, error } = await consulta.order('id', { ascending: false });
+
+      if (error) {
+        alert('❌ Error: ' + error.message);
+        return;
+      }
+
+      if (!autos || autos.length === 0) {
+        sinRes.style.display = 'block';
+        return;
+      }
+
+      // Mostrar resultados
+      autos.forEach(auto => {
+        const tarjeta = document.createElement('div');
+        tarjeta.className = 'tarjeta';
+        tarjeta.innerHTML = `
+          <h3>${auto.marca || ''} ${auto.modelo || ''} — ${auto.anio || ''}</h3>
+          <div class="dato"><span class="etiqueta">Versión:</span> ${auto.version || '-'}</div>
+          <div class="dato"><span class="etiqueta">Precio:</span> ${auto.precio || '-'}</div>
+          <div class="dato"><span class="etiqueta">Dueño:</span> ${auto.dueno || '-'}</div>
+          <div class="dato"><span class="etiqueta">Dirección:</span> ${auto.direccion || '-'}</div>
+          <div class="dato"><span class="etiqueta">Teléfono:</span> ${auto.telefono || '-'}</div>
+          <div class="dato"><span class="etiqueta">Deuda:</span> ${auto.deuda || 'Sin deudas'}</div>
+          <div class="dato"><span class="etiqueta">Descripción:</span> ${auto.descripcion || '-'}</div>
+        `;
+        caja.appendChild(tarjeta);
+      });
+    }
+  </script>
+
+</body>
+</html>
