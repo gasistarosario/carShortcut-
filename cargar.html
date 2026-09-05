@@ -12,9 +12,8 @@
       padding: 0;
       font-family: sans-serif;
     }
-    /* ✅ FONDO DE LA PÁGINA CELESTE */
     body {
-      background: #d4edf9;  /* Celeste suave */
+      background: #d4edf9;
       padding: 15px;
       max-width: 850px;
       margin: 0 auto;
@@ -52,14 +51,13 @@
       color: #4a5568;
       font-size: 14px;
     }
-    /* ✅ TODOS LOS CAMPOS BLANCOS, INCLUIDO DESCRIPCIÓN */
     input, textarea {
       width: 100%;
       padding: 10px 12px;
       border: 1px solid #ddd;
       border-radius: 8px;
       font-size: 15px;
-      background: white;  /* Blanco */
+      background: white;
     }
     input::placeholder, textarea::placeholder {
       color: #a0aec0;
@@ -116,6 +114,64 @@
       font-weight: 500;
     }
     .volver:hover { text-decoration: underline; }
+
+    /* === ESTILOS DE LAS FOTOS === */
+    .foto-seccion {
+      margin: 25px 0 15px;
+    }
+    .foto-titulo-seccion {
+      font-size: 19px;
+      font-weight: 700;
+      color: #2b6cb0;
+      margin-bottom: 18px;
+    }
+    .foto-tarjeta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      background: linear-gradient(to right, #f0f7ff, #ebf8ff);
+      border-radius: 14px;
+      border: 2px solid #90cdf4;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .foto-tarjeta:active {
+      transform: scale(0.98);
+      border-color: #3182ce;
+    }
+    .foto-nombre {
+      font-weight: 700;
+      font-size: 16px;
+      color: #2c5282;
+      flex: 1;
+    }
+    .foto-mini {
+      width: 80px;
+      height: 60px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f7fafc;
+      border: 2px dashed #cbd5e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .foto-mini-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+    .foto-sin {
+      font-size: 11px;
+      color: #a0aec0;
+    }
+    .foto-input-oculto {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -185,10 +241,146 @@
         <textarea id="deuda" rows="2" placeholder="Ej: Sin deudas / Patente al día / Deuda $15.000"></textarea>
       </div>
 
-      <!-- ✅ DESCRIPCIÓN BLANCA COMO ANTES -->
       <div class="campo-completo">
         <label>Descripción</label>
         <textarea id="descripcion" rows="4" placeholder="Ej: Único dueño, aire acondicionado, alarma, cubiertas nuevas, listo para transferir..."></textarea>
+      </div>
+
+      <!-- 📸 FOTOS DEL AUTO -->
+      <div class="foto-seccion">
+        <div class="foto-titulo-seccion">📸 Fotos del auto</div>
+
+        <label class="foto-tarjeta">
+          <div class="foto-nombre">
+            📷 Motor
+            <input type="file" class="foto-input-oculto" id="foto1" accept="image/*" capture="environment" onchange="verFoto(1, this)">
+          </div>
+          <div class="foto-mini">
+            <img id="img1" class="foto-mini-img">
+            <span id="sin1" class="foto-sin">Sin foto</span>
+          </div>
+        </label>
+
+        <label class="foto-tarjeta">
+          <div class="foto-nombre">
+            📷 Frente
+            <input type="file" class="foto-input-oculto" id="foto2" accept="image/*" capture="environment" onchange="verFoto(2, this)">
+          </div>
+          <div class="foto-mini">
+            <img id="img2" class="foto-mini-img">
+            <span id="sin2" class="foto-sin">Sin foto</span>
+          </div>
+        </label>
+
+        <label class="foto-tarjeta">
+          <div class="foto-nombre">
+            📷 Lateral izquierdo
+            <input type="file" class="foto-input-oculto" id="foto3" accept="image/*" capture="environment" onchange="verFoto(3, this)">
+          </div>
+          <div class="foto-mini">
+            <img id="img3" class="foto-mini-img">
+            <span id="sin3" class="foto-sin">Sin foto</span>
+          </div>
+        </label>
+
+        <label class="foto-tarjeta">
+          <div class="foto-nombre">
+            📷 Lateral derecho
+            <input type="file" class="foto-input-oculto" id="foto4" accept="image/*" capture="environment" onchange="verFoto(4, this)">
+          </div>
+          <div class="foto-mini">
+            <img id="img4" class="foto-mini-img">
+            <span id="sin4" class="foto-sin">Sin foto</span>
+          </div>
+        </label>
+
+        <label class="foto-tarjeta">
+          <div class="foto-nombre">
+            📷 Parte trasera
+            <input type="file" class="foto-input-oculto" id="foto5" accept="image/*" capture="environment" onchange="verFoto(5, this)">
+          </div>
+          <div class="foto-mini">
+            <img id="img5" class="foto-mini-img">
+            <span id="sin5" class="foto-sin">Sin foto</span>
+          </div>
+        </label>
+
+        <label class="foto-tarjeta">
+          <div class="foto-nombre">
+            📷 Interior
+            <input type="file" class="foto-input-oculto" id="foto6" accept="image/*" capture="environment" onchange="verFoto(6, this)">
+          </div>
+          <div class="foto-mini">
+            <img id="img6" class="foto-mini-img">
+            <span id="sin6" class="foto-sin">Sin foto</span>
+          </div>
+        </label>
+
+        <label class="foto-tarjeta">
+          <div class="foto-nombre">
+            📷 Interior
+            <input type="file" class="foto-input-oculto" id="foto7" accept="image/*" capture="environment" onchange="verFoto(7, this)">
+          </div>
+          <div class="foto-mini">
+            <img id="img7" class="foto-mini-img">
+            <span id="sin7" class="foto-sin">Sin foto</span>
+          </div>
+        </label>
+
+        <label class="foto-tarjeta">
+          <div class="foto-nombre">
+            📷 Interior
+            <input type="file" class="foto-input-oculto" id="foto8" accept="image/*" capture="environment" onchange="verFoto(8, this)">
+          </div>
+          <div class="foto-mini">
+            <img id="img8" class="foto-mini-img">
+            <span id="sin8" class="foto-sin">Sin foto</span>
+          </div>
+        </label>
+
+        <label class="foto-tarjeta">
+          <div class="foto-nombre">
+            📷 Interior
+            <input type="file" class="foto-input-oculto" id="foto9" accept="image/*" capture="environment" onchange="verFoto(9, this)">
+          </div>
+          <div class="foto-mini">
+            <img id="img9" class="foto-mini-img">
+            <span id="sin9" class="foto-sin">Sin foto</span>
+          </div>
+        </label>
+
+        <label class="foto-tarjeta">
+          <div class="foto-nombre">
+            📷 Ruedas
+            <input type="file" class="foto-input-oculto" id="foto10" accept="image/*" capture="environment" onchange="verFoto(10, this)">
+          </div>
+          <div class="foto-mini">
+            <img id="img10" class="foto-mini-img">
+            <span id="sin10" class="foto-sin">Sin foto</span>
+          </div>
+        </label>
+
+        <label class="foto-tarjeta">
+          <div class="foto-nombre">
+            📷 Extras
+            <input type="file" class="foto-input-oculto" id="foto11" accept="image/*" capture="environment" onchange="verFoto(11, this)">
+          </div>
+          <div class="foto-mini">
+            <img id="img11" class="foto-mini-img">
+            <span id="sin11" class="foto-sin">Sin foto</span>
+          </div>
+        </label>
+
+        <label class="foto-tarjeta">
+          <div class="foto-nombre">
+            📷 Extras
+            <input type="file" class="foto-input-oculto" id="foto12" accept="image/*" capture="environment" onchange="verFoto(12, this)">
+          </div>
+          <div class="foto-mini">
+            <img id="img12" class="foto-mini-img">
+            <span id="sin12" class="foto-sin">Sin foto</span>
+          </div>
+        </label>
       </div>
 
       <button type="submit" class="boton" id="btnGuardar">💾 Guardar Auto</button>
@@ -200,9 +392,34 @@
   </div>
 
   <script>
-    // === PONÉ TUS DATOS DE SUPABASE AQUÍ ===
     const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
     const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
+
+    // === MOSTRAR FOTITO CHICA AL LADO ===
+    function verFoto(numero, input) {
+      const img = document.getElementById(`img${numero}`);
+      const sin = document.getElementById(`sin${numero}`);
+      
+      if (input.files && input.files[0]) {
+        const lector = new FileReader();
+        lector.onload = e => {
+          img.src = e.target.result;
+          img.style.display = 'block';
+          sin.style.display = 'none';
+        };
+        lector.readAsDataURL(input.files[0]);
+      }
+    }
+
+    // === LEER FOTO COMO TEXTO PARA GUARDAR ===
+    function leerArchivoComoTexto(archivo) {
+      return new Promise((resolver) => {
+        if (!archivo) return resolver(null);
+        const lector = new FileReader();
+        lector.onload = e => resolver(e.target.result);
+        lector.readAsDataURL(archivo);
+      });
+    }
 
     async function cargarSupabase() {
       if (!window.supabase) {
@@ -229,6 +446,13 @@
       try {
         const supabase = await cargarSupabase();
 
+        // Leer las 12 fotos
+        const fotos = {};
+        for (let i = 1; i <= 12; i++) {
+          const input = document.getElementById(`foto${i}`);
+          fotos[`foto${i}`] = await leerArchivoComoTexto(input.files[0]);
+        }
+
         const datos = {
           marca: document.getElementById('marca').value.trim(),
           modelo: document.getElementById('modelo').value.trim(),
@@ -241,7 +465,8 @@
           permuta: document.getElementById('permuta').checked,
           contado: document.getElementById('contado').checked,
           deuda: document.getElementById('deuda').value.trim(),
-          descripcion: document.getElementById('descripcion').value.trim()
+          descripcion: document.getElementById('descripcion').value.trim(),
+          ...fotos
         };
 
         const { error } = await supabase
@@ -254,6 +479,12 @@
         mensaje.className = "mensaje exito";
         mensaje.style.display = "block";
         document.getElementById('formAuto').reset();
+
+        // Ocultar todas las fotitos después de guardar
+        for (let i = 1; i <= 12; i++) {
+          document.getElementById(`img${i}`).style.display = 'none';
+          document.getElementById(`sin${i}`).style.display = 'block';
+        }
 
       } catch (err) {
         console.error("Error:", err);
