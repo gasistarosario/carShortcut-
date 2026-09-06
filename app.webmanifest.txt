@@ -1,0 +1,16 @@
+{
+  "name": "Autos en Venta",
+  "short_name": "AutosVenta",
+  "description": "Venta y búsqueda de autos — Gratis",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#d4edf9",
+  "theme_color": "#3182ce",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2979/2979992.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ]
+}
