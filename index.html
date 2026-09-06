@@ -15,7 +15,7 @@
     }
 
     body {
-      background: #d4edf9;  /* Fondo celeste hermoso 💙 */
+      background: #d4edf9;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -36,14 +36,13 @@
     h1 {
       color: #2b6cb0;
       font-size: 34px;
-      margin-bottom: 35px;
+      margin-bottom: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
     }
 
-    /* === CAJA DE CONTRASEÑA === */
     .caja-acceso {
       margin-bottom: 10px;
     }
@@ -61,7 +60,7 @@
     .caja-acceso input:focus {
       outline: none;
       border-color: #3182ce;
-      box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+      box-shadow: 0 0 0 3px rgba(49,130,206,0.2);
     }
 
     .boton-entrar {
@@ -75,6 +74,7 @@
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
+      margin-bottom: 10px;
     }
 
     .boton-entrar:hover {
@@ -82,14 +82,13 @@
       transform: translateY(-2px);
     }
 
-    .error-pass {
+    .error {
       color: #9b2c2c;
       margin-top: 12px;
       display: none;
       font-weight: 500;
     }
 
-    /* === BOTONES — OCULTOS AL PRINCIPIO === */
     .menu-opciones {
       display: none;
       margin-top: 10px;
@@ -113,7 +112,10 @@
       transform: translateY(-2px);
     }
 
-    .boton:last-child {
+    .boton-cerrar {
+      background: #718096;
+      font-size: 17px;
+      padding: 14px 20px;
       margin-bottom: 0;
     }
   </style>
@@ -123,45 +125,57 @@
   <div class="caja-principal">
     <h1>🚗 Autos en Venta</h1>
 
-    <!-- 🔐 PIDE CONTRASEÑA PRIMERO -->
     <div id="cajaAcceso" class="caja-acceso">
-      <input type="password" id="contrasena" placeholder="Escribí la contraseña para entrar...">
-      <button class="boton-entrar" onclick="verificarPass()">🔑 Entrar</button>
-      <p id="malPass" class="error-pass">❌ Contraseña incorrecta</p>
+      <input type="text" id="usuario" placeholder="Nombre de usuario">
+      <input type="password" id="contrasena" placeholder="Contraseña">
+      <button class="boton-entrar" onclick="verificar()">🔑 Entrar</button>
+      <p id="mensajeError" class="error">❌ Usuario o contraseña incorrectos</p>
     </div>
 
-    <!-- MENÚ — APARECE DESPUÉS DE LA CONTRASEÑA -->
     <div id="menuOpciones" class="menu-opciones">
       <a href="cargar.html" class="boton">📄 Ingresar Auto</a>
       <a href="ver.html" class="boton">📋 Ver Autos Cargados</a>
       <a href="buscar.html" class="boton">🔍 Buscar Auto</a>
+      <button class="boton boton-cerrar" onclick="cerrarSesion()">🚪 Cerrar sesión</button>
     </div>
   </div>
 
   <script>
-    // 🔒 TU CONTRASEÑA
+    const USUARIO_CORRECTO = "Eduardo";
     const CONTRASENA_CORRECTA = "Homero2030";
 
-    function verificarPass() {
-      const ingreso = document.getElementById('contrasena').value;
+    window.onload = function() {
+      if (localStorage.getItem('autorizado') === 'si') {
+        document.getElementById('cajaAcceso').style.display = 'none';
+        document.getElementById('menuOpciones').style.display = 'block';
+      }
+    };
+
+    function verificar() {
+      const usuario = document.getElementById('usuario').value;
+      const clave = document.getElementById('contrasena').value;
       const cajaAcceso = document.getElementById('cajaAcceso');
       const menu = document.getElementById('menuOpciones');
-      const error = document.getElementById('malPass');
+      const error = document.getElementById('mensajeError');
 
-      if (ingreso === CONTRASENA_CORRECTA) {
-        // ✅ Bien: ocultar clave, mostrar menú
+      if (usuario === USUARIO_CORRECTO && clave === CONTRASENA_CORRECTA) {
+        localStorage.setItem('autorizado', 'si');
         cajaAcceso.style.display = 'none';
         menu.style.display = 'block';
       } else {
-        // ❌ Mal: mostrar mensaje
         error.style.display = 'block';
+        document.getElementById('usuario').value = '';
         document.getElementById('contrasena').value = '';
       }
     }
 
-    // Permitir presionar Enter para entrar
-    document.getElementById('contrasena').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') verificarPass();
+    function cerrarSesion() {
+      localStorage.removeItem('autorizado');
+      window.location.reload();
+    }
+
+    document.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') verificar();
     });
   </script>
 
