@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buscar Auto</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * {box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif;}
     body {background: #d4edf9; padding: 20px; min-height: 100vh;}
@@ -18,11 +19,12 @@
     .leyenda {text-align: center; color: #718096; font-size: 14px; margin-bottom: 20px;}
     .campo {margin-bottom: 15px;}
     label {display: block; margin-bottom: 6px; font-weight: 600; color: #4a5568;}
-    input {
+    input, select {
       width: 100%; padding: 11px 14px; border: 1px solid #cbd5e0;
       border-radius: 8px; font-size: 15px;
+      background: white;
     }
-    input:focus {
+    input:focus, select:focus {
       outline: none; border-color: #3182ce;
       box-shadow: 0 0 0 3px rgba(49,130,206,0.2);
     }
@@ -33,7 +35,6 @@
     }
     .boton-buscar:hover {background: #2b6cb0;}
 
-    /* === NAVEGACIÓN — SIEMPRE VISIBLE, PERO BOTONES INACTIVOS SI NO HAY RESULTADOS === */
     .navegacion {
       display: flex; justify-content: space-between; align-items: center;
       margin: 15px 0; padding: 12px; background: white;
@@ -50,7 +51,6 @@
     .navegacion button:disabled {background: #cbd5e0; cursor: not-allowed;}
     .contador {font-size: 16px; font-weight: bold; color: #2d3748;}
 
-    /* === TARJETA === */
     .tarjeta {
       background: white; padding: 22px; border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: aparecer 0.3s ease;
@@ -58,6 +58,15 @@
     @keyframes aparecer {
       from {opacity: 0; transform: translateX(8px);}
       to {opacity: 1; transform: translateX(0);}
+    }
+    .etiqueta-tipo {
+      display: inline-block;
+      background: #ebf8ff;
+      color: #2c5282;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
     }
     .titulo-auto {
       font-size: 19px; font-weight: 700; color: #2b6cb0; margin-bottom: 14px;
@@ -83,7 +92,6 @@
     }
     .volver:hover {text-decoration: underline;}
 
-    /* === FOTOS === */
     .fotos-titulo {margin-top: 18px; font-weight: 700; color: #2b6cb0; font-size: 16px;}
     .fotos-cuadricula {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
@@ -103,9 +111,21 @@
   <div class="contenedor">
     <h1>🔍 Buscar Auto</h1>
 
-    <!-- FORMULARIO DE BÚSQUEDA -->
     <div class="buscador">
       <p class="leyenda">Dejá vacío lo que no querés filtrar ✨</p>
+
+      <div class="campo">
+        <label>Tipo de Vehículo</label>
+        <select id="buscar_tipo">
+          <option value="">Todos los tipos</option>
+          <option value="Auto">🚗 Auto</option>
+          <option value="Camioneta">🚙 Camioneta / Pick-up</option>
+          <option value="4x4">⛰️ 4x4 / Todoterreno</option>
+          <option value="SUV">🏔️ SUV / Crossover</option>
+          <option value="Furgon">📦 Furgón / Utilitario</option>
+          <option value="Cuatriciclo">🏍️ Cuatriciclo</option>
+        </select>
+      </div>
 
       <div class="campo">
         <label>Marca</label>
@@ -119,18 +139,27 @@
         <label>Año</label>
         <input type="text" id="buscar_anio" placeholder="Ej: 2020">
       </div>
+      
+      <div class="campo">
+        <label>Kilometraje máximo</label>
+        <input type="number" id="buscar_km_max" placeholder="Ej: 100000 — Dejalo vacío sin límite">
+      </div>
+      
+      <!-- ✅ PRECIO MÁXIMO AGREGADO -->
+      <div class="campo">
+        <label>Precio máximo ($)</label>
+        <input type="number" id="buscar_precio_max" placeholder="Ej: 1500000 — Dejalo vacío sin límite">
+      </div>
 
       <button class="boton-buscar" onclick="realizarBusqueda()">🔍 Buscar</button>
     </div>
 
-    <!-- NAVEGACIÓN — SIEMPRE VISIBLE -->
     <div class="navegacion" id="caja_navegacion">
       <button id="btnAnterior" disabled>◀ Anterior</button>
       <span id="contador" class="contador">—</span>
       <button id="btnSiguiente" disabled>Siguiente ▶</button>
     </div>
 
-    <!-- RESULTADO -->
     <div id="caja_resultado"></div>
 
     <a href="index.html" class="volver">← Volver al Inicio</a>
@@ -143,7 +172,7 @@
     const nombresFotos = [
       'Motor', 'Frente', 'Lateral izquierdo', 'Lateral derecho', 'Trasera',
       'Interior 1', 'Interior 2', 'Interior 3', 'Interior 4',
-      'Ruedas 1', 'Ruedas 2', 'Extras'
+      'Ruedas', 'Extras 1', 'Extras 2'
     ];
 
     let sbClient = null;
@@ -152,23 +181,18 @@
 
     async function getSupabase() {
       if (!sbClient) {
-        if (!window.supabase) {
-          await new Promise(res => {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-            script.onload = res;
-            document.head.appendChild(script);
-          });
-        }
         sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
       }
       return sbClient;
     }
 
     async function realizarBusqueda() {
+      const tipo = document.getElementById('buscar_tipo').value;
       const marca = document.getElementById('buscar_marca').value.trim();
       const modelo = document.getElementById('buscar_modelo').value.trim();
       const anio = document.getElementById('buscar_anio').value.trim();
+      const kmMax = document.getElementById('buscar_km_max').value.trim();
+      const precioMax = document.getElementById('buscar_precio_max').value.trim();
 
       const caja = document.getElementById('caja_resultado');
       const cajaNav = document.getElementById('caja_navegacion');
@@ -183,8 +207,9 @@
       cajaNav.classList.remove('activa');
 
       const sb = await getSupabase();
-      let consulta = sb.from('autos').select('id, marca, modelo, anio');
+      let consulta = sb.from('autos').select('*');
 
+      if (tipo) consulta = consulta.eq('tipo_vehiculo', tipo);
       if (marca) consulta = consulta.ilike('marca', `%${marca}%`);
       if (modelo) consulta = consulta.ilike('modelo', `%${modelo}%`);
       if (anio) {
@@ -204,7 +229,36 @@
         return;
       }
 
-      idsFiltrados = data.map(item => item.id);
+      // ✅ Filtrar por kilometraje y precio máximo
+      let resultados = data;
+      
+      if (kmMax) {
+        const numKmMax = parseInt(kmMax);
+        if (!isNaN(numKmMax)) {
+          resultados = resultados.filter(auto => 
+            auto.kilometraje === null || auto.kilometraje <= numKmMax
+          );
+        }
+      }
+      
+      if (precioMax) {
+        const numPrecioMax = parseFloat(precioMax);
+        if (!isNaN(numPrecioMax)) {
+          resultados = resultados.filter(auto => {
+            if (!auto.precio) return true;
+            const soloNumeros = auto.precio.replace(/[^0-9.,]/g, '').replace(',', '.');
+            const valor = parseFloat(soloNumeros);
+            return isNaN(valor) || valor <= numPrecioMax;
+          });
+        }
+      }
+
+      if (resultados.length === 0) {
+        caja.innerHTML = `<div class="sin-resultado">📭 Ningún auto cumple con los filtros elegidos</div>`;
+        return;
+      }
+
+      idsFiltrados = resultados.map(item => item.id);
       cajaNav.classList.add('activa');
       btnAnt.disabled = false;
       btnSig.disabled = false;
@@ -245,8 +299,11 @@
 
       caja.innerHTML = `
       <div class="tarjeta">
+        ${auto.tipo_vehiculo ? `<span class="etiqueta-tipo">${auto.tipo_vehiculo}</span>` : ''}
+        
         <div class="titulo-auto">${auto.marca || ''} ${auto.modelo || ''} — ${auto.anio || ''}</div>
         <div class="fila"><strong>Versión:</strong> ${auto.version || '-'}</div>
+        <div class="fila"><strong>Kilometraje:</strong> ${auto.kilometraje ? auto.kilometraje.toLocaleString('es-AR') + ' km' : 'No indicado'}</div>
         <div class="fila"><strong>Precio:</strong> ${auto.precio || '-'}</div>
         <div class="fila"><strong>Dueño:</strong> ${auto.dueno || '-'}</div>
         <div class="fila"><strong>Dirección:</strong> ${auto.direccion || '-'}</div>
@@ -271,7 +328,7 @@
     async function autoAnterior() {
       if (idsFiltrados.length === 0) return;
       if (indiceActual === 0) {
-        indiceActual = idsFiltrados.length - 1; // primero → último
+        indiceActual = idsFiltrados.length - 1;
       } else {
         indiceActual--;
       }
@@ -281,14 +338,13 @@
     async function autoSiguiente() {
       if (idsFiltrados.length === 0) return;
       if (indiceActual === idsFiltrados.length - 1) {
-        indiceActual = 0; // último → primero
+        indiceActual = 0;
       } else {
         indiceActual++;
       }
       await cargarUno(indiceActual);
     }
 
-    // Conectar botones
     document.getElementById('btnAnterior').addEventListener('click', autoAnterior);
     document.getElementById('btnSiguiente').addEventListener('click', autoSiguiente);
   </script>
