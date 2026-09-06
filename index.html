@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Vehículos en Venta">
-  <meta name="theme-color" content="#3182ce">
+  <meta name="theme-color" content="#1565C0">
   <title>Vehículos en Venta</title>
   <link rel="manifest" href="app.webmanifest">
   <style>
@@ -16,11 +16,11 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Segoe UI', Roboto, 'Open Sans', sans-serif;
     }
 
     body {
-      background: #d4edf9;
+      background: linear-gradient(135deg, #D7E8F5 0%, #B9D2E8 100%);
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -29,68 +29,125 @@
     }
 
     .caja-principal {
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 45px 35px;
+      background: linear-gradient(135deg, #F5F2ED 0%, #EDE8DF 100%);
+      border-radius: 28px;
+      padding: 55px 40px;
       width: 100%;
-      max-width: 520px;
-      box-shadow: 0 6px 20px rgba(49, 130, 206, 0.15);
+      max-width: 540px;
+      box-shadow: 0 10px 35px rgba(21, 101, 192, 0.12);
       text-align: center;
+      animation: entradaSuave 0.7s ease-out;
+    }
+
+    @keyframes entradaSuave {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     h1 {
-      color: #2b6cb0;
+      color: #0D47A1;
       font-size: 34px;
-      margin-bottom: 20px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      letter-spacing: -0.6px;
+    }
+
+    .subtitulo {
+      color: #546E7A;
+      font-size: 17px;
+      margin-bottom: 30px;
+      font-weight: 500;
+    }
+
+    .cartel-gratis {
+      background: linear-gradient(135deg, #E2EDE4 0%, #D0DFD3 100%);
+      color: #1B5E20;
+      padding: 22px 24px;
+      border-radius: 18px;
+      margin-bottom: 38px;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 1.7;
+      border: 2px solid #B8CCBC;
+      box-shadow: 0 4px 12px rgba(27, 94, 32, 0.08);
+    }
+
+    .boton {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
-    }
-
-    .cartel-gratis {
-      background: #ebf8ff;
-      color: #2c5282;
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 30px;
-      font-weight: 600;
-      font-size: 15px;
-      line-height: 1.5;
-    }
-
-    .boton {
-      display: block;
-      background: #3182ce;
+      background: linear-gradient(135deg, #4285C4 0%, #2A6AB8 100%);
       color: #ffffff;
       text-decoration: none;
       font-size: 20px;
-      font-weight: 600;
-      padding: 18px 20px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      transition: all 0.3s ease;
+      font-weight: 700;
+      padding: 20px 26px;
+      border-radius: 16px;
+      margin-bottom: 16px;
+      transition: all 0.35s ease;
+      border: none;
+      box-shadow: 0 6px 16px rgba(42, 106, 184, 0.22);
     }
 
     .boton:hover {
-      background: #2b6cb0;
-      transform: translateY(-2px);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 22px rgba(42, 106, 184, 0.30);
+    }
+
+    .boton:active {
+      transform: translateY(0);
+    }
+
+    .boton-secundario {
+      background: #E8E4DD;
+      color: #2A6AB8;
+      border: 2.5px solid #C8D2DC;
+      box-shadow: none;
+    }
+
+    .boton-secundario:hover {
+      background: #DDE4EA;
+      border-color: #4285C4;
+      box-shadow: 0 4px 12px rgba(42, 106, 196, 0.12);
     }
 
     .boton-app {
-      background: #2f855a;
+      background: linear-gradient(135deg, #58A460 0%, #3D8B45 100%);
+      box-shadow: 0 6px 16px rgba(61, 139, 69, 0.22);
       margin-top: 10px;
     }
 
     .boton-app:hover {
-      background: #276749;
+      box-shadow: 0 8px 22px rgba(61, 139, 69, 0.30);
     }
 
     .aviso-app {
-      margin-top: 20px;
-      font-size: 13px;
-      color: #718096;
-      line-height: 1.4;
+      margin-top: 24px;
+      font-size: 14px;
+      color: #607D8B;
+      line-height: 1.6;
+      background: #E0E5EA;
+      padding: 16px 20px;
+      border-radius: 12px;
+      border-left: 4px solid #4285C4;
+    }
+
+    .pie-pagina {
+      margin-top: 35px;
+      font-size: 14px;
+      color: #78909C;
+      font-weight: 500;
     }
   </style>
 </head>
@@ -98,6 +155,7 @@
 
   <div class="caja-principal">
     <h1>🚗 Vehículos en Venta</h1>
+    <p class="subtitulo">Publicá • Buscá • Vendé con total confianza</p>
 
     <div class="cartel-gratis">
       ✨ Todo es <strong>TOTALMENTE GRATIS</strong> ✨<br>
@@ -105,16 +163,26 @@
       sin comisiones ni costos ocultos 💙
     </div>
 
-    <a href="cargar.html" class="boton">📄 Ingresar Vehículo</a>
-    <a href="ver.html" class="boton">📋 Ver Vehículos — Catálogo</a>
-    <a href="buscar.html" class="boton">🔍 Buscar Vehículo</a>
+    <a href="cargar.html" class="boton">
+      📄 <span>Ingresar Vehículo</span>
+    </a>
+    <a href="ver.html" class="boton boton-secundario">
+      📋 <span>Ver Vehículos — Catálogo</span>
+    </a>
+    <a href="buscar.html" class="boton boton-secundario">
+      🔍 <span>Buscar Vehículo</span>
+    </a>
     
-    <a href="#" class="boton boton-app" id="btnInstalar">📱 Bajar Aplicación</a>
+    <a href="#" class="boton boton-app" id="btnInstalar">
+      📱 <span>Bajar Aplicación</span>
+    </a>
     
     <p class="aviso-app" id="avisoInstalacion" style="display:none;">
-      Se va a instalar como aplicación en tu celular.<br>
-      No verás pestañas ni navegador, funciona como una app normal 📱
+      Se va a instalar como aplicación en tu celular 📱<br>
+      No verás pestañas ni navegador, funciona como una app normal ✅
     </p>
+
+  
   </div>
 
   <script>
@@ -125,30 +193,30 @@
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      btnInstalar.style.display = 'block';
+      btnInstalar.style.display = 'flex';
       avisoInstalacion.style.display = 'block';
     });
 
     btnInstalar.addEventListener('click', async (e) => {
       e.preventDefault();
       if (!deferredPrompt) {
-        alert('📱 Para instalarla:\n1. Entrá desde el navegador de tu celular\n2. Tocá los 3 puntitos arriba\n3. Elegí "Agregar a pantalla de inicio" ✅');
+        alert('📱 Para instalarla:\n1. Entrá desde el navegador de tu celular\n2. Tocá los 3 puntitos arriba ⋮\n3. Elegí "Agregar a pantalla de inicio" ✅');
         return;
       }
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === 'accepted') {
         console.log('App instalada ✅');
-        btnInstalar.textContent = '✅ Ya está instalada';
-        btnInstalar.style.opacity = '0.7';
+        btnInstalar.innerHTML = '✅ <span>Ya está instalada</span>';
+        btnInstalar.style.opacity = '0.85';
         deferredPrompt = null;
       }
     });
 
     window.addEventListener('appinstalled', () => {
       console.log('App instalada exitosamente');
-      btnInstalar.textContent = '✅ Ya está instalada';
-      btnInstalar.style.opacity = '0.7';
+      btnInstalar.innerHTML = '✅ <span>Ya está instalada</span>';
+      btnInstalar.style.opacity = '0.85';
       deferredPrompt = null;
     });
   </script>
