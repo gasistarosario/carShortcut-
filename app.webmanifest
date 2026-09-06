@@ -1,16 +1,21 @@
 {
-  "name": "Autos en Venta",
-  "short_name": "AutosVenta",
-  "description": "Venta y búsqueda de autos — Gratis",
+  "name": "Vehículos en Venta",
+  "short_name": "Vehículos",
+  "description": "Publicá y buscá vehículos de forma gratuita",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#d4edf9",
   "theme_color": "#3182ce",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/2979/2979992.png",
-      "sizes": "any",
-      "type": "image/png"
+      "src": "icono-192.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "icono-512.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
     }
   ]
 }
