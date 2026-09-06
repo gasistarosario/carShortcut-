@@ -23,8 +23,18 @@
     h1 {
       text-align: center;
       color: #2d3748;
-      margin-bottom: 25px;
+      margin-bottom: 15px;
       font-size: 22px;
+    }
+    .aviso-seguridad {
+      background: #fef5e7;
+      padding: 14px 18px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      color: #744210;
+      border-left: 4px solid #ed8936;
+      font-size: 14px;
+      line-height: 1.5;
     }
     .form-container {
       background: white;
@@ -179,9 +189,19 @@
 
   <h1>🚗 Ingresar Vehículo</h1>
 
+  <div class="aviso-seguridad">
+    🔐 <strong>Importante:</strong> Escribí acá tu código de seguridad. Lo vas a necesitar después para poder eliminar este vehículo cuando lo encuentres en la búsqueda. Guardalo bien.
+  </div>
+
   <div class="form-container">
     <form id="formAuto">
       
+      <!-- ✅ CAMPO DE CÓDIGO DE SEGURIDAD AGREGADO -->
+      <div class="campo-completo">
+        <label>🔑 Código de Seguridad *</label>
+        <input type="password" id="codigo_seguridad" placeholder="Escribí tu código para poder eliminar después" required>
+      </div>
+
       <div class="fila">
         <div class="campo-completo">
           <label>Tipo de Vehículo *</label>
@@ -219,7 +239,6 @@
         </div>
       </div>
 
-      <!-- ✅ KILOMETRAJE — JUSTO DESPUÉS DE AÑO -->
       <div class="fila">
         <div class="campo">
           <label>Kilometraje</label>
@@ -462,12 +481,12 @@
         }
 
         const datos = {
+          codigo_seguridad: document.getElementById('codigo_seguridad').value.trim(),
           tipo_vehiculo: document.getElementById('tipo_vehiculo').value,
           marca: document.getElementById('marca').value.trim(),
           modelo: document.getElementById('modelo').value.trim(),
           version: document.getElementById('version').value.trim(),
           anio: parseInt(document.getElementById('anio').value),
-          // ✅ KILOMETRAJE ENVIADO A LA BASE
           kilometraje: document.getElementById('kilometraje').value 
             ? parseInt(document.getElementById('kilometraje').value) 
             : null,
