@@ -9,8 +9,42 @@
   <style>
     * {box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif;}
     body {background: #d4edf9; padding: 15px; max-width: 900px; margin: 0 auto;}
-    h1 {text-align: center; color: #2d3748; margin-bottom: 25px; font-size: 22px;}
-    .tarjeta {background: white; padding: 20px; border-radius: 12px; margin-bottom: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);}
+    h1 {text-align: center; color: #2d3748; margin-bottom: 15px; font-size: 22px;}
+    
+    .navegacion {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 15px 0 20px;
+      padding: 12px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .navegacion button {
+      padding: 10px 20px;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background: #4a90e2;
+      color: white;
+      font-weight: 600;
+    }
+    .navegacion button:disabled {background: #cbd5e0; cursor: not-allowed;}
+    .contador {font-size: 16px; font-weight: bold; color: #2d3748;}
+
+    .tarjeta {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      animation: aparecer 0.3s ease;
+    }
+    @keyframes aparecer {
+      from {opacity: 0; transform: translateX(8px);}
+      to {opacity: 1; transform: translateX(0);}
+    }
     .titulo-auto {font-size: 18px; font-weight: 700; color: #2b6cb0; margin-bottom: 12px;}
     .fila {margin-bottom: 8px; color: #2d3748;}
     .fila strong {color: #4a5568; min-width: 110px; display: inline-block;}
@@ -24,64 +58,43 @@
     .boton-eliminar {margin-top: 12px; padding: 10px 18px; background: #fed7d7; color: #9b2c2c; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 15px;}
     .boton-eliminar:hover {background: #feb2b2;}
 
-    /* === ESTILOS DE LAS FOTOS === */
-    .fotos-titulo {
-      margin-top: 18px;
-      font-weight: 700;
-      color: #2b6cb0;
-      font-size: 16px;
-    }
-    .fotos-cuadricula {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .foto-caja {
-      text-align: center;
-    }
-    .foto-ver {
-      width: 100%;
-      aspect-ratio: 4/3;
-      border-radius: 8px;
-      overflow: hidden;
-      background: #f7fafc;
-      border: 1px solid #e2e8f0;
-    }
-    .foto-ver img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .foto-nombre {
-      font-size: 11px;
-      color: #718096;
-      padding: 4px 0;
-    }
+    .fotos-titulo {margin-top: 18px; font-weight: 700; color: #2b6cb0; font-size: 16px;}
+    .fotos-cuadricula {display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 10px;}
+    .foto-caja {text-align: center;}
+    .foto-ver {width: 100%; aspect-ratio: 4/3; border-radius: 8px; overflow: hidden; background: #f7fafc; border: 1px solid #e2e8f0;}
+    .foto-ver img {width: 100%; height: 100%; object-fit: cover;}
+    .foto-nombre {font-size: 11px; color: #718096; padding: 4px 0;}
   </style>
 </head>
 <body>
 
   <h1>📋 Autos Cargados</h1>
 
+  <div class="navegacion">
+    <button id="btnAnterior">◀ Anterior</button>
+    <span id="contador" class="contador"></span>
+    <button id="btnSiguiente">Siguiente ▶</button>
+  </div>
+
   <div id="listaAutos">
-    <div class="cargando">🔄 Cargando autos...</div>
+    <div class="cargando">🔄 Cargando...</div>
   </div>
 
   <a href="index.html" class="volver">← Volver a Ingresar Auto</a>
 
   <script>
-    // === DATOS DE SUPABASE ===
     const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
     const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
 
-    // === NOMBRES DE CADA FOTO ===
     const nombresFotos = [
-      'Motor', 'Frente', 'Lateral izquierdo', 'Lateral derecho', 'Parte trasera',
-      'Interior', 'Interior', 'Interior', 'Interior', 'Ruedas', 'Extras', 'Extras'
+      'Foto 1', 'Foto 2', 'Foto 3', 'Foto 4', 'Foto 5', 'Foto 6',
+      'Foto 7', 'Foto 8', 'Foto 9', 'Foto 10', 'Foto 11', 'Foto 12'
     ];
 
     let sbClient = null;
+    let totalAutos = 0;
+    let indiceActual = 0;
+    let idsOrdenados = [];
 
     async function getSupabase() {
       if (!sbClient) {
@@ -98,94 +111,131 @@
       return sbClient;
     }
 
-    async function mostrarAutos() {
-      const caja = document.getElementById('listaAutos');
+    async function contarYListar() {
       const sb = await getSupabase();
-
-      const { data: autos, error } = await sb
+      const { count, data, error } = await sb
         .from('autos')
-        .select('*')
+        .select('id', { count: 'exact', head: false })
         .order('id', { ascending: false });
 
-      if (error) {
-        caja.innerHTML = `<div class="vacio">❌ Error: ${error.message}</div>`;
+      if (error || !data || data.length === 0) {
+        document.getElementById('listaAutos').innerHTML = 
+          `<div class="vacio">📭 Todavía no hay autos cargados</div>`;
+        return false;
+      }
+      totalAutos = count;
+      idsOrdenados = data.map(item => item.id);
+      return true;
+    }
+
+    async function cargarUno(posicion) {
+      if (posicion < 0 || posicion >= totalAutos) return;
+      
+      const caja = document.getElementById('listaAutos');
+      caja.innerHTML = `<div class="cargando">🔄 Cargando vehículo ${posicion+1} de ${totalAutos}...</div>`;
+      
+      const sb = await getSupabase();
+      const { data: auto, error } = await sb
+        .from('autos')
+        .select('*')
+        .eq('id', idsOrdenados[posicion])
+        .single();
+
+      if (error || !auto) {
+        caja.innerHTML = `<div class="vacio">❌ Error al cargar</div>`;
         return;
       }
 
-      if (!autos || autos.length === 0) {
-        caja.innerHTML = `<div class="vacio">📭 Todavía no hay autos cargados</div>`;
-        return;
-      }
-
-      caja.innerHTML = autos.map(auto => {
-        // Armar las fotos
-        let fotosHtml = '';
-        for (let i = 1; i <= 12; i++) {
-          const foto = auto[`foto${i}`];
-          if (foto) {
-            fotosHtml += `
-              <div class="foto-caja">
-                <div class="foto-ver"><img src="${foto}" alt="${nombresFotos[i-1]}"></div>
-                <div class="foto-nombre">${nombresFotos[i-1]}</div>
-              </div>
-            `;
-          }
+      let fotosHtml = '';
+      for (let i = 1; i <= 12; i++) {
+        const foto = auto[`foto${i}`];
+        if (foto) {
+          fotosHtml += `
+            <div class="foto-caja">
+              <div class="foto-ver"><img src="${foto}" alt="${nombresFotos[i-1]}"></div>
+              <div class="foto-nombre">${nombresFotos[i-1]}</div>
+            </div>
+          `;
         }
-        const hayFotos = fotosHtml !== '';
+      }
+      const hayFotos = fotosHtml !== '';
 
-        return `
-        <div class="tarjeta">
-          <div class="titulo-auto">${auto.marca || ''} ${auto.modelo || ''} — ${auto.anio || ''}</div>
-          <div class="fila"><strong>Versión:</strong> ${auto.version || '-'}</div>
-          <div class="fila"><strong>Precio:</strong> ${auto.precio || '-'}</div>
-          <div class="fila"><strong>Dueño:</strong> ${auto.dueno || '-'}</div>
-          <div class="fila"><strong>Dirección:</strong> ${auto.direccion || '-'}</div>
-          <div class="fila"><strong>Teléfono:</strong> ${auto.telefono || '-'}</div>
-          <div>
-            ${auto.permuta ? '<span class="etiqueta permuta">✅ Acepta permuta</span>' : ''}
-            ${auto.contado ? '<span class="etiqueta contado">💵 Solo contado</span>' : ''}
-          </div>
-          <div class="fila" style="margin-top: 10px;"><strong>Deuda:</strong> ${auto.deuda || 'Sin deudas'}</div>
-          <div class="fila"><strong>Descripción:</strong> ${auto.descripcion || '-'}</div>
-          
-          ${hayFotos ? `
-          <div class="fotos-titulo">📸 Fotos del auto</div>
-          <div class="fotos-cuadricula">
-            ${fotosHtml}
-          </div>
-          ` : ''}
-          
-          <button class="boton-eliminar" onclick="borrarAuto(${auto.id})">🗑️ Eliminar este auto</button>
+      caja.innerHTML = `
+      <div class="tarjeta">
+        <div class="titulo-auto">${auto.marca || ''} ${auto.modelo || ''} — ${auto.anio || ''}</div>
+        <div class="fila"><strong>Versión:</strong> ${auto.version || '-'}</div>
+        <div class="fila"><strong>Precio:</strong> ${auto.precio || '-'}</div>
+        <div class="fila"><strong>Dueño:</strong> ${auto.dueno || '-'}</div>
+        <div class="fila"><strong>Dirección:</strong> ${auto.direccion || '-'}</div>
+        <div class="fila"><strong>Teléfono:</strong> ${auto.telefono || '-'}</div>
+        <div>
+          ${auto.permuta ? '<span class="etiqueta permuta">✅ Acepta permuta</span>' : ''}
+          ${auto.contado ? '<span class="etiqueta contado">💵 Solo contado</span>' : ''}
         </div>
-        `;
-      }).join('');
+        <div class="fila" style="margin-top: 10px;"><strong>Deuda:</strong> ${auto.deuda || 'Sin deudas'}</div>
+        <div class="fila"><strong>Descripción:</strong> ${auto.descripcion || '-'}</div>
+        
+        ${hayFotos ? `
+        <div class="fotos-titulo">📸 Fotos del vehículo</div>
+        <div class="fotos-cuadricula">${fotosHtml}</div>
+        ` : ''}
+        
+        <button class="boton-eliminar" onclick="borrarAuto(${auto.id})">🗑️ Eliminar este vehículo</button>
+      </div>
+      `;
+      document.getElementById('contador').textContent = `${posicion+1} de ${totalAutos}`;
+    }
+
+    async function autoAnterior() {
+      if (totalAutos === 0) return;
+      if (indiceActual === 0) {
+        indiceActual = totalAutos - 1; // primero → último
+      } else {
+        indiceActual--;
+      }
+      await cargarUno(indiceActual);
+    }
+
+    async function autoSiguiente() {
+      if (totalAutos === 0) return;
+      if (indiceActual === totalAutos - 1) {
+        indiceActual = 0; // último → primero
+      } else {
+        indiceActual++;
+      }
+      await cargarUno(indiceActual);
     }
 
     async function borrarAuto(id) {
-      // 🛑 Cartel de confirmación
       const seguro = confirm(
-        '¿Estás seguro que querés eliminar este auto?\n' +
+        '¿Estás seguro que querés eliminar este vehículo?\n' +
         'Esta acción NO se puede deshacer.'
       );
-      
-      // ❌ Si dice Cancelar → no hace nada
-      if (!seguro) {
-        return;
-      }
+      if (!seguro) return;
 
-      // ✅ Si dice Aceptar → recién borra
       const sb = await getSupabase();
       const { error } = await sb.from('autos').delete().eq('id', id);
       
       if (error) {
         alert('❌ No se pudo eliminar: ' + error.message);
       } else {
-        alert('✅ Auto eliminado correctamente');
-        mostrarAutos();
+        alert('✅ Vehículo eliminado correctamente');
+        indiceActual = 0;
+        iniciar();
       }
     }
 
-    mostrarAutos();
+    async function iniciar() {
+      const hayDatos = await contarYListar();
+      if (hayDatos) {
+        await cargarUno(0);
+      }
+    }
+
+    document.getElementById('btnAnterior').addEventListener('click', autoAnterior);
+    document.getElementById('btnSiguiente').addEventListener('click', autoSiguiente);
+
+    iniciar();
   </script>
 
 </body>
