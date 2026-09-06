@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,175 +6,132 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buscar Auto</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
+    * {box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif;}
+    body {background: #d4edf9; padding: 20px; min-height: 100vh;}
+    .contenedor {max-width: 600px; margin: 0 auto;}
+
+    h1 {text-align: center; color: #2b6cb0; margin-bottom: 20px;}
+    .buscador {
+      background: white; padding: 25px; border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 20px;
     }
-    body {
-      background: #d4edf9;
-      padding: 20px;
-      min-height: 100vh;
-    }
-    .contenedor {
-      max-width: 600px;
-      margin: 0 auto;
-      background: white;
-      padding: 35px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    h1 {
-      text-align: center;
-      color: #2b6cb0;
-      margin-bottom: 30px;
-    }
-    .campo {
-      margin-bottom: 18px;
-    }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-      color: #4a5568;
-    }
+    .leyenda {text-align: center; color: #718096; font-size: 14px; margin-bottom: 20px;}
+    .campo {margin-bottom: 15px;}
+    label {display: block; margin-bottom: 6px; font-weight: 600; color: #4a5568;}
     input {
-      width: 100%;
-      padding: 12px 15px;
-      border: 1px solid #cbd5e0;
-      border-radius: 8px;
-      font-size: 16px;
+      width: 100%; padding: 11px 14px; border: 1px solid #cbd5e0;
+      border-radius: 8px; font-size: 15px;
     }
     input:focus {
-      outline: none;
-      border-color: #3182ce;
-      box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+      outline: none; border-color: #3182ce;
+      box-shadow: 0 0 0 3px rgba(49,130,206,0.2);
     }
-    .boton {
-      width: 100%;
-      padding: 14px;
-      background: #3182ce;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: background 0.2s;
+    .boton-buscar {
+      width: 100%; padding: 13px; background: #3182ce; color: white;
+      border: none; border-radius: 8px; font-size: 17px; font-weight: 600;
+      cursor: pointer; transition: background 0.2s;
     }
-    .boton:hover {
-      background: #2b6cb0;
+    .boton-buscar:hover {background: #2b6cb0;}
+
+    /* === NAVEGACIÓN — SIEMPRE VISIBLE, PERO BOTONES INACTIVOS SI NO HAY RESULTADOS === */
+    .navegacion {
+      display: flex; justify-content: space-between; align-items: center;
+      margin: 15px 0; padding: 12px; background: white;
+      border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      opacity: 0.4; transition: opacity 0.3s;
+    }
+    .navegacion.activa {opacity: 1;}
+    .navegacion button {
+      padding: 10px 18px; font-size: 15px; cursor: pointer;
+      border: none; border-radius: 8px; background: #4a90e2;
+      color: white; font-weight: 600; transition: background 0.2s;
+    }
+    .navegacion button:hover {background: #357abd;}
+    .navegacion button:disabled {background: #cbd5e0; cursor: not-allowed;}
+    .contador {font-size: 16px; font-weight: bold; color: #2d3748;}
+
+    /* === TARJETA === */
+    .tarjeta {
+      background: white; padding: 22px; border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: aparecer 0.3s ease;
+    }
+    @keyframes aparecer {
+      from {opacity: 0; transform: translateX(8px);}
+      to {opacity: 1; transform: translateX(0);}
+    }
+    .titulo-auto {
+      font-size: 19px; font-weight: 700; color: #2b6cb0; margin-bottom: 14px;
+      padding-bottom: 8px; border-bottom: 2px solid #ebf4ff;
+    }
+    .fila {margin-bottom: 9px; color: #2d3748;}
+    .fila strong {color: #4a5568; min-width: 110px; display: inline-block;}
+    .etiqueta {
+      display: inline-block; padding: 4px 10px; border-radius: 20px;
+      font-size: 13px; margin: 4px 8px 4px 0;
+    }
+    .permuta {background: #fef5e7; color: #975a16;}
+    .contado {background: #e6fffa; color: #047857;}
+
+    .cargando {text-align: center; padding: 40px; color: #4a5568; font-size: 16px;}
+    .sin-resultado {
+      text-align: center; padding: 40px 20px; color: #718096;
+      font-size: 16px; background: white; border-radius: 12px;
     }
     .volver {
-      display: block;
-      text-align: center;
-      margin-top: 25px;
-      color: #3182ce;
-      text-decoration: none;
-      font-weight: 600;
+      display: block; text-align: center; margin-top: 25px;
+      color: #3182ce; text-decoration: none; font-weight: 600;
     }
-    .volver:hover {
-      text-decoration: underline;
-    }
-    .resultado {
-      margin-top: 30px;
-    }
-    .tarjeta {
-      background: #f7fafc;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      border-left: 4px solid #3182ce;
-    }
-    .tarjeta h3 {
-      color: #2b6cb0;
-      margin-bottom: 12px;
-      font-size: 18px;
-    }
-    .dato {
-      margin-bottom: 8px;
-    }
-    .etiqueta {
-      font-weight: 600;
-      color: #4a5568;
-      display: inline-block;
-      min-width: 100px;
-    }
-    .sin-resultado {
-      text-align: center;
-      color: #718096;
-      padding: 30px;
-      font-size: 16px;
-    }
-    .leyenda {
-      text-align: center;
-      color: #718096;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-    .fotos-titulo {
-      margin-top: 16px;
-      font-weight: 700;
-      color: #2b6cb0;
-      font-size: 15px;
-    }
+    .volver:hover {text-decoration: underline;}
+
+    /* === FOTOS === */
+    .fotos-titulo {margin-top: 18px; font-weight: 700; color: #2b6cb0; font-size: 16px;}
     .fotos-cuadricula {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-      gap: 8px;
-      margin-top: 8px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 8px; margin-top: 10px;
     }
-    .foto-caja {
-      text-align: center;
-    }
+    .foto-caja {text-align: center;}
     .foto-ver {
-      width: 100%;
-      aspect-ratio: 4/3;
-      border-radius: 6px;
-      overflow: hidden;
-      background: #e2e8f0;
+      width: 100%; aspect-ratio: 4/3; border-radius: 6px;
+      overflow: hidden; background: #e2e8f0;
     }
-    .foto-ver img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .foto-nombre {
-      font-size: 10px;
-      color: #718096;
-      padding: 3px 0;
-    }
+    .foto-ver img {width: 100%; height: 100%; object-fit: cover;}
+    .foto-nombre {font-size: 10px; color: #718096; padding: 3px 0;}
   </style>
 </head>
 <body>
 
   <div class="contenedor">
     <h1>🔍 Buscar Auto</h1>
-    <p class="leyenda">Escribí lo que querés buscar y dejá vacío lo que no importa ✨</p>
 
-    <div class="campo">
-      <label>Marca</label>
-      <input type="text" id="buscar_marca" placeholder="Ej: Toyota, Ford, Chevrolet...">
+    <!-- FORMULARIO DE BÚSQUEDA -->
+    <div class="buscador">
+      <p class="leyenda">Dejá vacío lo que no querés filtrar ✨</p>
+
+      <div class="campo">
+        <label>Marca</label>
+        <input type="text" id="buscar_marca" placeholder="Ej: Toyota, Ford...">
+      </div>
+      <div class="campo">
+        <label>Modelo</label>
+        <input type="text" id="buscar_modelo" placeholder="Ej: Corolla, Fiesta...">
+      </div>
+      <div class="campo">
+        <label>Año</label>
+        <input type="text" id="buscar_anio" placeholder="Ej: 2020">
+      </div>
+
+      <button class="boton-buscar" onclick="realizarBusqueda()">🔍 Buscar</button>
     </div>
 
-    <div class="campo">
-      <label>Modelo</label>
-      <input type="text" id="buscar_modelo" placeholder="Ej: Corolla, Fiesta, Cruze...">
+    <!-- NAVEGACIÓN — SIEMPRE VISIBLE -->
+    <div class="navegacion" id="caja_navegacion">
+      <button id="btnAnterior" disabled>◀ Anterior</button>
+      <span id="contador" class="contador">—</span>
+      <button id="btnSiguiente" disabled>Siguiente ▶</button>
     </div>
 
-    <div class="campo">
-      <label>Año</label>
-      <input type="text" id="buscar_anio" placeholder="Ej: 2019, 2020...">
-    </div>
-
-    <button class="boton" onclick="buscarAutos()">🔍 Buscar</button>
-
-    <div class="resultado" id="caja_resultado"></div>
-    <div class="sin-resultado" id="sin_resultado" style="display:none;">
-      📭 No se encontraron autos con esos datos
-    </div>
+    <!-- RESULTADO -->
+    <div id="caja_resultado"></div>
 
     <a href="index.html" class="volver">← Volver al Inicio</a>
   </div>
@@ -183,11 +141,14 @@
     const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
 
     const nombresFotos = [
-      'Motor', 'Frente', 'Lateral izquierdo', 'Lateral derecho', 'Parte trasera',
-      'Interior', 'Interior', 'Interior', 'Interior', 'Ruedas', 'Extras', 'Extras'
+      'Motor', 'Frente', 'Lateral izquierdo', 'Lateral derecho', 'Trasera',
+      'Interior 1', 'Interior 2', 'Interior 3', 'Interior 4',
+      'Ruedas 1', 'Ruedas 2', 'Extras'
     ];
 
     let sbClient = null;
+    let idsFiltrados = [];
+    let indiceActual = 0;
 
     async function getSupabase() {
       if (!sbClient) {
@@ -204,73 +165,132 @@
       return sbClient;
     }
 
-    async function buscarAutos() {
+    async function realizarBusqueda() {
       const marca = document.getElementById('buscar_marca').value.trim();
       const modelo = document.getElementById('buscar_modelo').value.trim();
       const anio = document.getElementById('buscar_anio').value.trim();
 
       const caja = document.getElementById('caja_resultado');
-      const sinRes = document.getElementById('sin_resultado');
-      caja.innerHTML = '';
-      sinRes.style.display = 'none';
+      const cajaNav = document.getElementById('caja_navegacion');
+      const btnAnt = document.getElementById('btnAnterior');
+      const btnSig = document.getElementById('btnSiguiente');
+      
+      caja.innerHTML = `<div class="cargando">🔄 Buscando...</div>`;
+      idsFiltrados = [];
+      indiceActual = 0;
+      btnAnt.disabled = true;
+      btnSig.disabled = true;
+      cajaNav.classList.remove('activa');
 
       const sb = await getSupabase();
-
-      let consulta = sb.from('autos').select('*');
+      let consulta = sb.from('autos').select('id, marca, modelo, anio');
 
       if (marca) consulta = consulta.ilike('marca', `%${marca}%`);
       if (modelo) consulta = consulta.ilike('modelo', `%${modelo}%`);
-     if (anio) { const numAnio = parseInt(anio); consulta = consulta.eq('anio', numAnio);}// ✅ CONVERTIMOS A TEXTO
+      if (anio) {
+        const numAnio = parseInt(anio);
+        if (!isNaN(numAnio)) consulta = consulta.eq('anio', numAnio);
+      }
 
-      const { data: autos, error } = await consulta.order('id', { ascending: false });
+      consulta = consulta.order('id', { ascending: false });
+      const { data, error } = await consulta;
 
       if (error) {
-        alert('❌ Error: ' + error.message);
+        caja.innerHTML = `<div class="sin-resultado">❌ Error: ${error.message}</div>`;
+        return;
+      }
+      if (!data || data.length === 0) {
+        caja.innerHTML = `<div class="sin-resultado">📭 No se encontraron autos con esos datos</div>`;
         return;
       }
 
-      if (!autos || autos.length === 0) {
-        sinRes.style.display = 'block';
-        return;
-      }
-
-      autos.forEach(auto => {
-        let fotosHtml = '';
-        for (let i = 1; i <= 12; i++) {
-          const foto = auto[`foto${i}`];
-          if (foto) {
-            fotosHtml += `
-              <div class="foto-caja">
-                <div class="foto-ver"><img src="${foto}" alt="${nombresFotos[i-1]}"></div>
-                <div class="foto-nombre">${nombresFotos[i-1]}</div>
-              </div>
-            `;
-          }
-        }
-        const hayFotos = fotosHtml !== '';
-
-        const tarjeta = document.createElement('div');
-        tarjeta.className = 'tarjeta';
-        tarjeta.innerHTML = `
-          <h3>${auto.marca || ''}${auto.modelo ? ` — ${auto.modelo}` : ''}${auto.version ? ` — ${auto.version}` : ''}${auto.anio ? ` — ${auto.anio}` : ''}</h3>
-          <div class="dato"><span class="etiqueta">Versión:</span> ${auto.version || '-'}</div>
-          <div class="dato"><span class="etiqueta">Precio:</span> ${auto.precio || '-'}</div>
-          <div class="dato"><span class="etiqueta">Dueño:</span> ${auto.dueno || '-'}</div>
-          <div class="dato"><span class="etiqueta">Dirección:</span> ${auto.direccion || '-'}</div>
-          <div class="dato"><span class="etiqueta">Teléfono:</span> ${auto.telefono || '-'}</div>
-          <div class="dato"><span class="etiqueta">Deuda:</span> ${auto.deuda || 'Sin deudas'}</div>
-          <div class="dato"><span class="etiqueta">Descripción:</span> ${auto.descripcion || '-'}</div>
-          
-          ${hayFotos ? `
-          <div class="fotos-titulo">📸 Fotos del auto</div>
-          <div class="fotos-cuadricula">
-            ${fotosHtml}
-          </div>
-          ` : ''}
-        `;
-        caja.appendChild(tarjeta);
-      });
+      idsFiltrados = data.map(item => item.id);
+      cajaNav.classList.add('activa');
+      btnAnt.disabled = false;
+      btnSig.disabled = false;
+      await cargarUno(0);
     }
+
+    async function cargarUno(posicion) {
+      if (posicion < 0 || posicion >= idsFiltrados.length) return;
+
+      const caja = document.getElementById('caja_resultado');
+      caja.innerHTML = `<div class="cargando">🔄 Cargando...</div>`;
+
+      const sb = await getSupabase();
+      const { data: auto, error } = await sb
+        .from('autos')
+        .select('*')
+        .eq('id', idsFiltrados[posicion])
+        .single();
+
+      if (error || !auto) {
+        caja.innerHTML = `<div class="sin-resultado">❌ Error al cargar</div>`;
+        return;
+      }
+
+      let fotosHtml = '';
+      for (let i = 1; i <= 12; i++) {
+        const foto = auto[`foto${i}`];
+        if (foto) {
+          fotosHtml += `
+            <div class="foto-caja">
+              <div class="foto-ver"><img src="${foto}" alt="${nombresFotos[i-1]}"></div>
+              <div class="foto-nombre">${nombresFotos[i-1]}</div>
+            </div>
+          `;
+        }
+      }
+      const hayFotos = fotosHtml !== '';
+
+      caja.innerHTML = `
+      <div class="tarjeta">
+        <div class="titulo-auto">${auto.marca || ''} ${auto.modelo || ''} — ${auto.anio || ''}</div>
+        <div class="fila"><strong>Versión:</strong> ${auto.version || '-'}</div>
+        <div class="fila"><strong>Precio:</strong> ${auto.precio || '-'}</div>
+        <div class="fila"><strong>Dueño:</strong> ${auto.dueno || '-'}</div>
+        <div class="fila"><strong>Dirección:</strong> ${auto.direccion || '-'}</div>
+        <div class="fila"><strong>Teléfono:</strong> ${auto.telefono || '-'}</div>
+        <div>
+          ${auto.permuta ? '<span class="etiqueta permuta">✅ Permuta</span>' : ''}
+          ${auto.contado ? '<span class="etiqueta contado">💵 Contado</span>' : ''}
+        </div>
+        <div class="fila" style="margin-top: 10px;"><strong>Deuda:</strong> ${auto.deuda || 'Sin deudas'}</div>
+        <div class="fila"><strong>Descripción:</strong> ${auto.descripcion || '-'}</div>
+        
+        ${hayFotos ? `
+        <div class="fotos-titulo">📸 Fotos del vehículo</div>
+        <div class="fotos-cuadricula">${fotosHtml}</div>
+        ` : ''}
+      </div>
+      `;
+      document.getElementById('contador').textContent = 
+        `${posicion + 1} de ${idsFiltrados.length}`;
+    }
+
+    async function autoAnterior() {
+      if (idsFiltrados.length === 0) return;
+      if (indiceActual === 0) {
+        indiceActual = idsFiltrados.length - 1; // primero → último
+      } else {
+        indiceActual--;
+      }
+      await cargarUno(indiceActual);
+    }
+
+    async function autoSiguiente() {
+      if (idsFiltrados.length === 0) return;
+      if (indiceActual === idsFiltrados.length - 1) {
+        indiceActual = 0; // último → primero
+      } else {
+        indiceActual++;
+      }
+      await cargarUno(indiceActual);
+    }
+
+    // Conectar botones
+    document.getElementById('btnAnterior').addEventListener('click', autoAnterior);
+    document.getElementById('btnSiguiente').addEventListener('click', autoSiguiente);
   </script>
 
 </body>
