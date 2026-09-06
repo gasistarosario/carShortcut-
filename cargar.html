@@ -1,10 +1,12 @@
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ingresar Vehículo</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -51,7 +53,7 @@
       color: #4a5568;
       font-size: 14px;
     }
-    input, textarea {
+    input, select, textarea {
       width: 100%;
       padding: 10px 12px;
       border: 1px solid #ddd;
@@ -62,7 +64,7 @@
     input::placeholder, textarea::placeholder {
       color: #a0aec0;
     }
-    input:focus, textarea:focus {
+    input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: #3182ce;
       box-shadow: 0 0 0 3px rgba(49,130,206,0.2);
@@ -115,7 +117,6 @@
     }
     .volver:hover { text-decoration: underline; }
 
-    /* === ESTILOS DE LAS FOTOS === */
     .foto-seccion {
       margin: 25px 0 15px;
     }
@@ -182,6 +183,21 @@
     <form id="formAuto">
       
       <div class="fila">
+        <div class="campo-completo">
+          <label>Tipo de Vehículo *</label>
+          <select id="tipo_vehiculo" required>
+            <option value="">Seleccionar...</option>
+            <option value="Auto">🚗 Auto</option>
+            <option value="Camioneta">🚙 Camioneta / Pick-up</option>
+            <option value="4x4">⛰️ 4x4 / Todoterreno</option>
+            <option value="SUV">🏔️ SUV / Crossover</option>
+            <option value="Furgon">📦 Furgón / Utilitario</option>
+            <option value="Cuatriciclo">🏍️ Cuatriciclo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fila">
         <div class="campo">
           <label>Marca</label>
           <input type="text" id="marca" placeholder="Ej: Toyota, Ford, Chevrolet" required>
@@ -203,29 +219,34 @@
         </div>
       </div>
 
+      <!-- ✅ KILOMETRAJE — JUSTO DESPUÉS DE AÑO -->
       <div class="fila">
+        <div class="campo">
+          <label>Kilometraje</label>
+          <input type="number" id="kilometraje" placeholder="Ej: 95000">
+        </div>
         <div class="campo">
           <label>Precio</label>
           <input type="text" id="precio" placeholder="Ej: 12.500.000 o USD 8.500" required>
         </div>
+      </div>
+
+      <div class="fila">
         <div class="campo">
           <label>Dueño / Agencia</label>
           <input type="text" id="dueno" placeholder="Ej: Juan Pérez o Autos SRL" required>
+        </div>
+        <div class="campo">
+          <label>Dirección</label>
+          <input type="text" id="direccion" placeholder="Ej: Av. San Martín 1234, Rosario" required>
         </div>
       </div>
 
       <div class="fila">
         <div class="campo">
-          <label>Dirección</label>
-          <input type="text" id="direccion" placeholder="Ej: Av. San Martín 1234, Rosario" required>
-        </div>
-        <div class="campo">
           <label>Teléfono / WhatsApp</label>
           <input type="tel" id="telefono" placeholder="Ej: +54 9 341 123-4567" required>
         </div>
-      </div>
-
-      <div class="fila-chk">
         <div class="campo-chk">
           <input type="checkbox" id="permuta">
           <label for="permuta">Acepta permuta</label>
@@ -246,13 +267,11 @@
         <textarea id="descripcion" rows="4" placeholder="Ej: Único dueño, aire acondicionado, alarma, cubiertas nuevas, listo para transferir..."></textarea>
       </div>
 
-      <!-- 📸 FOTOS DEL AUTO -->
       <div class="foto-seccion">
         <div class="foto-titulo-seccion">📸 Fotos del auto</div>
 
         <label class="foto-tarjeta">
-          <div class="foto-nombre">
-            📷 Motor
+          <div class="foto-nombre">📷 Motor
             <input type="file" class="foto-input-oculto" id="foto1" accept="image/*" capture="environment" onchange="verFoto(1, this)">
           </div>
           <div class="foto-mini">
@@ -262,8 +281,7 @@
         </label>
 
         <label class="foto-tarjeta">
-          <div class="foto-nombre">
-            📷 Frente
+          <div class="foto-nombre">📷 Frente
             <input type="file" class="foto-input-oculto" id="foto2" accept="image/*" capture="environment" onchange="verFoto(2, this)">
           </div>
           <div class="foto-mini">
@@ -273,8 +291,7 @@
         </label>
 
         <label class="foto-tarjeta">
-          <div class="foto-nombre">
-            📷 Lateral izquierdo
+          <div class="foto-nombre">📷 Lateral izquierdo
             <input type="file" class="foto-input-oculto" id="foto3" accept="image/*" capture="environment" onchange="verFoto(3, this)">
           </div>
           <div class="foto-mini">
@@ -284,8 +301,7 @@
         </label>
 
         <label class="foto-tarjeta">
-          <div class="foto-nombre">
-            📷 Lateral derecho
+          <div class="foto-nombre">📷 Lateral derecho
             <input type="file" class="foto-input-oculto" id="foto4" accept="image/*" capture="environment" onchange="verFoto(4, this)">
           </div>
           <div class="foto-mini">
@@ -295,8 +311,7 @@
         </label>
 
         <label class="foto-tarjeta">
-          <div class="foto-nombre">
-            📷 Parte trasera
+          <div class="foto-nombre">📷 Parte trasera
             <input type="file" class="foto-input-oculto" id="foto5" accept="image/*" capture="environment" onchange="verFoto(5, this)">
           </div>
           <div class="foto-mini">
@@ -306,8 +321,7 @@
         </label>
 
         <label class="foto-tarjeta">
-          <div class="foto-nombre">
-            📷 Interior
+          <div class="foto-nombre">📷 Interior 1
             <input type="file" class="foto-input-oculto" id="foto6" accept="image/*" capture="environment" onchange="verFoto(6, this)">
           </div>
           <div class="foto-mini">
@@ -317,8 +331,7 @@
         </label>
 
         <label class="foto-tarjeta">
-          <div class="foto-nombre">
-            📷 Interior
+          <div class="foto-nombre">📷 Interior 2
             <input type="file" class="foto-input-oculto" id="foto7" accept="image/*" capture="environment" onchange="verFoto(7, this)">
           </div>
           <div class="foto-mini">
@@ -328,8 +341,7 @@
         </label>
 
         <label class="foto-tarjeta">
-          <div class="foto-nombre">
-            📷 Interior
+          <div class="foto-nombre">📷 Interior 3
             <input type="file" class="foto-input-oculto" id="foto8" accept="image/*" capture="environment" onchange="verFoto(8, this)">
           </div>
           <div class="foto-mini">
@@ -339,8 +351,7 @@
         </label>
 
         <label class="foto-tarjeta">
-          <div class="foto-nombre">
-            📷 Interior
+          <div class="foto-nombre">📷 Interior 4
             <input type="file" class="foto-input-oculto" id="foto9" accept="image/*" capture="environment" onchange="verFoto(9, this)">
           </div>
           <div class="foto-mini">
@@ -350,8 +361,7 @@
         </label>
 
         <label class="foto-tarjeta">
-          <div class="foto-nombre">
-            📷 Ruedas
+          <div class="foto-nombre">📷 Ruedas
             <input type="file" class="foto-input-oculto" id="foto10" accept="image/*" capture="environment" onchange="verFoto(10, this)">
           </div>
           <div class="foto-mini">
@@ -361,8 +371,7 @@
         </label>
 
         <label class="foto-tarjeta">
-          <div class="foto-nombre">
-            📷 Extras
+          <div class="foto-nombre">📷 Extras 1
             <input type="file" class="foto-input-oculto" id="foto11" accept="image/*" capture="environment" onchange="verFoto(11, this)">
           </div>
           <div class="foto-mini">
@@ -372,8 +381,7 @@
         </label>
 
         <label class="foto-tarjeta">
-          <div class="foto-nombre">
-            📷 Extras
+          <div class="foto-nombre">📷 Extras 2
             <input type="file" class="foto-input-oculto" id="foto12" accept="image/*" capture="environment" onchange="verFoto(12, this)">
           </div>
           <div class="foto-mini">
@@ -384,7 +392,6 @@
       </div>
 
       <button type="submit" class="boton" id="btnGuardar">💾 Guardar Auto</button>
-      
       <div id="mensaje" class="mensaje"></div>
     </form>
 
@@ -395,11 +402,9 @@
     const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
     const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
 
-    // === MOSTRAR FOTITO CHICA AL LADO ===
     function verFoto(numero, input) {
       const img = document.getElementById(`img${numero}`);
       const sin = document.getElementById(`sin${numero}`);
-      
       if (input.files && input.files[0]) {
         const lector = new FileReader();
         lector.onload = e => {
@@ -411,24 +416,16 @@
       }
     }
 
-    // === NUEVO: ACHICAR FOTO AUTOMÁTICAMENTE ===
     function reducirFoto(archivo, maxAncho = 900, calidad = 0.75) {
-      return new Promise((resolver) => {
+      return new Promise(resolver => {
         const lector = new FileReader();
         lector.onload = e => {
           const img = new Image();
           img.onload = () => {
             const lienzo = document.createElement('canvas');
-            let ancho = img.width;
-            let alto = img.height;
-            
-            if (ancho > maxAncho) {
-              alto = alto * (maxAncho / ancho);
-              ancho = maxAncho;
-            }
-            
-            lienzo.width = ancho;
-            lienzo.height = alto;
+            let ancho = img.width, alto = img.height;
+            if (ancho > maxAncho) { alto = alto * (maxAncho / ancho); ancho = maxAncho; }
+            lienzo.width = ancho; lienzo.height = alto;
             const ctx = lienzo.getContext('2d');
             ctx.drawImage(img, 0, 0, ancho, alto);
             resolver(lienzo.toDataURL('image/jpeg', calidad));
@@ -439,40 +436,25 @@
       });
     }
 
-    // === LEER FOTO YA ACHICADA ===
     async function leerArchivoComoTexto(archivo) {
       if (!archivo) return null;
       return await reducirFoto(archivo);
     }
 
     async function cargarSupabase() {
-      if (!window.supabase) {
-        await new Promise(res => {
-          const s = document.createElement('script');
-          s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-          s.onload = res;
-          document.head.appendChild(s);
-        });
-      }
-      return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-        timeout: 30000 // ⏱️ Más tiempo para subir todo
-      });
+      return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { timeout: 30000 });
     }
 
     document.getElementById('formAuto').addEventListener('submit', async e => {
       e.preventDefault();
-      
       const btn = document.getElementById('btnGuardar');
       const mensaje = document.getElementById('mensaje');
-      
       btn.disabled = true;
       btn.textContent = "Guardando...";
       mensaje.style.display = "none";
 
       try {
         const supabase = await cargarSupabase();
-
-        // Leer las 12 fotos (ya achicadas solas)
         const fotos = {};
         for (let i = 1; i <= 12; i++) {
           const input = document.getElementById(`foto${i}`);
@@ -480,10 +462,15 @@
         }
 
         const datos = {
+          tipo_vehiculo: document.getElementById('tipo_vehiculo').value,
           marca: document.getElementById('marca').value.trim(),
           modelo: document.getElementById('modelo').value.trim(),
           version: document.getElementById('version').value.trim(),
           anio: parseInt(document.getElementById('anio').value),
+          // ✅ KILOMETRAJE ENVIADO A LA BASE
+          kilometraje: document.getElementById('kilometraje').value 
+            ? parseInt(document.getElementById('kilometraje').value) 
+            : null,
           precio: document.getElementById('precio').value.trim(),
           dueno: document.getElementById('dueno').value.trim(),
           direccion: document.getElementById('direccion').value.trim(),
@@ -495,23 +482,18 @@
           ...fotos
         };
 
-        const { error } = await supabase
-          .from('autos')
-          .insert([datos]);
-
+        const { error } = await supabase.from('autos').insert([datos]);
         if (error) throw error;
 
         mensaje.textContent = "✅ Auto guardado correctamente";
         mensaje.className = "mensaje exito";
         mensaje.style.display = "block";
         document.getElementById('formAuto').reset();
-
-        // Ocultar todas las fotitos después de guardar
+        
         for (let i = 1; i <= 12; i++) {
           document.getElementById(`img${i}`).style.display = 'none';
           document.getElementById(`sin${i}`).style.display = 'block';
         }
-
       } catch (err) {
         console.error("Error:", err);
         mensaje.textContent = "❌ Error: " + err.message;
@@ -523,6 +505,5 @@
       }
     });
   </script>
-
 </body>
 </html>
