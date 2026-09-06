@@ -5,7 +5,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Autos en Venta">
+  <meta name="theme-color" content="#3182ce">
   <title>Autos en Venta</title>
+  <link rel="manifest" href="app.webmanifest">
   <style>
     * {
       box-sizing: border-box;
@@ -36,62 +41,22 @@
     h1 {
       color: #2b6cb0;
       font-size: 34px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
     }
 
-    .caja-acceso {
-      margin-bottom: 10px;
-    }
-
-    .caja-acceso input {
-      width: 100%;
+    .cartel-gratis {
+      background: #ebf8ff;
+      color: #2c5282;
       padding: 15px;
-      border: 2px solid #90cdf4;
       border-radius: 12px;
-      font-size: 17px;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-
-    .caja-acceso input:focus {
-      outline: none;
-      border-color: #3182ce;
-      box-shadow: 0 0 0 3px rgba(49,130,206,0.2);
-    }
-
-    .boton-entrar {
-      width: 100%;
-      padding: 14px;
-      background: #3182ce;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 17px;
+      margin-bottom: 30px;
       font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-bottom: 10px;
-    }
-
-    .boton-entrar:hover {
-      background: #2b6cb0;
-      transform: translateY(-2px);
-    }
-
-    .error {
-      color: #9b2c2c;
-      margin-top: 12px;
-      display: none;
-      font-weight: 500;
-    }
-
-    .menu-opciones {
-      display: none;
-      margin-top: 10px;
+      font-size: 15px;
+      line-height: 1.5;
     }
 
     .boton {
@@ -103,7 +68,7 @@
       font-weight: 600;
       padding: 18px 20px;
       border-radius: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       transition: all 0.3s ease;
     }
 
@@ -112,11 +77,20 @@
       transform: translateY(-2px);
     }
 
-    .boton-cerrar {
-      background: #718096;
-      font-size: 17px;
-      padding: 14px 20px;
-      margin-bottom: 0;
+    .boton-app {
+      background: #2f855a;
+      margin-top: 10px;
+    }
+
+    .boton-app:hover {
+      background: #276749;
+    }
+
+    .aviso-app {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #718096;
+      line-height: 1.4;
     }
   </style>
 </head>
@@ -125,57 +99,57 @@
   <div class="caja-principal">
     <h1>🚗 Autos en Venta</h1>
 
-    <div id="cajaAcceso" class="caja-acceso">
-      <input type="text" id="usuario" placeholder="Nombre de usuario">
-      <input type="password" id="contrasena" placeholder="Contraseña">
-      <button class="boton-entrar" onclick="verificar()">🔑 Entrar</button>
-      <p id="mensajeError" class="error">❌ Usuario o contraseña incorrectos</p>
+    <div class="cartel-gratis">
+      ✨ Todo es <strong>TOTALMENTE GRATIS</strong> ✨<br>
+      Cargá, buscá y vendé sin pagar nada,<br>
+      sin comisiones ni costos ocultos 💙
     </div>
 
-    <div id="menuOpciones" class="menu-opciones">
-      <a href="cargar.html" class="boton">📄 Ingresar Auto</a>
-      <a href="ver.html" class="boton">📋 Ver Autos Cargados</a>
-      <a href="buscar.html" class="boton">🔍 Buscar Auto</a>
-      <button class="boton boton-cerrar" onclick="cerrarSesion()">🚪 Cerrar sesión</button>
-    </div>
+    <a href="cargar.html" class="boton">📄 Ingresar Auto</a>
+    <a href="ver.html" class="boton">📋 Ver Autos — Catálogo</a>
+    <a href="buscar.html" class="boton">🔍 Buscar Auto</a>
+    
+    <a href="#" class="boton boton-app" id="btnInstalar">📱 Bajar Aplicación</a>
+    
+    <p class="aviso-app" id="avisoInstalacion" style="display:none;">
+      Se va a instalar como aplicación en tu celular.<br>
+      No verás pestañas ni navegador, funciona como una app normal 📱
+    </p>
   </div>
 
   <script>
-    const USUARIO_CORRECTO = "Eduardo";
-    const CONTRASENA_CORRECTA = "Homero2030";
+    let deferredPrompt;
+    const btnInstalar = document.getElementById('btnInstalar');
+    const avisoInstalacion = document.getElementById('avisoInstalacion');
 
-    window.onload = function() {
-      if (localStorage.getItem('autorizado') === 'si') {
-        document.getElementById('cajaAcceso').style.display = 'none';
-        document.getElementById('menuOpciones').style.display = 'block';
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      btnInstalar.style.display = 'block';
+      avisoInstalacion.style.display = 'block';
+    });
+
+    btnInstalar.addEventListener('click', async (e) => {
+      e.preventDefault();
+      if (!deferredPrompt) {
+        alert('📱 Para instalarla:\n1. Entrá desde el navegador de tu celular\n2. Tocá los 3 puntitos arriba\n3. Elegí "Agregar a pantalla de inicio" ✅');
+        return;
       }
-    };
-
-    function verificar() {
-      const usuario = document.getElementById('usuario').value;
-      const clave = document.getElementById('contrasena').value;
-      const cajaAcceso = document.getElementById('cajaAcceso');
-      const menu = document.getElementById('menuOpciones');
-      const error = document.getElementById('mensajeError');
-
-      if (usuario === USUARIO_CORRECTO && clave === CONTRASENA_CORRECTA) {
-        localStorage.setItem('autorizado', 'si');
-        cajaAcceso.style.display = 'none';
-        menu.style.display = 'block';
-      } else {
-        error.style.display = 'block';
-        document.getElementById('usuario').value = '';
-        document.getElementById('contrasena').value = '';
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        console.log('App instalada ✅');
+        btnInstalar.textContent = '✅ Ya está instalada';
+        btnInstalar.style.opacity = '0.7';
+        deferredPrompt = null;
       }
-    }
+    });
 
-    function cerrarSesion() {
-      localStorage.removeItem('autorizado');
-      window.location.reload();
-    }
-
-    document.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') verificar();
+    window.addEventListener('appinstalled', () => {
+      console.log('App instalada exitosamente');
+      btnInstalar.textContent = '✅ Ya está instalada';
+      btnInstalar.style.opacity = '0.7';
+      deferredPrompt = null;
     });
   </script>
 
