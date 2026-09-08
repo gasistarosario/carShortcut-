@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,6 +12,7 @@
   <meta name="theme-color" content="#1565C0">
   <title>Vehículos en Venta</title>
   <link rel="manifest" href="app.webmanifest">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -40,14 +42,8 @@
     }
 
     @keyframes entradaSuave {
-      from {
-        opacity: 0;
-        transform: translateY(25px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(25px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     h1 {
@@ -55,11 +51,6 @@
       font-size: 34px;
       font-weight: 800;
       margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      letter-spacing: -0.6px;
     }
 
     .subtitulo {
@@ -74,12 +65,9 @@
       color: #1B5E20;
       padding: 22px 24px;
       border-radius: 18px;
-      margin-bottom: 38px;
+      margin-bottom: 30px;
       font-weight: 700;
-      font-size: 16px;
-      line-height: 1.7;
       border: 2px solid #B8CCBC;
-      box-shadow: 0 4px 12px rgba(27, 94, 32, 0.08);
     }
 
     .boton {
@@ -87,7 +75,7 @@
       align-items: center;
       justify-content: center;
       gap: 12px;
-      background: linear-gradient(135deg, #4285C4 0%, #2A6AB8 100%);
+      background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
       color: #ffffff;
       text-decoration: none;
       font-size: 20px;
@@ -97,57 +85,98 @@
       margin-bottom: 16px;
       transition: all 0.35s ease;
       border: none;
-      box-shadow: 0 6px 16px rgba(42, 106, 184, 0.22);
+      box-shadow: 0 6px 16px rgba(21, 101, 192, 0.25);
+      cursor: pointer;
+      width: 100%;
     }
 
     .boton:hover {
       transform: translateY(-3px);
-      box-shadow: 0 8px 22px rgba(42, 106, 184, 0.30);
+      box-shadow: 0 8px 22px rgba(21, 101, 192, 0.35);
     }
 
-    .boton:active {
-      transform: translateY(0);
+    .seccion-ayuda {
+      margin-top: 35px;
+      padding: 22px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 16px;
+      border-left: 4px solid #1976D2;
     }
 
-    .boton-secundario {
-      background: #E8E4DD;
-      color: #2A6AB8;
-      border: 2.5px solid #C8D2DC;
-      box-shadow: none;
+    .seccion-ayuda h3 {
+      color: #1565C0;
+      font-size: 17px;
+      margin-bottom: 10px;
+      font-weight: 700;
     }
 
-    .boton-secundario:hover {
-      background: #DDE4EA;
-      border-color: #4285C4;
-      box-shadow: 0 4px 12px rgba(42, 106, 196, 0.12);
+    .seccion-ayuda p {
+      color: #4A5568;
+      font-size: 14px;
+      margin-bottom: 12px;
+      line-height: 1.5;
     }
 
-    .boton-app {
-      background: linear-gradient(135deg, #58A460 0%, #3D8B45 100%);
-      box-shadow: 0 6px 16px rgba(61, 139, 69, 0.22);
-      margin-top: 10px;
+    .seccion-ayuda textarea {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #90CAF9;
+      border-radius: 12px;
+      font-size: 15px;
+      resize: vertical;
+      min-height: 90px;
+      background: #FFFFFF;
+      margin-bottom: 12px;
     }
 
-    .boton-app:hover {
-      box-shadow: 0 8px 22px rgba(61, 139, 69, 0.30);
+    .seccion-ayuda textarea:focus {
+      outline: none;
+      border-color: #1976D2;
+      box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+    }
+
+    .boton-enviar {
+      background: linear-gradient(135deg, #FF9800 0%, #FB8C00 100%);
+      font-size: 16px;
+      padding: 14px 20px;
+      box-shadow: 0 4px 12px rgba(255, 152, 0, 0.25);
+    }
+
+    .mensaje-confirmacion {
+      margin-top: 12px;
+      padding: 10px;
+      color: #2E7D32;
+      background: #E8F5E9;
+      border-radius: 10px;
+      font-weight: 600;
+      display: none;
+    }
+
+    .mensaje-error {
+      margin-top: 12px;
+      padding: 10px;
+      color: #C62828;
+      background: #FFEBEE;
+      border-radius: 10px;
+      font-weight: 600;
+      display: none;
     }
 
     .aviso-app {
-      margin-top: 24px;
+      margin-top: 18px;
       font-size: 14px;
       color: #607D8B;
-      line-height: 1.6;
-      background: #E0E5EA;
-      padding: 16px 20px;
+      background: #E3F2FD;
+      padding: 14px 18px;
       border-radius: 12px;
-      border-left: 4px solid #4285C4;
+      border-left: 4px solid #1976D2;
+      display: none;
     }
 
     .pie-pagina {
-      margin-top: 35px;
-      font-size: 14px;
+      margin-top: 30px;
+      font-size: 13px;
       color: #78909C;
-      font-weight: 500;
     }
   </style>
 </head>
@@ -160,32 +189,45 @@
     <div class="cartel-gratis">
       ✨ Todo es <strong>TOTALMENTE GRATIS</strong> ✨<br>
       Cargá, buscá y vendé sin pagar nada,<br>
-      sin comisiones ni costos ocultos 
+      sin comisiones ni costos ocultos.
     </div>
 
     <a href="cargar.html" class="boton">
       📄 <span>Ingresar Vehículo</span>
     </a>
-    <a href="ver.html" class="boton boton-secundario">
+    <a href="ver.html" class="boton">
       📋 <span>Ver Vehículos — Catálogo</span>
     </a>
-    <a href="buscar.html" class="boton boton-secundario">
+    <a href="buscar.html" class="boton">
       🔍 <span>Buscar Vehículo</span>
     </a>
-    
-    <a href="#" class="boton boton-app" id="btnInstalar">
-      📱 <span>Bajar Aplicación</span>
-    </a>
-    
-    <p class="aviso-app" id="avisoInstalacion" style="display:none;">
-      Se va a instalar como aplicación en tu celular 📱<br>
-      No verás pestañas ni navegador, funciona como una app normal ✅
+    <button class="boton" id="btnInstalar">
+      📱 <span>Instalar Aplicación</span>
+    </button>
+
+    <p class="aviso-app" id="avisoInstalacion">
+      Se instala como una aplicación en tu celular.<br>
+      Sin pestañas ni navegador, funciona como una app normal.
     </p>
 
-  
+    <div class="seccion-ayuda">
+      <h3>¿Necesitás ayuda o tenés una consulta?</h3>
+      <p>Por favor, escribí tu correo electrónico y tu mensaje. Te responderemos a la brevedad.</p>
+      <textarea id="mensajeAyuda" placeholder="Tu correo y tu mensaje..."></textarea>
+      <button class="boton boton-enviar" id="btnEnviarAyuda">Enviar Mensaje</button>
+      <p class="mensaje-confirmacion" id="confirmacionEnvio">✅ Mensaje enviado. Gracias, te responderemos pronto.</p>
+      <p class="mensaje-error" id="mensajeError">❌ No se pudo enviar. Intentá nuevamente.</p>
+    </div>
+
+    <p class="pie-pagina">Hecho para Rosario y toda la región.</p>
   </div>
 
   <script>
+    const SUPABASE_URL = 'https://cgwdahvstitjksphucqk.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr';
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     let deferredPrompt;
     const btnInstalar = document.getElementById('btnInstalar');
     const avisoInstalacion = document.getElementById('avisoInstalacion');
@@ -200,24 +242,70 @@
     btnInstalar.addEventListener('click', async (e) => {
       e.preventDefault();
       if (!deferredPrompt) {
-        alert('📱 Para instalarla:\n1. Entrá desde el navegador de tu celular\n2. Tocá los 3 puntitos arriba ⋮\n3. Elegí "Agregar a pantalla de inicio" ✅');
+        alert('Para instalarla:\n1. Entrá desde el navegador de tu celular\n2. Tocá los 3 puntitos arriba ⋮\n3. Elegí "Agregar a pantalla de inicio"');
         return;
       }
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === 'accepted') {
-        console.log('App instalada ✅');
-        btnInstalar.innerHTML = '✅ <span>Ya está instalada</span>';
+        btnInstalar.innerHTML = '✅ <span>Instalada</span>';
         btnInstalar.style.opacity = '0.85';
         deferredPrompt = null;
       }
     });
 
     window.addEventListener('appinstalled', () => {
-      console.log('App instalada exitosamente');
-      btnInstalar.innerHTML = '✅ <span>Ya está instalada</span>';
+      btnInstalar.innerHTML = '✅ <span>Instalada</span>';
       btnInstalar.style.opacity = '0.85';
       deferredPrompt = null;
+    });
+
+    const btnEnviarAyuda = document.getElementById('btnEnviarAyuda');
+    const mensajeAyuda = document.getElementById('mensajeAyuda');
+    const confirmacionEnvio = document.getElementById('confirmacionEnvio');
+    const mensajeError = document.getElementById('mensajeError');
+
+    btnEnviarAyuda.addEventListener('click', async () => {
+      const texto = mensajeAyuda.value.trim();
+      
+      if (!texto) {
+        alert('Escribí tu correo y tu mensaje antes de enviar.');
+        return;
+      }
+
+      btnEnviarAyuda.disabled = true;
+      btnEnviarAyuda.textContent = 'Enviando...';
+      confirmacionEnvio.style.display = 'none';
+      mensajeError.style.display = 'none';
+
+      try {
+        const { error } = await supabaseClient
+          .from('mensajes_ayuda')
+          .insert([{ 
+            mensaje: texto,
+            fecha: new Date().toISOString()
+          }]);
+
+        if (error) throw error;
+
+        confirmacionEnvio.style.display = 'block';
+        mensajeAyuda.value = '';
+
+        setTimeout(() => {
+          confirmacionEnvio.style.display = 'none';
+        }, 5000);
+
+      } catch (err) {
+        console.error('Error:', err);
+        mensajeError.style.display = 'block';
+        
+        setTimeout(() => {
+          mensajeError.style.display = 'none';
+        }, 5000);
+      }
+
+      btnEnviarAyuda.textContent = 'Enviar Mensaje';
+      btnEnviarAyuda.disabled = false;
     });
   </script>
 
