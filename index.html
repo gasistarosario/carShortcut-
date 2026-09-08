@@ -22,7 +22,7 @@
     }
 
     body {
-      background: linear-gradient(135deg, #D7E8F5 0%, #B9D2E8 100%);
+      background: linear-gradient(135deg, #87c5e8 0%, #B9D2E8 100%);
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -212,8 +212,8 @@
 
     <div class="seccion-ayuda">
       <h3>¿Necesitás ayuda o tenés una consulta?</h3>
-      <p>Por favor, escribí tu correo electrónico y tu mensaje. Te responderemos a la brevedad.</p>
-      <textarea id="mensajeAyuda" placeholder="Tu correo y tu mensaje..."></textarea>
+      <p>Por favor, escribí tu mensaje. Te responderemos a la brevedad.</p>
+      <textarea id="mensajeAyuda" placeholder="Tu mensaje..."></textarea>
       <button class="boton boton-enviar" id="btnEnviarAyuda">Enviar Mensaje</button>
       <p class="mensaje-confirmacion" id="confirmacionEnvio">✅ Mensaje enviado. Gracias, te responderemos pronto.</p>
       <p class="mensaje-error" id="mensajeError">❌ No se pudo enviar. Intentá nuevamente.</p>
@@ -269,7 +269,7 @@
       const texto = mensajeAyuda.value.trim();
       
       if (!texto) {
-        alert('Escribí tu correo y tu mensaje antes de enviar.');
+        alert('Escribí tu mensaje antes de enviar.');
         return;
       }
 
@@ -307,6 +307,38 @@
       btnEnviarAyuda.textContent = 'Enviar Mensaje';
       btnEnviarAyuda.disabled = false;
     });
+  </script>
+
+  <!-- === CONTADOR DE VISITAS — PÁGINA PRINCIPAL === -->
+  <script>
+    async function contarVisitaPrincipal() {
+      try {
+        const { data, error } = await supabaseClient
+          .from('visitas')
+          .select('cantidad')
+          .eq('pagina', 'principal')
+          .single();
+
+        if (error) {
+          console.log('⚠️ No se pudo leer el contador:', error.message);
+          return;
+        }
+
+        if (data) {
+          const nuevaCantidad = data.cantidad + 1;
+          await supabaseClient
+            .from('visitas')
+            .update({ cantidad: nuevaCantidad })
+            .eq('pagina', 'principal');
+          
+          console.log('✅ Visita contada — Principal:', nuevaCantidad);
+        }
+      } catch (err) {
+        console.log('⚠️ Error contando visita:', err.message);
+      }
+    }
+
+    contarVisitaPrincipal();
   </script>
 
 </body>
