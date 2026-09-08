@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -183,6 +182,9 @@
     .foto-input-oculto {
       display: none;
     }
+    .oculto {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -196,7 +198,6 @@
   <div class="form-container">
     <form id="formAuto">
       
-      <!-- ✅ CAMPO DE CÓDIGO DE SEGURIDAD AGREGADO -->
       <div class="campo-completo">
         <label>🔑 Código de Seguridad *</label>
         <input type="password" id="codigo_seguridad" placeholder="Escribí tu código para poder eliminar después" required>
@@ -233,9 +234,32 @@
           <label>Versión</label>
           <input type="text" id="version" placeholder="Ej: XEi, 1.6 LT, Limited" required>
         </div>
+        <!-- ⛽ COMBUSTIBLE ABAJO DE VERSIÓN -->
+        <div class="campo">
+          <label>⛽ Combustible</label>
+          <select id="combustible">
+            <option value="">Seleccionar...</option>
+            <option>Nafta</option>
+            <option>Diésel</option>
+            <option>Eléctrico</option>
+            <option>Híbrido</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fila">
         <div class="campo">
           <label>Año</label>
           <input type="number" id="anio" placeholder="Ej: 2018" required>
+        </div>
+        <!-- 🔄 TRANSMISIÓN ABAJO DE AÑO -->
+        <div class="campo">
+          <label>🔄 Transmisión</label>
+          <select id="transmision">
+            <option value="">Seleccionar...</option>
+            <option>Manual</option>
+            <option>Automática</option>
+          </select>
         </div>
       </div>
 
@@ -258,6 +282,29 @@
         <div class="campo">
           <label>Dirección</label>
           <input type="text" id="direccion" placeholder="Ej: Av. San Martín 1234, Rosario" required>
+        </div>
+      </div>
+
+      <div class="fila">
+        <!-- 🏙️ CIUDAD ABAJO DE DIRECCIÓN -->
+        <div class="campo">
+          <label>🏙️ Ciudad</label>
+          <select id="ciudad">
+            <option value="">Seleccionar...</option>
+            <option>Beltrán</option>
+            <option>Fray Luis Beltrán</option>
+            <option>Funes</option>
+            <option>Granadero Baigorria</option>
+            <option>Roldán</option>
+            <option>Rosario</option>
+            <option>San Lorenzo</option>
+            <option>Villa Gobernador Gálvez</option>
+            <option>Otra ciudad</option>
+          </select>
+        </div>
+        <div class="campo" id="campo_ciudad_libre" style="display:none;">
+          <label>✍️ Escribí tu ciudad</label>
+          <input type="text" id="ciudad_libre" placeholder="Tu ciudad...">
         </div>
       </div>
 
@@ -287,7 +334,7 @@
       </div>
 
       <div class="foto-seccion">
-        <div class="foto-titulo-seccion">📸 Fotos del auto</div>
+        <div class="foto-titulo-seccion">📸 Fotos del vehículo</div>
 
         <label class="foto-tarjeta">
           <div class="foto-nombre">📷 Motor
@@ -410,7 +457,7 @@
         </label>
       </div>
 
-      <button type="submit" class="boton" id="btnGuardar">💾 Guardar Auto</button>
+      <button type="submit" class="boton" id="btnGuardar">💾 Guardar Vehículo</button>
       <div id="mensaje" class="mensaje"></div>
     </form>
 
@@ -420,6 +467,13 @@
   <script>
     const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
     const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
+
+    // Mostrar campo libre si eligen "Otra ciudad"
+    const selectCiudad = document.getElementById('ciudad');
+    const campoLibre = document.getElementById('campo_ciudad_libre');
+    selectCiudad.addEventListener('change', () => {
+      campoLibre.style.display = selectCiudad.value === 'Otra ciudad' ? 'block' : 'none';
+    });
 
     function verFoto(numero, input) {
       const img = document.getElementById(`img${numero}`);
@@ -480,19 +534,28 @@
           fotos[`foto${i}`] = await leerArchivoComoTexto(input.files[0]);
         }
 
+        // Obtener ciudad: lista o escrita
+        let ciudadValor = selectCiudad.value;
+        if (ciudadValor === 'Otra ciudad') {
+          ciudadValor = document.getElementById('ciudad_libre').value.trim();
+        }
+
         const datos = {
           codigo_seguridad: document.getElementById('codigo_seguridad').value.trim(),
           tipo_vehiculo: document.getElementById('tipo_vehiculo').value,
           marca: document.getElementById('marca').value.trim(),
           modelo: document.getElementById('modelo').value.trim(),
           version: document.getElementById('version').value.trim(),
+          combustible: document.getElementById('combustible').value,
           anio: parseInt(document.getElementById('anio').value),
+          transmision: document.getElementById('transmision').value,
           kilometraje: document.getElementById('kilometraje').value 
             ? parseInt(document.getElementById('kilometraje').value) 
             : null,
           precio: document.getElementById('precio').value.trim(),
           dueno: document.getElementById('dueno').value.trim(),
           direccion: document.getElementById('direccion').value.trim(),
+          ciudad: ciudadValor,
           telefono: document.getElementById('telefono').value.trim(),
           permuta: document.getElementById('permuta').checked,
           contado: document.getElementById('contado').checked,
@@ -504,10 +567,13 @@
         const { error } = await supabase.from('autos').insert([datos]);
         if (error) throw error;
 
-        mensaje.textContent = "✅ Auto guardado correctamente";
+        mensaje.textContent = "✅ Vehículo guardado correctamente";
         mensaje.className = "mensaje exito";
         mensaje.style.display = "block";
         document.getElementById('formAuto').reset();
+        
+        // Ocultar campo ciudad libre al reiniciar
+        campoLibre.style.display = 'none';
         
         for (let i = 1; i <= 12; i++) {
           document.getElementById(`img${i}`).style.display = 'none';
@@ -520,7 +586,7 @@
         mensaje.style.display = "block";
       } finally {
         btn.disabled = false;
-        btn.textContent = "💾 Guardar Auto";
+        btn.textContent = "💾 Guardar Vehículo";
       }
     });
   </script>
