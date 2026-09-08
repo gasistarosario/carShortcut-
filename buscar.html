@@ -8,57 +8,126 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * {box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif;}
-    body {background: #d4edf9; padding: 20px; min-height: 100vh;}
-    .contenedor {max-width: 600px; margin: 0 auto;}
+    body {
+      background: #c6e2f2;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    .contenedor {max-width: 620px; margin: 0 auto;}
 
-    h1 {text-align: center; color: #2b6cb0; margin-bottom: 20px;}
+    h1 {
+      text-align: center;
+      color: #1565C0;
+      margin-bottom: 20px;
+      font-size: 23px;
+    }
     .aviso-seguridad {
-      background: #fef5e7; padding: 14px 18px; border-radius: 10px;
-      margin-bottom: 20px; color: #744210; border-left: 4px solid #ed8936;
-      font-size: 14px; line-height: 1.5;
+      background: #fff8e1;
+      padding: 15px 20px;
+      border-radius: 12px;
+      margin-bottom: 22px;
+      color: #744210;
+      border-left: 4px solid #ff9800;
+      font-size: 14px;
+      line-height: 1.6;
     }
     .buscador {
-      background: white; padding: 25px; border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 20px;
+      background: #fffaf0;
+      padding: 28px;
+      border-radius: 18px;
+      box-shadow: 0 4px 14px rgba(21, 101, 192, 0.12);
+      margin-bottom: 22px;
     }
-    .leyenda {text-align: center; color: #718096; font-size: 14px; margin-bottom: 20px;}
-    .campo {margin-bottom: 15px;}
-    label {display: block; margin-bottom: 6px; font-weight: 600; color: #4a5568;}
+    .leyenda {
+      text-align: center;
+      color: #546e7a;
+      font-size: 14px;
+      margin-bottom: 22px;
+    }
+    .campo {margin-bottom: 16px;}
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 600;
+      color: #37474f;
+    }
     input, select {
-      width: 100%; padding: 11px 14px; border: 1px solid #cbd5e0;
-      border-radius: 8px; font-size: 15px;
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #90caf9;
+      border-radius: 10px;
+      font-size: 15px;
       background: white;
+      transition: all 0.2s;
     }
     input:focus, select:focus {
-      outline: none; border-color: #3182ce;
-      box-shadow: 0 0 0 3px rgba(49,130,206,0.2);
+      outline: none;
+      border-color: #1976D2;
+      box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
     }
     .boton-buscar {
-      width: 100%; padding: 13px; background: #3182ce; color: white;
-      border: none; border-radius: 8px; font-size: 17px; font-weight: 600;
-      cursor: pointer; transition: background 0.2s;
+      width: 100%;
+      padding: 14px;
+      background: #1976D2;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
     }
-    .boton-buscar:hover {background: #2b6cb0;}
+    .boton-buscar:hover {
+      background: #1565C0;
+      transform: translateY(-1px);
+    }
 
     .navegacion {
-      display: flex; justify-content: space-between; align-items: center;
-      margin: 15px 0; padding: 12px; background: white;
-      border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      opacity: 0.4; transition: opacity 0.3s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 18px 0;
+      padding: 14px 18px;
+      background: #fffaf0;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(21, 101, 192, 0.1);
+      opacity: 0.4;
+      transition: opacity 0.3s;
     }
     .navegacion.activa {opacity: 1;}
     .navegacion button {
-      padding: 10px 18px; font-size: 15px; cursor: pointer;
-      border: none; border-radius: 8px; background: #4a90e2;
-      color: white; font-weight: 600; transition: background 0.2s;
+      padding: 11px 22px;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      background: #1976D2;
+      color: white;
+      font-weight: 600;
+      transition: all 0.2s;
     }
-    .navegacion button:hover {background: #357abd;}
-    .navegacion button:disabled {background: #cbd5e0; cursor: not-allowed;}
-    .contador {font-size: 16px; font-weight: bold; color: #2d3748;}
+    .navegacion button:hover {
+      background: #1565C0;
+      transform: translateY(-1px);
+    }
+    .navegacion button:disabled {
+      background: #bbdefb;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .contador {
+      font-size: 16px;
+      font-weight: bold;
+      color: #1565C0;
+    }
 
     .tarjeta {
-      background: white; padding: 22px; border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1); animation: aparecer 0.3s ease;
+      background: #fffaf0;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(21, 101, 192, 0.12);
+      animation: aparecer 0.3s ease;
       margin-bottom: 20px;
     }
     @keyframes aparecer {
@@ -67,74 +136,160 @@
     }
     .etiqueta-tipo {
       display: inline-block;
-      background: #ebf8ff;
-      color: #2c5282;
-      padding: 6px 14px;
+      background: #e3f2fd;
+      color: #1565C0;
+      padding: 8px 18px;
       border-radius: 20px;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 15px;
+      font-size: 15px;
     }
     .titulo-vehiculo {
-      font-size: 19px; font-weight: 700; color: #2b6cb0; margin-bottom: 14px;
-      padding-bottom: 8px; border-bottom: 2px solid #ebf4ff;
+      font-size: 20px;
+      font-weight: 700;
+      color: #1565C0;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e3f2fd;
     }
-    .fila {margin-bottom: 9px; color: #2d3748;}
-    .fila strong {color: #4a5568; min-width: 110px; display: inline-block;}
+    .fila {
+      margin-bottom: 10px;
+      color: #37474f;
+      line-height: 1.6;
+    }
+    .fila strong {
+      color: #1976D2;
+      min-width: 130px;
+      display: inline-block;
+    }
     .etiqueta {
-      display: inline-block; padding: 4px 10px; border-radius: 20px;
-      font-size: 13px; margin: 4px 8px 4px 0;
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      margin: 6px 10px 6px 0;
+      font-weight: 600;
     }
-    .permuta {background: #fef5e7; color: #975a16;}
-    .contado {background: #e6fffa; color: #047857;}
+    .permuta {background: #fff3e0; color: #e65100;}
+    .contado {background: #e8f5e9; color: #2e7d32;}
 
-    .cargando {text-align: center; padding: 40px; color: #4a5568; font-size: 16px;}
+    .cargando {
+      text-align: center;
+      padding: 50px 20px;
+      color: #455a64;
+      font-size: 17px;
+    }
     .sin-resultado {
-      text-align: center; padding: 40px 20px; color: #718096;
-      font-size: 16px; background: white; border-radius: 12px;
+      text-align: center;
+      padding: 50px 20px;
+      color: #607d8b;
+      font-size: 17px;
+      background: #fffaf0;
+      border-radius: 16px;
     }
     .volver {
-      display: block; text-align: center; margin-top: 25px;
-      color: #3182ce; text-decoration: none; font-weight: 600;
+      display: block;
+      text-align: center;
+      margin-top: 28px;
+      color: #1976D2;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 12px;
+      background: #fffaf0;
+      border-radius: 10px;
+      transition: all 0.2s;
     }
-    .volver:hover {text-decoration: underline;}
+    .volver:hover {
+      background: #e3f2fd;
+      text-decoration: none;
+    }
 
-    .fotos-titulo {margin-top: 18px; font-weight: 700; color: #2b6cb0; font-size: 16px;}
+    .fotos-titulo {
+      margin-top: 22px;
+      font-weight: 700;
+      color: #1565C0;
+      font-size: 17px;
+      padding-top: 15px;
+      border-top: 2px solid #e3f2fd;
+    }
     .fotos-cuadricula {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-      gap: 8px; margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 12px;
+      margin-top: 15px;
     }
     .foto-caja {text-align: center;}
     .foto-ver {
-      width: 100%; aspect-ratio: 4/3; border-radius: 6px;
-      overflow: hidden; background: #e2e8f0;
+      width: 100%;
+      aspect-ratio: 4/3;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #e3f2fd;
+      border: 2px solid #bbdefb;
+      transition: transform 0.2s;
     }
+    .foto-ver:hover {transform: scale(1.03);}
     .foto-ver img {width: 100%; height: 100%; object-fit: cover;}
-    .foto-nombre {font-size: 10px; color: #718096; padding: 3px 0;}
+    .foto-nombre {
+      font-size: 11px;
+      color: #455a64;
+      padding: 5px 0;
+      font-weight: 600;
+    }
 
-    /* ZONA ELIMINAR - AHORA VISIBLE SIEMPRE */
     .zona-eliminar {
-      margin-top: 20px; padding-top: 18px; border-top: 2px dashed #e2e8f0;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 2px dashed #ffccbc;
     }
     .titulo-eliminar {
-      font-size: 15px; font-weight: 700; color: #c53030; margin-bottom: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #d32f2f;
+      margin-bottom: 12px;
     }
     .input-eliminar {
-      width: 100%; padding: 11px 14px; border: 1px solid #feb2b2;
-      border-radius: 8px; font-size: 15px; margin-bottom: 10px;
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #ef9a9a;
+      border-radius: 10px;
+      font-size: 15px;
+      margin-bottom: 12px;
       background: #fff5f5;
     }
     .boton-eliminar {
-      width: 100%; padding: 12px; background: #e53e3e; color: white;
-      border: none; border-radius: 8px; font-size: 16px; font-weight: 600;
-      cursor: pointer; transition: background 0.2s;
+      width: 100%;
+      padding: 13px;
+      background: #e53935;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
     }
-    .boton-eliminar:hover {background: #c53030;}
+    .boton-eliminar:hover {
+      background: #c62828;
+      transform: translateY(-1px);
+    }
     .mensaje {
-      margin-top: 12px; padding: 12px; border-radius: 8px;
-      display: none; font-weight: 500;
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 10px;
+      display: none;
+      font-weight: 500;
     }
-    .exito {background: #f0fff4; color: #22543d; border: 1px solid #9ae6b4;}
-    .error {background: #fed7d7; color: #742a2a; border: 1px solid #feb2b2;}
+    .exito {
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #a5d6a7;
+    }
+    .error {
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #ef9a9a;
+    }
   </style>
 </head>
 <body>
@@ -157,7 +312,7 @@
           <option value="Camioneta">🚙 Camioneta / Pick-up</option>
           <option value="4x4">⛰️ 4x4 / Todoterreno</option>
           <option value="SUV">🏔️ SUV / Crossover</option>
-          <option value="Furgon">📦 Furgón / Utilitario</option>
+          <option value="Furgón">📦 Furgón / Utilitario</option>
           <option value="Cuatriciclo">🏍️ Cuatriciclo</option>
         </select>
       </div>
@@ -175,6 +330,41 @@
         <input type="text" id="buscar_anio" placeholder="Ej: 2020">
       </div>
       
+      <!-- ✅ ACÁ ESTÁ EL MENÚ DESPLEGABLE DE CIUDADES -->
+      <div class="campo">
+        <label>Ciudad</label>
+        <select id="buscar_ciudad">
+          <option value="">Todas las ciudades</option>
+          <option value="Rosario">🏙️ Rosario</option>
+          <option value="Santa Fe">🏛️ Santa Fe</option>
+          <option value="Funes">🌳 Funes</option>
+          <option value="Roldán">🚲 Roldán</option>
+          <option value="Granadero Baigorria">🏡 Granadero Baigorria</option>
+          <option value="Puerto General San Martín">⚓ Puerto Gral. San Martín</option>
+          <option value="Villa Constitución">🏭 Villa Constitución</option>
+          <option value="Otra ciudad">📍 Otra ciudad</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Combustible</label>
+        <select id="buscar_combustible">
+          <option value="">Todos</option>
+          <option value="Nafta">⛽ Nafta</option>
+          <option value="Diésel">🛢️ Diésel</option>
+          <option value="Eléctrico">⚡ Eléctrico</option>
+          <option value="Híbrido">🔋 Híbrido</option>
+        </select>
+      </div>
+      <div class="campo">
+        <label>Transmisión</label>
+        <select id="buscar_transmision">
+          <option value="">Todas</option>
+          <option value="Manual">⚙️ Manual</option>
+          <option value="Automática">🔄 Automática</option>
+        </select>
+      </div>
+      
       <div class="campo">
         <label>Kilometraje máximo</label>
         <input type="number" id="buscar_km_max" placeholder="Ej: 100000 — Dejalo vacío sin límite">
@@ -185,7 +375,7 @@
         <input type="number" id="buscar_precio_max" placeholder="Ej: 1500000 — Dejalo vacío sin límite">
       </div>
 
-      <button class="boton-buscar" onclick="realizarBusqueda()">🔍 Buscar</button>
+      <button class="boton-buscar" onclick="realizarBusqueda()">🔍 Buscar Vehículos</button>
     </div>
 
     <div class="navegacion" id="caja_navegacion">
@@ -196,7 +386,7 @@
 
     <div id="caja_resultado"></div>
 
-    <a href="index.html" class="volver">← Volver al Inicio</a>
+    <a href="index.html" class="volver">← Volver a la página principal</a>
   </div>
 
   <script>
@@ -204,9 +394,9 @@
     const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
 
     const nombresFotos = [
-      'Motor', 'Frente', 'Lateral izquierdo', 'Lateral derecho', 'Trasera',
+      'Motor', 'Frente', 'Lateral izquierdo', 'Lateral derecho', 'Parte trasera',
       'Interior 1', 'Interior 2', 'Interior 3', 'Interior 4',
-      'Ruedas', 'Extras 1', 'Extras 2'
+      'Ruedas', 'Detalle Extra 1', 'Detalle Extra 2'
     ];
 
     let sbClient = null;
@@ -226,6 +416,9 @@
       const marca = document.getElementById('buscar_marca').value.trim();
       const modelo = document.getElementById('buscar_modelo').value.trim();
       const anio = document.getElementById('buscar_anio').value.trim();
+      const ciudad = document.getElementById('buscar_ciudad').value; // ✅ Ya funciona con select
+      const combustible = document.getElementById('buscar_combustible').value;
+      const transmision = document.getElementById('buscar_transmision').value;
       const kmMax = document.getElementById('buscar_km_max').value.trim();
       const precioMax = document.getElementById('buscar_precio_max').value.trim();
 
@@ -234,7 +427,7 @@
       const btnAnt = document.getElementById('btnAnterior');
       const btnSig = document.getElementById('btnSiguiente');
       
-      caja.innerHTML = `<div class="cargando">🔄 Buscando...</div>`;
+      caja.innerHTML = `<div class="cargando">🔄 Buscando vehículos...</div>`;
       idsFiltrados = [];
       indiceActual = 0;
       vehiculoActual = null;
@@ -252,6 +445,9 @@
         const numAnio = parseInt(anio);
         if (!isNaN(numAnio)) consulta = consulta.eq('anio', numAnio);
       }
+      if (ciudad && ciudad !== 'Otra ciudad') consulta = consulta.ilike('ciudad', `%${ciudad}%`);
+      if (combustible) consulta = consulta.eq('combustible', combustible);
+      if (transmision) consulta = consulta.eq('transmision', transmision);
 
       consulta = consulta.order('id', { ascending: false });
       const { data, error } = await consulta;
@@ -304,7 +500,7 @@
       if (posicion < 0 || posicion >= idsFiltrados.length) return;
 
       const caja = document.getElementById('caja_resultado');
-      caja.innerHTML = `<div class="cargando">🔄 Cargando...</div>`;
+      caja.innerHTML = `<div class="cargando">🔄 Cargando vehículo ${posicion+1} de ${idsFiltrados.length}...</div>`;
 
       const sb = await getSupabase();
       const { data: vehiculo, error } = await sb
@@ -314,7 +510,7 @@
         .single();
 
       if (error || !vehiculo) {
-        caja.innerHTML = `<div class="sin-resultado">❌ Error al cargar</div>`;
+        caja.innerHTML = `<div class="sin-resultado">❌ Error al cargar el vehículo</div>`;
         return;
       }
 
@@ -340,14 +536,17 @@
         
         <div class="titulo-vehiculo">${vehiculo.marca || ''} ${vehiculo.modelo || ''} — ${vehiculo.anio || ''}</div>
         <div class="fila"><strong>Versión:</strong> ${vehiculo.version || '-'}</div>
+        <div class="fila"><strong>Ciudad:</strong> ${vehiculo.ciudad || '-'}</div>
         <div class="fila"><strong>Kilometraje:</strong> ${vehiculo.kilometraje ? vehiculo.kilometraje.toLocaleString('es-AR') + ' km' : 'No indicado'}</div>
+        <div class="fila"><strong>Combustible:</strong> ${vehiculo.combustible || '-'}</div>
+        <div class="fila"><strong>Transmisión:</strong> ${vehiculo.transmision || '-'}</div>
         <div class="fila"><strong>Precio:</strong> ${vehiculo.precio || '-'}</div>
         <div class="fila"><strong>Dueño:</strong> ${vehiculo.dueno || '-'}</div>
         <div class="fila"><strong>Dirección:</strong> ${vehiculo.direccion || '-'}</div>
         <div class="fila"><strong>Teléfono:</strong> ${vehiculo.telefono || '-'}</div>
         <div>
-          ${vehiculo.permuta ? '<span class="etiqueta permuta">✅ Permuta</span>' : ''}
-          ${vehiculo.contado ? '<span class="etiqueta contado">💵 Contado</span>' : ''}
+          ${vehiculo.permuta ? '<span class="etiqueta permuta">✅ Acepta permuta</span>' : ''}
+          ${vehiculo.contado ? '<span class="etiqueta contado">💵 Solo contado</span>' : ''}
         </div>
         <div class="fila" style="margin-top: 10px;"><strong>Deuda:</strong> ${vehiculo.deuda || 'Sin deudas'}</div>
         <div class="fila"><strong>Descripción:</strong> ${vehiculo.descripcion || '-'}</div>
@@ -357,7 +556,6 @@
         <div class="fotos-cuadricula">${fotosHtml}</div>
         ` : ''}
 
-        <!-- ZONA ELIMINAR - VISIBLE SIEMPRE -->
         <div class="zona-eliminar">
           <div class="titulo-eliminar">⚠️ Eliminar este vehículo</div>
           <input type="password" id="codigoSeguridad" class="input-eliminar" placeholder="Escribí tu código de seguridad">
