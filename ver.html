@@ -6,12 +6,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ver Vehiculos Cargados</title>
+  <title>Ver Vehículos Cargados</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * {box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif;}
-    body {background: #d4edf9; padding: 15px; max-width: 900px; margin: 0 auto;}
-    h1 {text-align: center; color: #2d3748; margin-bottom: 15px; font-size: 22px;}
+    body {
+      background: #c6e2f2; /* Celeste más suave 💙 */
+      padding: 15px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      color: #1565C0;
+      margin-bottom: 15px;
+      font-size: 22px;
+    }
     
     .navegacion {
       display: flex;
@@ -19,9 +29,9 @@
       align-items: center;
       margin: 15px 0 20px;
       padding: 12px;
-      background: white;
+      background: #fffaf0; /* Cremita suave 🌸 */
       border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(21, 101, 192, 0.12);
     }
     .navegacion button {
       padding: 10px 20px;
@@ -29,18 +39,23 @@
       cursor: pointer;
       border: none;
       border-radius: 8px;
-      background: #4a90e2;
+      background: #1976D2;
       color: white;
       font-weight: 600;
+      transition: all 0.2s;
     }
-    .navegacion button:disabled {background: #cbd5e0; cursor: not-allowed;}
+    .navegacion button:hover {
+      background: #1565C0;
+      transform: translateY(-1px);
+    }
+    .navegacion button:disabled {background: #cbd5e0; cursor: not-allowed; transform: none;}
     .contador {font-size: 16px; font-weight: bold; color: #2d3748;}
 
     .tarjeta {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      background: #fffaf0; /* Cremita suave 🌸 */
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(21, 101, 192, 0.12);
       animation: aparecer 0.3s ease;
     }
     @keyframes aparecer {
@@ -49,35 +64,115 @@
     }
     .etiqueta-tipo {
       display: inline-block;
-      background: #ebf8ff;
-      color: #2c5282;
-      padding: 6px 14px;
+      background: #e3f2fd;
+      color: #1565C0;
+      padding: 8px 18px;
       border-radius: 20px;
       font-weight: 700;
-      margin-bottom: 12px;
+      margin-bottom: 15px;
+      font-size: 15px;
     }
-    .titulo-auto {font-size: 18px; font-weight: 700; color: #2b6cb0; margin-bottom: 12px;}
-    .fila {margin-bottom: 8px; color: #2d3748;}
-    .fila strong {color: #4a5568; min-width: 110px; display: inline-block;}
-    .etiqueta {display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 13px; margin: 4px 8px 4px 0;}
+    .titulo-auto {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1565C0;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e3f2fd;
+    }
+    .fila {
+      margin-bottom: 10px;
+      color: #2d3748;
+      line-height: 1.6;
+    }
+    .fila strong {
+      color: #2c5282;
+      min-width: 130px;
+      display: inline-block;
+    }
+    .etiqueta {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      margin: 6px 8px 6px 0;
+      font-weight: 600;
+    }
     .permuta {background: #fef5e7; color: #975a16;}
     .contado {background: #e6fffa; color: #047857;}
-    .volver {display: inline-block; margin-top: 20px; color: #3182ce; text-decoration: none; font-weight: 600;}
-    .volver:hover {text-decoration: underline;}
-    .cargando {text-align: center; padding: 40px; color: #4a5568; font-size: 16px;}
-    .vacio {text-align: center; padding: 40px 20px; color: #718096; font-size: 16px;}
+    .volver {
+      display: inline-block;
+      margin-top: 25px;
+      color: #1976D2;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 20px;
+      background: #fffaf0;
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+    .volver:hover {
+      background: #e3f2fd;
+      text-decoration: none;
+    }
+    .cargando {
+      text-align: center;
+      padding: 60px 20px;
+      color: #4a5568;
+      font-size: 17px;
+    }
+    .vacio {
+      text-align: center;
+      padding: 60px 20px;
+      color: #718096;
+      font-size: 17px;
+    }
 
-    .fotos-titulo {margin-top: 18px; font-weight: 700; color: #2b6cb0; font-size: 16px;}
-    .fotos-cuadricula {display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; margin-top: 10px;}
-    .foto-caja {text-align: center;}
-    .foto-ver {width: 100%; aspect-ratio: 4/3; border-radius: 8px; overflow: hidden; background: #f7fafc; border: 1px solid #e2e8f0;}
-    .foto-ver img {width: 100%; height: 100%; object-fit: cover;}
-    .foto-nombre {font-size: 11px; color: #718096; padding: 4px 0;}
+    .fotos-titulo {
+      margin-top: 22px;
+      font-weight: 700;
+      color: #1565C0;
+      font-size: 17px;
+      padding-top: 15px;
+      border-top: 2px solid #e3f2fd;
+    }
+    .fotos-cuadricula {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 12px;
+      margin-top: 15px;
+    }
+    .foto-caja {
+      text-align: center;
+    }
+    .foto-ver {
+      width: 100%;
+      aspect-ratio: 4/3;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f7fafc;
+      border: 2px solid #e3f2fd;
+      transition: transform 0.2s;
+    }
+    .foto-ver:hover {
+      transform: scale(1.03);
+    }
+    .foto-ver img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .foto-nombre {
+      font-size: 11px;
+      color: #4a5568;
+      padding: 5px 0;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
 
-  <h1>📋 Vehiculos Cargados</h1>
+  <h1>📋 Vehículos Cargados</h1>
 
   <div class="navegacion">
     <button id="btnAnterior">◀ Anterior</button>
@@ -86,7 +181,7 @@
   </div>
 
   <div id="listaAutos">
-    <div class="cargando">🔄 Cargando...</div>
+    <div class="cargando">🔄 Cargando vehículos...</div>
   </div>
 
   <a href="index.html" class="volver">← Volver a la página principal</a>
@@ -96,8 +191,9 @@
     const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
 
     const nombresFotos = [
-      'Foto 1', 'Foto 2', 'Foto 3', 'Foto 4', 'Foto 5', 'Foto 6',
-      'Foto 7', 'Foto 8', 'Foto 9', 'Foto 10', 'Foto 11', 'Foto 12'
+      'Motor', 'Frente', 'Lateral Izquierdo', 'Lateral Derecho',
+      'Parte Trasera', 'Interior 1', 'Interior 2', 'Interior 3',
+      'Interior 4', 'Ruedas', 'Detalle Extra 1', 'Detalle Extra 2'
     ];
 
     let sbClient = null;
@@ -121,7 +217,7 @@
 
       if (error || !data || data.length === 0) {
         document.getElementById('listaAutos').innerHTML = 
-          `<div class="vacio">📭 Todavía no hay autos cargados</div>`;
+          `<div class="vacio">📭 Todavía no hay vehículos cargados</div>`;
         return false;
       }
       totalAutos = count;
@@ -143,7 +239,7 @@
         .single();
 
       if (error || !auto) {
-        caja.innerHTML = `<div class="vacio">❌ Error al cargar</div>`;
+        caja.innerHTML = `<div class="vacio">❌ Error al cargar el vehículo</div>`;
         return;
       }
 
@@ -166,17 +262,23 @@
         ${auto.tipo_vehiculo ? `<span class="etiqueta-tipo">${auto.tipo_vehiculo}</span>` : ''}
         
         <div class="titulo-auto">${auto.marca || ''} ${auto.modelo || ''} — ${auto.anio || ''}</div>
+        
         <div class="fila"><strong>Versión:</strong> ${auto.version || '-'}</div>
+        <div class="fila"><strong>Ciudad:</strong> ${auto.ciudad || '-'}</div>
         <div class="fila"><strong>Kilometraje:</strong> ${auto.kilometraje ? auto.kilometraje.toLocaleString('es-AR') + ' km' : 'No indicado'}</div>
+        <div class="fila"><strong>Combustible:</strong> ${auto.combustible || '-'}</div>
+        <div class="fila"><strong>Transmisión:</strong> ${auto.transmision || '-'}</div>
         <div class="fila"><strong>Precio:</strong> ${auto.precio || '-'}</div>
         <div class="fila"><strong>Dueño:</strong> ${auto.dueno || '-'}</div>
         <div class="fila"><strong>Dirección:</strong> ${auto.direccion || '-'}</div>
         <div class="fila"><strong>Teléfono:</strong> ${auto.telefono || '-'}</div>
-        <div>
+        
+        <div style="margin: 8px 0;">
           ${auto.permuta ? '<span class="etiqueta permuta">✅ Acepta permuta</span>' : ''}
           ${auto.contado ? '<span class="etiqueta contado">💵 Solo contado</span>' : ''}
         </div>
-        <div class="fila" style="margin-top: 10px;"><strong>Deuda:</strong> ${auto.deuda || 'Sin deudas'}</div>
+        
+        <div class="fila"><strong>Deuda:</strong> ${auto.deuda || 'Sin deudas'}</div>
         <div class="fila"><strong>Descripción:</strong> ${auto.descripcion || '-'}</div>
         
         ${hayFotos ? `
