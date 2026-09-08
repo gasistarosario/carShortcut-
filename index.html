@@ -309,37 +309,48 @@
     });
   </script>
 
-  <!-- === CONTADOR DE VISITAS — PÁGINA PRINCIPAL === -->
-  <script>
-    async function contarVisitaPrincipal() {
-      try {
-        const { data, error } = await supabaseClient
-          .from('visitas')
-          .select('cantidad')
-          .eq('pagina', 'principal')
-          .single();
+<!-- === CONTADOR DE VISITAS — PÁGINA PRINCIPAL === -->
+<script>
+async function contarVisitaPrincipal() {
+  console.log('🔄 Contando visita...');
+  
+  try {
+    // Buscamos todas las filas que se llamen "principal"
+    const { data, error } = await supabaseClient
+      .from('visitas')
+      .select('cantidad')
+      .eq('pagina', 'principal'); // Sin .single() → así no da error
 
-        if (error) {
-          console.log('⚠️ No se pudo leer el contador:', error.message);
-          return;
-        }
-
-        if (data) {
-          const nuevaCantidad = data.cantidad + 1;
-          await supabaseClient
-            .from('visitas')
-            .update({ cantidad: nuevaCantidad })
-            .eq('pagina', 'principal');
-          
-          console.log('✅ Visita contada — Principal:', nuevaCantidad);
-        }
-      } catch (err) {
-        console.log('⚠️ Error contando visita:', err.message);
-      }
+    if (error) {
+      console.log('❌ Error al buscar:', error);
+      return;
     }
 
-    contarVisitaPrincipal();
-  </script>
+    if (data.length === 0) {
+      // No existe → la creamos
+      await supabaseClient
+        .from('visitas')
+        .insert([{ pagina: 'principal', cantidad: 1 }]);
+      console.log('✅ Creada → principal: 1');
+      
+    } else {
+      // Existe → sumamos 1
+      const nuevaCantidad = data[0].cantidad + 1;
+      await supabaseClient
+        .from('visitas')
+        .update({ cantidad: nuevaCantidad })
+        .eq('pagina', 'principal');
+      console.log('✅ Principal ahora es:', nuevaCantidad);
+    }
+    
+  } catch (err) {
+    console.log('❌ Error:', err.message);
+  }
+}
+
+contarVisitaPrincipal();
+</script>
+
 
 </body>
 </html>
