@@ -22,7 +22,7 @@
     }
 
     body {
-      background: linear-gradient(135deg, #87c5e8 0%, #B9D2E8 100%);
+      background: linear-gradient(135deg, #dceaf5 0%, #cfe0ee 100%);
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -31,14 +31,15 @@
     }
 
     .caja-principal {
-      background: linear-gradient(135deg, #F5F2ED 0%, #EDE8DF 100%);
+      background: linear-gradient(135deg, #f7f3eb 0%, #eee9dd 100%);
       border-radius: 28px;
       padding: 55px 40px;
       width: 100%;
       max-width: 540px;
-      box-shadow: 0 10px 35px rgba(21, 101, 192, 0.12);
+      box-shadow: 0 10px 30px rgba(44, 82, 130, 0.08);
       text-align: center;
       animation: entradaSuave 0.7s ease-out;
+      border: 1px solid #e2d9c8;
     }
 
     @keyframes entradaSuave {
@@ -47,27 +48,18 @@
     }
 
     h1 {
-      color: #0D47A1;
+      color: #2c5282;
       font-size: 34px;
       font-weight: 800;
       margin-bottom: 12px;
     }
 
     .subtitulo {
-      color: #546E7A;
+      color: #5a6872;
       font-size: 17px;
-      margin-bottom: 30px;
+      margin-bottom: 35px;
       font-weight: 500;
-    }
-
-    .cartel-gratis {
-      background: linear-gradient(135deg, #E2EDE4 0%, #D0DFD3 100%);
-      color: #1B5E20;
-      padding: 22px 24px;
-      border-radius: 18px;
-      margin-bottom: 30px;
-      font-weight: 700;
-      border: 2px solid #B8CCBC;
+      line-height: 1.5;
     }
 
     .boton {
@@ -75,7 +67,7 @@
       align-items: center;
       justify-content: center;
       gap: 12px;
-      background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+      background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
       color: #ffffff;
       text-decoration: none;
       font-size: 20px;
@@ -85,68 +77,74 @@
       margin-bottom: 16px;
       transition: all 0.35s ease;
       border: none;
-      box-shadow: 0 6px 16px rgba(21, 101, 192, 0.25);
+      box-shadow: 0 6px 16px rgba(49, 130, 206, 0.18);
       cursor: pointer;
       width: 100%;
     }
 
     .boton:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 22px rgba(21, 101, 192, 0.35);
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #4a90d9 0%, #3182ce 100%);
+      box-shadow: 0 8px 20px rgba(49, 130, 206, 0.25);
     }
 
     .seccion-ayuda {
       margin-top: 35px;
       padding: 22px;
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.6);
       border-radius: 16px;
-      border-left: 4px solid #1976D2;
+      border-left: 4px solid #6ba3d9;
     }
 
     .seccion-ayuda h3 {
-      color: #1565C0;
+      color: #2c5282;
       font-size: 17px;
       margin-bottom: 10px;
       font-weight: 700;
     }
 
     .seccion-ayuda p {
-      color: #4A5568;
+      color: #5a6872;
       font-size: 14px;
       margin-bottom: 12px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .seccion-ayuda textarea {
       width: 100%;
       padding: 12px 15px;
-      border: 2px solid #90CAF9;
+      border: 2px solid #c5d6e8;
       border-radius: 12px;
       font-size: 15px;
       resize: vertical;
-      min-height: 90px;
-      background: #FFFFFF;
+      min-height: 110px;
+      background: #ffffff;
       margin-bottom: 12px;
+      color: #4a5568;
     }
 
     .seccion-ayuda textarea:focus {
       outline: none;
-      border-color: #1976D2;
-      box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+      border-color: #3182ce;
+      box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.12);
     }
 
     .boton-enviar {
-      background: linear-gradient(135deg, #FF9800 0%, #FB8C00 100%);
+      background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
       font-size: 16px;
       padding: 14px 20px;
-      box-shadow: 0 4px 12px rgba(255, 152, 0, 0.25);
+      box-shadow: 0 4px 12px rgba(237, 137, 54, 0.18);
+    }
+
+    .boton-enviar:hover {
+      background: linear-gradient(135deg, #f6993f 0%, #ed8936 100%);
     }
 
     .mensaje-confirmacion {
       margin-top: 12px;
       padding: 10px;
-      color: #2E7D32;
-      background: #E8F5E9;
+      color: #276749;
+      background: #f0f7ee;
       border-radius: 10px;
       font-weight: 600;
       display: none;
@@ -155,8 +153,8 @@
     .mensaje-error {
       margin-top: 12px;
       padding: 10px;
-      color: #C62828;
-      background: #FFEBEE;
+      color: #c53030;
+      background: #fef2f2;
       border-radius: 10px;
       font-weight: 600;
       display: none;
@@ -165,18 +163,18 @@
     .aviso-app {
       margin-top: 18px;
       font-size: 14px;
-      color: #607D8B;
-      background: #E3F2FD;
+      color: #5a6872;
+      background: #ebf4fb;
       padding: 14px 18px;
       border-radius: 12px;
-      border-left: 4px solid #1976D2;
+      border-left: 4px solid #6ba3d9;
       display: none;
     }
 
     .pie-pagina {
       margin-top: 30px;
       font-size: 13px;
-      color: #78909C;
+      color: #718096;
     }
   </style>
 </head>
@@ -184,13 +182,8 @@
 
   <div class="caja-principal">
     <h1>🚗 Vehículos en Venta</h1>
-    <p class="subtitulo">Publicá • Buscá • Vendé con total confianza</p>
-
-    <div class="cartel-gratis">
-      ✨ Todo es <strong>TOTALMENTE GRATIS</strong> ✨<br>
-      Cargá, buscá y vendé sin pagar nada,<br>
-      sin comisiones ni costos ocultos.
-    </div>
+    <p class="subtitulo">Publicá • Buscá • Vendé con total confianza<br>
+    La plataforma de vehículos de Rosario y la región</p>
 
     <a href="cargar.html" class="boton">
       📄 <span>Ingresar Vehículo</span>
@@ -212,8 +205,8 @@
 
     <div class="seccion-ayuda">
       <h3>¿Necesitás ayuda o tenés una consulta?</h3>
-      <p>Por favor, escribí tu mensaje. Te responderemos a la brevedad.</p>
-      <textarea id="mensajeAyuda" placeholder="Tu mensaje..."></textarea>
+      <p>Dejá tu correo escrito aquí abajo junto con tu mensaje. Te responderemos a la brevedad.</p>
+      <textarea id="mensajeAyuda" placeholder="Escribí acá tu correo y tu mensaje..."></textarea>
       <button class="boton boton-enviar" id="btnEnviarAyuda">Enviar Mensaje</button>
       <p class="mensaje-confirmacion" id="confirmacionEnvio">✅ Mensaje enviado. Gracias, te responderemos pronto.</p>
       <p class="mensaje-error" id="mensajeError">❌ No se pudo enviar. Intentá nuevamente.</p>
@@ -315,11 +308,10 @@ async function contarVisitaPrincipal() {
   console.log('🔄 Contando visita...');
   
   try {
-    // Buscamos todas las filas que se llamen "principal"
     const { data, error } = await supabaseClient
       .from('visitas')
       .select('cantidad')
-      .eq('pagina', 'principal'); // Sin .single() → así no da error
+      .eq('pagina', 'principal');
 
     if (error) {
       console.log('❌ Error al buscar:', error);
@@ -327,14 +319,12 @@ async function contarVisitaPrincipal() {
     }
 
     if (data.length === 0) {
-      // No existe → la creamos
       await supabaseClient
         .from('visitas')
         .insert([{ pagina: 'principal', cantidad: 1 }]);
       console.log('✅ Creada → principal: 1');
       
     } else {
-      // Existe → sumamos 1
       const nuevaCantidad = data[0].cantidad + 1;
       await supabaseClient
         .from('visitas')
@@ -350,7 +340,6 @@ async function contarVisitaPrincipal() {
 
 contarVisitaPrincipal();
 </script>
-
 
 </body>
 </html>
