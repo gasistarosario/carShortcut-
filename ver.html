@@ -1,6 +1,4 @@
 
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,7 +9,7 @@
   <style>
     * {box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif;}
     body {
-      background: #c6e2f2; /* Celeste más suave 💙 */
+      background: #87c5e8; /* Celeste más suave 💙 */
       padding: 15px;
       max-width: 900px;
       margin: 0 auto;
@@ -208,6 +206,21 @@
       return sbClient;
     }
 
+    // === CONTADOR DE VISITAS — VER ===
+    async function contarVer() {
+      const sb = await getSupabase();
+      try {
+        const { data } = await sb.from('visitas').select('cantidad').eq('pagina', 'ver');
+        if (data && data.length > 0) {
+          const nuevaCantidad = data[0].cantidad + 1;
+          await sb.from('visitas').update({ cantidad: nuevaCantidad }).eq('pagina', 'ver');
+          console.log('✅ Ver → visitas:', nuevaCantidad);
+        }
+      } catch (err) {
+        console.log('⚠️ Error contador:', err.message);
+      }
+    }
+
     async function contarYListar() {
       const sb = await getSupabase();
       const { count, data, error } = await sb
@@ -311,6 +324,9 @@
     }
 
     async function iniciar() {
+      // Contamos la visita apenas entra
+      getSupabase().then(() => contarVer());
+      
       const hayDatos = await contarYListar();
       if (hayDatos) {
         await cargarUno(0);
