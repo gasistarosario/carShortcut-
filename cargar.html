@@ -11,35 +11,38 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: sans-serif;
+      font-family: 'Segoe UI', Roboto, 'Open Sans', sans-serif;
     }
     body {
-      background: #d4edf9;
-      padding: 15px;
+      background: linear-gradient(135deg, #dceaf5 0%, #cfe0ee 100%);
+      padding: 20px;
       max-width: 850px;
       margin: 0 auto;
+      min-height: 100vh;
     }
     h1 {
       text-align: center;
-      color: #2d3748;
-      margin-bottom: 15px;
-      font-size: 22px;
+      color: #2c5282;
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: 800;
     }
     .aviso-seguridad {
-      background: #fef5e7;
-      padding: 14px 18px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      color: #744210;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 16px 20px;
+      border-radius: 14px;
+      margin-bottom: 22px;
+      color: #5a4210;
       border-left: 4px solid #ed8936;
       font-size: 14px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
     .form-container {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      background: linear-gradient(135deg, #f7f3eb 0%, #eee9dd 100%);
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 6px 16px rgba(44, 82, 130, 0.08);
+      border: 1px solid #e2d9c8;
     }
     .fila {
       display: flex;
@@ -57,26 +60,28 @@
     }
     label {
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 7px;
       font-weight: 600;
       color: #4a5568;
       font-size: 14px;
     }
     input, select, textarea {
       width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
+      padding: 12px 15px;
+      border: 2px solid #c5d6e8;
+      border-radius: 10px;
       font-size: 15px;
-      background: white;
+      background: #ffffff;
+      color: #4a5568;
+      transition: all 0.2s ease;
     }
     input::placeholder, textarea::placeholder {
-      color: #a0aec0;
+      color: #90aec9;
     }
     input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: #3182ce;
-      box-shadow: 0 0 0 3px rgba(49,130,206,0.2);
+      box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.12);
     }
     .fila-chk {
       display: flex;
@@ -95,72 +100,101 @@
     }
     .boton {
       width: 100%;
-      padding: 14px;
-      background: #3182ce;
-      color: white;
+      padding: 15px;
+      background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+      color: #ffffff;
       border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 700;
       cursor: pointer;
-      margin-top: 8px;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(49, 130, 206, 0.15);
     }
-    .boton:hover { background: #2b6cb0; }
-    .boton:disabled { background: #a0aec0; cursor: not-allowed; }
+    .boton:hover { 
+      background: linear-gradient(135deg, #4a90d9 0%, #3182ce 100%);
+      transform: translateY(-1px);
+    }
+    .boton:disabled { 
+      background: #a0aec0; 
+      cursor: not-allowed;
+      transform: none;
+      opacity: 0.7;
+    }
     .mensaje {
-      margin-top: 18px;
-      padding: 12px;
-      border-radius: 8px;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 12px;
       display: none;
-      font-weight: 500;
+      font-weight: 600;
       font-size: 15px;
+      line-height: 1.5;
     }
-    .exito { background: #f0fff4; color: #22543d; border: 1px solid #9ae6b4; }
-    .error { background: #fed7d7; color: #742a2a; border: 1px solid #feb2b2; }
+    .exito { 
+      background: #f0f7ee; 
+      color: #276749; 
+      border: 1px solid #b8d8b9; 
+    }
+    .error { 
+      background: #fef2f2; 
+      color: #c53030; 
+      border: 1px solid #feb2b2; 
+    }
     .volver {
       display: inline-block;
-      margin-top: 18px;
+      margin-top: 22px;
       color: #3182ce;
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 600;
+      padding: 10px 18px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 10px;
+      transition: all 0.2s ease;
     }
-    .volver:hover { text-decoration: underline; }
+    .volver:hover { 
+      background: #ebf4fb;
+      text-decoration: none;
+    }
 
     .foto-seccion {
-      margin: 25px 0 15px;
+      margin: 28px 0 15px;
     }
     .foto-titulo-seccion {
       font-size: 19px;
       font-weight: 700;
-      color: #2b6cb0;
-      margin-bottom: 18px;
+      color: #2c5282;
+      margin-bottom: 20px;
     }
     .foto-tarjeta {
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 14px 16px;
+      padding: 15px 18px;
       margin-bottom: 12px;
-      background: linear-gradient(to right, #f0f7ff, #ebf8ff);
+      background: #ffffff;
       border-radius: 14px;
-      border: 2px solid #90cdf4;
+      border: 2px solid #c5d6e8;
       transition: all 0.2s ease;
       cursor: pointer;
     }
+    .foto-tarjeta:hover {
+      border-color: #3182ce;
+      background: #ebf4fb;
+    }
     .foto-tarjeta:active {
       transform: scale(0.98);
-      border-color: #3182ce;
     }
     .foto-nombre {
       font-weight: 700;
-      font-size: 16px;
+      font-size: 15px;
       color: #2c5282;
       flex: 1;
     }
     .foto-mini {
       width: 80px;
       height: 60px;
-      border-radius: 8px;
+      border-radius: 10px;
       overflow: hidden;
       background: #f7fafc;
       border: 2px dashed #cbd5e0;
@@ -234,7 +268,6 @@
           <label>Versión</label>
           <input type="text" id="version" placeholder="Ej: XEi, 1.6 LT, Limited" required>
         </div>
-        <!-- ⛽ COMBUSTIBLE ABAJO DE VERSIÓN -->
         <div class="campo">
           <label>⛽ Combustible</label>
           <select id="combustible">
@@ -252,7 +285,6 @@
           <label>Año</label>
           <input type="number" id="anio" placeholder="Ej: 2018" required>
         </div>
-        <!-- 🔄 TRANSMISIÓN ABAJO DE AÑO -->
         <div class="campo">
           <label>🔄 Transmisión</label>
           <select id="transmision">
@@ -286,7 +318,6 @@
       </div>
 
       <div class="fila">
-        <!-- 🏙️ CIUDAD ABAJO DE DIRECCIÓN -->
         <div class="campo">
           <label>🏙️ Ciudad</label>
           <select id="ciudad">
@@ -313,13 +344,15 @@
           <label>Teléfono / WhatsApp</label>
           <input type="tel" id="telefono" placeholder="Ej: +54 9 341 123-4567" required>
         </div>
-        <div class="campo-chk">
-          <input type="checkbox" id="permuta">
-          <label for="permuta">Acepta permuta</label>
-        </div>
-        <div class="campo-chk">
-          <input type="checkbox" id="contado">
-          <label for="contado">Solo contado</label>
+        <div class="fila-chk">
+          <div class="campo-chk">
+            <input type="checkbox" id="permuta">
+            <label for="permuta">Acepta permuta</label>
+          </div>
+          <div class="campo-chk">
+            <input type="checkbox" id="contado">
+            <label for="contado">Solo contado</label>
+          </div>
         </div>
       </div>
 
@@ -468,6 +501,15 @@
     const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
     const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
 
+    let sbClient = null;
+
+    async function getSupabase() {
+      if (!sbClient) {
+        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { timeout: 30000 });
+      }
+      return sbClient;
+    }
+
     // Mostrar campo libre si eligen "Otra ciudad"
     const selectCiudad = document.getElementById('ciudad');
     const campoLibre = document.getElementById('campo_ciudad_libre');
@@ -514,9 +556,22 @@
       return await reducirFoto(archivo);
     }
 
-    async function cargarSupabase() {
-      return window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { timeout: 30000 });
+    // === CONTADOR DE VISITAS — CARGAR ===
+    async function contarCargar() {
+      const sb = await getSupabase();
+      try {
+        const { data } = await sb.from('visitas').select('cantidad').eq('pagina', 'cargar');
+        if (data && data.length > 0) {
+          const nuevaCantidad = data[0].cantidad + 1;
+          await sb.from('visitas').update({ cantidad: nuevaCantidad }).eq('pagina', 'cargar');
+          console.log('✅ Cargar → visitas:', nuevaCantidad);
+        }
+      } catch (err) {
+        console.log('⚠️ Error contador:', err.message);
+      }
     }
+    // Contamos al entrar a la página
+    getSupabase().then(() => contarCargar());
 
     document.getElementById('formAuto').addEventListener('submit', async e => {
       e.preventDefault();
@@ -527,7 +582,7 @@
       mensaje.style.display = "none";
 
       try {
-        const supabase = await cargarSupabase();
+        const supabase = await getSupabase();
         const fotos = {};
         for (let i = 1; i <= 12; i++) {
           const input = document.getElementById(`foto${i}`);
