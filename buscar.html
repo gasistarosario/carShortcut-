@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Buscar Vehículo</title>
+  <title>🔍 Buscar Vehículo</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    * {box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif;}
+    * {box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, 'Open Sans', sans-serif;}
     body {
       background: linear-gradient(135deg, #dceaf5 0%, #cfe0ee 100%);
       padding: 20px;
@@ -19,16 +19,6 @@
       color: #2c5282;
       margin-bottom: 20px;
       font-size: 23px;
-    }
-    .aviso-seguridad {
-      background: rgba(255, 255, 255, 0.6);
-      padding: 15px 20px;
-      border-radius: 12px;
-      margin-bottom: 22px;
-      color: #4a5568;
-      border-left: 4px solid #6ba3d9;
-      font-size: 14px;
-      line-height: 1.6;
     }
     .buscador {
       background: linear-gradient(135deg, #f7f3eb 0%, #eee9dd 100%);
@@ -241,61 +231,6 @@
       padding: 5px 0;
       font-weight: 600;
     }
-
-    .zona-eliminar {
-      margin-top: 25px;
-      padding-top: 20px;
-      border-top: 2px dashed #e0c5b8;
-    }
-    .titulo-eliminar {
-      font-size: 15px;
-      font-weight: 700;
-      color: #b54434;
-      margin-bottom: 12px;
-    }
-    .input-eliminar {
-      width: 100%;
-      padding: 12px 16px;
-      border: 2px solid #e5b9b0;
-      border-radius: 10px;
-      font-size: 15px;
-      margin-bottom: 12px;
-      background: #faf5f3;
-      color: #4a5568;
-    }
-    .boton-eliminar {
-      width: 100%;
-      padding: 13px;
-      background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .boton-eliminar:hover {
-      background: linear-gradient(135deg, #ef5350 0%, #e53935 100%);
-      transform: translateY(-1px);
-    }
-    .mensaje {
-      margin-top: 14px;
-      padding: 14px;
-      border-radius: 10px;
-      display: none;
-      font-weight: 500;
-    }
-    .exito {
-      background: #eaf4e9;
-      color: #2f6b32;
-      border: 1px solid #b8d8b9;
-    }
-    .error {
-      background: #faf0f0;
-      color: #b54434;
-      border: 1px solid #e5b9b0;
-    }
   </style>
 </head>
 <body>
@@ -303,15 +238,11 @@
   <div class="contenedor">
     <h1>🔍 Buscar Vehículo</h1>
 
-    <div class="aviso-seguridad">
-      🔐 El mismo código de seguridad que usaste para guardar el vehículo te servirá para eliminarlo cuando lo encuentres.
-    </div>
-
     <div class="buscador">
       <p class="leyenda">Dejá vacío lo que no querés filtrar ✨</p>
 
       <div class="campo">
-        <label>Tipo de Vehículo</label>
+        <label>🚘 Tipo de Vehículo</label>
         <select id="buscar_tipo">
           <option value="">Todos los tipos</option>
           <option value="Auto">🚗 Auto</option>
@@ -324,35 +255,47 @@
       </div>
 
       <div class="campo">
-        <label>Marca</label>
+        <label>🏷️ Marca</label>
         <input type="text" id="buscar_marca" placeholder="Ej: Toyota, Ford...">
       </div>
       <div class="campo">
-        <label>Modelo</label>
+        <label>📋 Modelo</label>
         <input type="text" id="buscar_modelo" placeholder="Ej: Corolla, Fiesta...">
       </div>
       <div class="campo">
-        <label>Año</label>
-        <input type="text" id="buscar_anio" placeholder="Ej: 2020">
+        <label>📅 Año</label>
+        <input type="number" id="buscar_anio" placeholder="Ej: 2024 — Solo 4 dígitos" min="1900" max="2100" oninput="this.value=this.value.slice(0,4)">
       </div>
       
       <div class="campo">
-        <label>Ciudad</label>
+        <label>📍 Ciudad</label>
         <select id="buscar_ciudad">
           <option value="">Todas las ciudades</option>
+          <option value="Acebal">🏘️ Acebal</option>
+          <option value="Álvarez">🏘️ Álvarez</option>
+          <option value="Arroyo Seco">🏘️ Arroyo Seco</option>
+          <option value="Capitán Bermúdez">🏘️ Capitán Bermúdez</option>
+          <option value="Coronda">🏘️ Coronda</option>
+          <option value="Fray Luis Beltrán">🏘️ Fray Luis Beltrán</option>
+          <option value="Funes">🏘️ Funes</option>
+          <option value="Granadero Baigorria">🏘️ Granadero Baigorria</option>
+          <option value="Ibarlucea">🏘️ Ibarlucea</option>
+          <option value="Pérez">🏘️ Pérez</option>
+          <option value="Puerto General San Martín">🏘️ Puerto General San Martín</option>
+          <option value="Pueblo Esther">🏘️ Pueblo Esther</option>
+          <option value="Roldán">🏘️ Roldán</option>
           <option value="Rosario">🏙️ Rosario</option>
-          <option value="Santa Fe">🏛️ Santa Fe</option>
-          <option value="Funes">🌳 Funes</option>
-          <option value="Roldán">🚲 Roldán</option>
-          <option value="Granadero Baigorria">🏡 Granadero Baigorria</option>
-          <option value="Puerto General San Martín">⚓ Puerto Gral. San Martín</option>
-          <option value="Villa Constitución">🏭 Villa Constitución</option>
-          <option value="Otra ciudad">📍 Otra ciudad</option>
+          <option value="San Lorenzo">🏘️ San Lorenzo</option>
+          <option value="Santa Fe">🏙️ Santa Fe</option>
+          <option value="Soldini">🏘️ Soldini</option>
+          <option value="Villa Constitución">🏘️ Villa Constitución</option>
+          <option value="Villa Gobernador Gálvez">🏘️ Villa Gobernador Gálvez</option>
+          <option value="Otra ciudad">🌍 Otra ciudad</option>
         </select>
       </div>
 
       <div class="campo">
-        <label>Combustible</label>
+        <label>⛽ Combustible</label>
         <select id="buscar_combustible">
           <option value="">Todos</option>
           <option value="Nafta">⛽ Nafta</option>
@@ -362,7 +305,7 @@
         </select>
       </div>
       <div class="campo">
-        <label>Transmisión</label>
+        <label>⚙️ Transmisión</label>
         <select id="buscar_transmision">
           <option value="">Todas</option>
           <option value="Manual">⚙️ Manual</option>
@@ -370,14 +313,26 @@
         </select>
       </div>
       
-      <div class="campo">
-        <label>Kilometraje máximo</label>
-        <input type="number" id="buscar_km_max" placeholder="Ej: 100000 — Dejalo vacío sin límite">
+      <div class="fila" style="display: flex; gap: 15px; flex-wrap: wrap;">
+        <div class="campo" style="flex: 1; min-width: 200px;">
+          <label>📏 Kilometraje Mínimo</label>
+          <input type="number" id="buscar_km_min" placeholder="Ej: 0 — Dejalo vacío sin límite">
+        </div>
+        <div class="campo" style="flex: 1; min-width: 200px;">
+          <label>📏 Kilometraje Máximo</label>
+          <input type="number" id="buscar_km_max" placeholder="Ej: 100000 — Dejalo vacío sin límite">
+        </div>
       </div>
       
-      <div class="campo">
-        <label>Precio máximo ($)</label>
-        <input type="number" id="buscar_precio_max" placeholder="Ej: 1500000 — Dejalo vacío sin límite">
+      <div class="fila" style="display: flex; gap: 15px; flex-wrap: wrap;">
+        <div class="campo" style="flex: 1; min-width: 200px;">
+          <label>💰 Precio Mínimo ($)</label>
+          <input type="number" id="buscar_precio_min" placeholder="Ej: 0 — Dejalo vacío sin límite">
+        </div>
+        <div class="campo" style="flex: 1; min-width: 200px;">
+          <label>💰 Precio Máximo ($)</label>
+          <input type="number" id="buscar_precio_max" placeholder="Ej: 1500000 — Dejalo vacío sin límite">
+        </div>
       </div>
 
       <button class="boton-buscar" onclick="realizarBusqueda()">🔍 Buscar Vehículos</button>
@@ -424,7 +379,9 @@
       const ciudad = document.getElementById('buscar_ciudad').value;
       const combustible = document.getElementById('buscar_combustible').value;
       const transmision = document.getElementById('buscar_transmision').value;
+      const kmMin = document.getElementById('buscar_km_min').value.trim();
       const kmMax = document.getElementById('buscar_km_max').value.trim();
+      const precioMin = document.getElementById('buscar_precio_min').value.trim();
       const precioMax = document.getElementById('buscar_precio_max').value.trim();
 
       const caja = document.getElementById('caja_resultado');
@@ -446,11 +403,14 @@
       if (tipo) consulta = consulta.eq('tipo_vehiculo', tipo);
       if (marca) consulta = consulta.ilike('marca', `%${marca}%`);
       if (modelo) consulta = consulta.ilike('modelo', `%${modelo}%`);
-      if (anio) {
+      if (anio && anio.length === 4) {
         const numAnio = parseInt(anio);
         if (!isNaN(numAnio)) consulta = consulta.eq('anio', numAnio);
       }
-      if (ciudad && ciudad !== 'Otra ciudad') consulta = consulta.ilike('ciudad', `%${ciudad}%`);
+      if (ciudad && ciudad !== 'Otra ciudad') {
+        const ciudadLimpia = ciudad.replace(/^[^\p{L}]+/u, '').trim();
+        consulta = consulta.eq('ciudad', ciudadLimpia);
+      }
       if (combustible) consulta = consulta.eq('combustible', combustible);
       if (transmision) consulta = consulta.eq('transmision', transmision);
 
@@ -468,6 +428,15 @@
 
       let resultados = data;
       
+      // === FILTRO KILOMETRAJE MÍNIMO Y MÁXIMO ===
+      if (kmMin) {
+        const numKmMin = parseInt(kmMin);
+        if (!isNaN(numKmMin)) {
+          resultados = resultados.filter(auto => 
+            auto.kilometraje !== null && auto.kilometraje >= numKmMin
+          );
+        }
+      }
       if (kmMax) {
         const numKmMax = parseInt(kmMax);
         if (!isNaN(numKmMax)) {
@@ -477,6 +446,18 @@
         }
       }
       
+      // === FILTRO PRECIO MÍNIMO Y MÁXIMO ===
+      if (precioMin) {
+        const numPrecioMin = parseFloat(precioMin);
+        if (!isNaN(numPrecioMin)) {
+          resultados = resultados.filter(auto => {
+            if (!auto.precio) return true;
+            const soloNumeros = auto.precio.replace(/[^0-9.,]/g, '').replace(',', '.');
+            const valor = parseFloat(soloNumeros);
+            return isNaN(valor) || valor >= numPrecioMin;
+          });
+        }
+      }
       if (precioMax) {
         const numPrecioMax = parseFloat(precioMax);
         if (!isNaN(numPrecioMax)) {
@@ -560,63 +541,10 @@
         <div class="fotos-titulo">📸 Fotos del vehículo</div>
         <div class="fotos-cuadricula">${fotosHtml}</div>
         ` : ''}
-
-        <div class="zona-eliminar">
-          <div class="titulo-eliminar">⚠️ Eliminar este vehículo</div>
-          <input type="password" id="codigoSeguridad" class="input-eliminar" placeholder="Escribí tu código de seguridad">
-          <button class="boton-eliminar" onclick="confirmarEliminar()">🗑️ Eliminar Definitivamente</button>
-          <div id="mensajeEliminar" class="mensaje"></div>
-        </div>
       </div>
       `;
       document.getElementById('contador').textContent = 
         `${posicion + 1} de ${idsFiltrados.length}`;
-    }
-
-    async function confirmarEliminar() {
-      if (!vehiculoActual) return;
-
-      const codigoIngresado = document.getElementById('codigoSeguridad').value.trim();
-      const mensaje = document.getElementById('mensajeEliminar');
-      
-      mensaje.style.display = 'none';
-
-      if (codigoIngresado !== vehiculoActual.codigo_seguridad) {
-        mensaje.textContent = "❌ Código incorrecto. No se puede eliminar.";
-        mensaje.className = "mensaje error";
-        mensaje.style.display = 'block';
-        return;
-      }
-
-      const sb = await getSupabase();
-      const { error } = await sb
-        .from('autos')
-        .delete()
-        .eq('id', vehiculoActual.id);
-
-      if (error) {
-        mensaje.textContent = "❌ Error: " + error.message;
-        mensaje.className = "mensaje error";
-        mensaje.style.display = 'block';
-        return;
-      }
-
-      mensaje.textContent = "✅ Vehículo eliminado correctamente";
-      mensaje.className = "mensaje exito";
-      mensaje.style.display = 'block';
-
-      setTimeout(() => {
-        idsFiltrados = idsFiltrados.filter(id => id !== vehiculoActual.id);
-        vehiculoActual = null;
-        if (idsFiltrados.length > 0) {
-          indiceActual = Math.min(indiceActual, idsFiltrados.length - 1);
-          cargarUno(indiceActual);
-        } else {
-          document.getElementById('caja_resultado').innerHTML = 
-            `<div class="sin-resultado">✅ Eliminado. No quedan más vehículos en esta búsqueda.</div>`;
-          document.getElementById('caja_navegacion').classList.remove('activa');
-        }
-      }, 1800);
     }
 
     async function vehiculoAnterior() {
@@ -645,17 +573,17 @@
     // === CONTADOR DE VISITAS ===
     async function contarBuscar() {
       try {
-        const { data } = await sbClient.from('visitas').select('cantidad').eq('pagina', 'buscar');
-        if (data.length) {
+        const sb = await getSupabase();
+        const { data } = await sb.from('visitas').select('cantidad').eq('pagina', 'buscar');
+        if (data && data.length) {
           const nuevaCantidad = data[0].cantidad + 1;
-          await sbClient.from('visitas').update({ cantidad: nuevaCantidad }).eq('pagina', 'buscar');
+          await sb.from('visitas').update({ cantidad: nuevaCantidad }).eq('pagina', 'buscar');
           console.log('✅ Buscar →', nuevaCantidad);
         }
       } catch (err) {
         console.log('⚠️ Error contador buscar:', err.message);
       }
     }
-    // Esperamos a que esté conectado y contamos
     getSupabase().then(() => contarBuscar());
   </script>
 
