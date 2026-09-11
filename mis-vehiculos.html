@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>❤ Mis Vehículos — Vehículos en Venta</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #dceaf5 0%, #cfe0ee 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .caja-principal {
+      background: linear-gradient(135deg, #f7f3eb 0%, #eee9dd 100%);
+      border-radius: 28px;
+      padding: 55px 40px;
+      width: 100%;
+      max-width: 540px;
+      box-shadow: 0 10px 30px rgba(44, 82, 130, 0.08);
+      text-align: center;
+      animation: entradaSuave 0.7s ease-out;
+      border: 1px solid #e2d9c8;
+    }
+
+    @keyframes entradaSuave {
+      from { opacity: 0; transform: translateY(25px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      color: #2c5282;
+      font-size: 30px;
+      font-weight: 800;
+      margin-bottom: 15px;
+    }
+
+    .icono {
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+
+    .mensaje {
+      color: #5a6872;
+      font-size: 17px;
+      line-height: 1.6;
+      margin-bottom: 35px;
+    }
+
+    .boton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 700;
+      padding: 20px 26px;
+      border-radius: 16px;
+      margin-bottom: 16px;
+      transition: all 0.35s ease;
+      border: none;
+      box-shadow: 0 6px 16px rgba(49, 130, 206, 0.18);
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .boton:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #4a90d9 0%, #3182ce 100%);
+      box-shadow: 0 8px 20px rgba(49, 130, 206, 0.25);
+    }
+
+    .pie-pagina {
+      margin-top: 30px;
+      font-size: 13px;
+      color: #718096;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="caja-principal">
+    
+    <h1>Mis Vehículos</h1>
+    
+    <p class="mensaje">
+      Estamos preparando todo <br>
+      Esta sección está en desarrollo.<br>
+  
+    </p>
+
+    <a href="index.html" class="boton">
+      🏠 <span>Volver al Inicio</span>
+    </a>
+
+    <p class="pie-pagina">Hecho para Rosario y toda la región.</p>
+  </div>
+
+</body>
+</html>
