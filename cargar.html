@@ -28,7 +28,7 @@
       font-weight: 800;
     }
     .aviso-seguridad {
-      background: rgba(255, 255, 255, 0.6);
+      background: rgba(255,255,255,0.6);
       padding: 16px 20px;
       border-radius: 14px;
       margin-bottom: 22px;
@@ -37,27 +37,24 @@
       font-size: 14px;
       line-height: 1.6;
     }
+    .requisitos { margin-top: 10px; padding-left: 5px; }
+    .req {
+      color: #c53030;
+      transition: color 0.3s ease;
+      margin: 4px 0;
+      font-weight: 500;
+    }
+    .req.ok { color: #276749; }
     .form-container {
       background: linear-gradient(135deg, #f7f3eb 0%, #eee9dd 100%);
       padding: 25px;
       border-radius: 18px;
-      box-shadow: 0 6px 16px rgba(44, 82, 130, 0.08);
+      box-shadow: 0 6px 16px rgba(44,82,130,0.08);
       border: 1px solid #e2d9c8;
     }
-    .fila {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
-    .campo {
-      flex: 1 1 45%;
-      min-width: 160px;
-    }
-    .campo-completo {
-      flex: 1 1 100%;
-      margin-bottom: 18px;
-    }
+    .fila { display: flex; gap: 15px; margin-bottom: 18px; flex-wrap: wrap; }
+    .campo { flex: 1 1 45%; min-width: 160px; }
+    .campo-completo { flex: 1 1 100%; margin-bottom: 18px; }
     label {
       display: block;
       margin-bottom: 7px;
@@ -65,44 +62,65 @@
       color: #4a5568;
       font-size: 14px;
     }
-    input, select, textarea {
+    .contenedor-input {
+      position: relative;
       width: 100%;
+    }
+    .contenedor-input input {
+      width: 100%;
+      padding: 12px 45px 12px 15px;
+      border: 2px solid #c5d6e8;
+      border-radius: 10px;
+      font-size: 15px;
+      background: #fff;
+      color: #4a5568;
+      transition: all 0.2s ease;
+    }
+    .contenedor-input input:focus {
+      outline: none;
+      border-color: #3182ce;
+      box-shadow: 0 0 0 3px rgba(49,130,206,0.12);
+    }
+    .ojo {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 20px;
+      color: #718096;
+      user-select: none;
+      transition: color 0.2s ease;
+    }
+    .ojo:hover { color: #2c5282; }
+    input, select, textarea {
       padding: 12px 15px;
       border: 2px solid #c5d6e8;
       border-radius: 10px;
       font-size: 15px;
-      background: #ffffff;
+      background: #fff;
       color: #4a5568;
       transition: all 0.2s ease;
+      width: 100%;
     }
-    input::placeholder, textarea::placeholder {
-      color: #90aec9;
+    textarea {
+      resize: vertical;
+      min-height: 80px;
     }
+    input::placeholder, textarea::placeholder { color: #90aec9; }
     input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: #3182ce;
-      box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.12);
+      box-shadow: 0 0 0 3px rgba(49,130,206,0.12);
     }
-    .fila-chk {
-      display: flex;
-      gap: 30px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
-    .campo-chk {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .campo-chk input {
-      width: auto;
-      margin: 0;
-    }
+    .fila-chk { display: flex; gap: 30px; margin-bottom: 18px; flex-wrap: wrap; }
+    .campo-chk { display: flex; align-items: center; gap: 8px; }
+    .campo-chk input { width: auto; margin: 0; }
     .boton {
       width: 100%;
       padding: 15px;
       background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
-      color: #ffffff;
+      color: #fff;
       border: none;
       border-radius: 12px;
       font-size: 17px;
@@ -110,7 +128,7 @@
       cursor: pointer;
       margin-top: 10px;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(49, 130, 206, 0.15);
+      box-shadow: 0 4px 12px rgba(49,130,206,0.15);
     }
     .boton:hover { 
       background: linear-gradient(135deg, #4a90d9 0%, #3182ce 100%);
@@ -131,16 +149,8 @@
       font-size: 15px;
       line-height: 1.5;
     }
-    .exito { 
-      background: #f0f7ee; 
-      color: #276749; 
-      border: 1px solid #b8d8b9; 
-    }
-    .error { 
-      background: #fef2f2; 
-      color: #c53030; 
-      border: 1px solid #feb2b2; 
-    }
+    .exito { background: #f0f7ee; color: #276749; border: 1px solid #b8d8b9; }
+    .error { background: #fef2f2; color: #c53030; border: 1px solid #feb2b2; }
     .volver {
       display: inline-block;
       margin-top: 22px;
@@ -148,18 +158,12 @@
       text-decoration: none;
       font-weight: 600;
       padding: 10px 18px;
-      background: rgba(255, 255, 255, 0.6);
+      background: rgba(255,255,255,0.6);
       border-radius: 10px;
       transition: all 0.2s ease;
     }
-    .volver:hover { 
-      background: #ebf4fb;
-      text-decoration: none;
-    }
-
-    .foto-seccion {
-      margin: 28px 0 15px;
-    }
+    .volver:hover { background: #ebf4fb; text-decoration: none; }
+    .foto-seccion { margin: 28px 0 15px; }
     .foto-titulo-seccion {
       font-size: 19px;
       font-weight: 700;
@@ -172,19 +176,14 @@
       gap: 14px;
       padding: 15px 18px;
       margin-bottom: 12px;
-      background: #ffffff;
+      background: #fff;
       border-radius: 14px;
       border: 2px solid #c5d6e8;
       transition: all 0.2s ease;
       cursor: pointer;
     }
-    .foto-tarjeta:hover {
-      border-color: #3182ce;
-      background: #ebf4fb;
-    }
-    .foto-tarjeta:active {
-      transform: scale(0.98);
-    }
+    .foto-tarjeta:hover { border-color: #3182ce; background: #ebf4fb; }
+    .foto-tarjeta:active { transform: scale(0.98); }
     .foto-nombre {
       font-weight: 700;
       font-size: 15px;
@@ -192,8 +191,7 @@
       flex: 1;
     }
     .foto-mini {
-      width: 80px;
-      height: 60px;
+      width: 80px; height: 60px;
       border-radius: 10px;
       overflow: hidden;
       background: #f7fafc;
@@ -203,22 +201,9 @@
       justify-content: center;
       flex-shrink: 0;
     }
-    .foto-mini-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: none;
-    }
-    .foto-sin {
-      font-size: 11px;
-      color: #a0aec0;
-    }
-    .foto-input-oculto {
-      display: none;
-    }
-    .oculto {
-      display: none;
-    }
+    .foto-mini-img { width: 100%; height: 100%; object-fit: cover; display: none; }
+    .foto-sin { font-size: 11px; color: #a0aec0; }
+    .foto-input-oculto { display: none; }
   </style>
 </head>
 <body>
@@ -226,7 +211,7 @@
   <h1>🚗 Ingresar Vehículo</h1>
 
   <div class="aviso-seguridad">
-    🔐 <strong>Importante:</strong> Escribí acá tu código de seguridad. Lo vas a necesitar después para poder eliminar este vehículo cuando lo encuentres en la búsqueda. Guardalo bien.
+    🔐 <strong>Importante:</strong> Escribí acá tu código de seguridad. Lo vas a necesitar después para poder eliminar este vehículo desde <strong>Mis Vehículos</strong> cuando lo desees. Guárdalo bien.
   </div>
 
   <div class="form-container">
@@ -234,7 +219,17 @@
       
       <div class="campo-completo">
         <label>🔑 Código de Seguridad *</label>
-        <input type="password" id="codigo_seguridad" placeholder="Escribí tu código para poder eliminar después" required>
+        <div class="contenedor-input">
+          <input type="password" id="codigo_seguridad" maxlength="6" placeholder="Solo 6 caracteres" required oninput="validarCodigo()">
+          <span class="ojo" id="iconoOjo" onclick="toggleVerCodigo()">👁️</span>
+        </div>
+        <div class="requisitos">
+          <div id="req-long" class="req">❌ 6 caracteres</div>
+          <div id="req-mayus" class="req">❌ 1 letra mayúscula</div>
+          <div id="req-minus" class="req">❌ 1 letra minúscula</div>
+          <div id="req-num" class="req">❌ 1 número</div>
+          <div id="req-esp" class="req">❌ 1 carácter especial (@ # $ % ! & * etc.)</div>
+        </div>
       </div>
 
       <div class="fila">
@@ -283,7 +278,7 @@
       <div class="fila">
         <div class="campo">
           <label>Año</label>
-          <input type="number" id="anio" placeholder="Ej: 2018" required>
+          <input type="number" id="anio" placeholder="Solo 4 dígitos" min="1900" max="2100" oninput="limitarAnio(this)" required>
         </div>
         <div class="campo">
           <label>🔄 Transmisión</label>
@@ -298,11 +293,11 @@
       <div class="fila">
         <div class="campo">
           <label>Kilometraje</label>
-          <input type="number" id="kilometraje" placeholder="Ej: 95000">
+          <input type="text" id="kilometraje" placeholder="Solo números" oninput="soloNumeros(this)">
         </div>
         <div class="campo">
           <label>Precio</label>
-          <input type="text" id="precio" placeholder="Ej: 12.500.000 o USD 8.500" required>
+          <input type="text" id="precio" placeholder="Solo números" oninput="soloNumeros(this)" required>
         </div>
       </div>
 
@@ -322,13 +317,24 @@
           <label>🏙️ Ciudad</label>
           <select id="ciudad">
             <option value="">Seleccionar...</option>
-            <option>Beltrán</option>
+            <option>Acebal</option>
+            <option>Álvarez</option>
+            <option>Arroyo Seco</option>
+            <option>Capitán Bermúdez</option>
+            <option>Coronda</option>
             <option>Fray Luis Beltrán</option>
             <option>Funes</option>
             <option>Granadero Baigorria</option>
+            <option>Ibarlucea</option>
+            <option>Pérez</option>
+            <option>Puerto General San Martín</option>
+            <option>Pueblo Esther</option>
             <option>Roldán</option>
             <option>Rosario</option>
             <option>San Lorenzo</option>
+            <option>Santa Fe</option>
+            <option>Soldini</option>
+            <option>Villa Constitución</option>
             <option>Villa Gobernador Gálvez</option>
             <option>Otra ciudad</option>
           </select>
@@ -357,13 +363,13 @@
       </div>
 
       <div class="campo-completo">
-        <label>Deuda / Patentes / Multas</label>
-        <textarea id="deuda" rows="2" placeholder="Ej: Sin deudas / Patente al día / Deuda $15.000"></textarea>
+        <label>💸 Deuda / Patentes / Multas</label>
+        <textarea id="deuda" rows="3" placeholder="Ej: Sin deudas / Patente al día / Deuda de $... / Multas pendientes..."></textarea>
       </div>
 
       <div class="campo-completo">
-        <label>Descripción</label>
-        <textarea id="descripcion" rows="4" placeholder="Ej: Único dueño, aire acondicionado, alarma, cubiertas nuevas, listo para transferir..."></textarea>
+        <label>📝 Descripción del vehículo</label>
+        <textarea id="descripcion" rows="5" placeholder="Ej: Único dueño, aire acondicionado, alarma, cubiertas nuevas, servicios al día, sin golpes, etc..."></textarea>
       </div>
 
       <div class="foto-seccion">
@@ -502,7 +508,6 @@
     const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
 
     let sbClient = null;
-
     async function getSupabase() {
       if (!sbClient) {
         sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { timeout: 30000 });
@@ -510,7 +515,63 @@
       return sbClient;
     }
 
-    // Mostrar campo libre si eligen "Otra ciudad"
+    // === OJITO VER / OCULTAR CÓDIGO ===
+    function toggleVerCodigo() {
+      const input = document.getElementById('codigo_seguridad');
+      const icono = document.getElementById('iconoOjo');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icono.textContent = '🙈';
+      } else {
+        input.type = 'password';
+        icono.textContent = '👁️';
+      }
+    }
+
+    // === SOLO NÚMEROS ===
+    function soloNumeros(campo) {
+      campo.value = campo.value.replace(/[^0-9]/g, '');
+    }
+
+    // === LIMITAR AÑO A 4 DÍGITOS ===
+    function limitarAnio(campo) {
+      soloNumeros(campo);
+      if (campo.value.length > 4) {
+        campo.value = campo.value.slice(0, 4);
+      }
+    }
+
+    // === VALIDACIÓN DEL CÓDIGO ===
+    function validarCodigo() {
+      const codigo = document.getElementById('codigo_seguridad').value;
+      const tieneLongitud = codigo.length === 6;
+      const tieneMayus = /[A-Z]/.test(codigo);
+      const tieneMinus = /[a-z]/.test(codigo);
+      const tieneNum = /[0-9]/.test(codigo);
+      const tieneEspecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(codigo);
+
+      const reqLong = document.getElementById('req-long');
+      const reqMayus = document.getElementById('req-mayus');
+      const reqMinus = document.getElementById('req-minus');
+      const reqNum = document.getElementById('req-num');
+      const reqEsp = document.getElementById('req-esp');
+
+      reqLong.className = 'req' + (tieneLongitud ? ' ok' : '');
+      reqLong.innerHTML = (tieneLongitud ? '✅' : '❌') + ' 6 caracteres';
+      
+      reqMayus.className = 'req' + (tieneMayus ? ' ok' : '');
+      reqMayus.innerHTML = (tieneMayus ? '✅' : '❌') + ' 1 letra mayúscula';
+      
+      reqMinus.className = 'req' + (tieneMinus ? ' ok' : '');
+      reqMinus.innerHTML = (tieneMinus ? '✅' : '❌') + ' 1 letra minúscula';
+      
+      reqNum.className = 'req' + (tieneNum ? ' ok' : '');
+      reqNum.innerHTML = (tieneNum ? '✅' : '❌') + ' 1 número';
+      
+      reqEsp.className = 'req' + (tieneEspecial ? ' ok' : '');
+      reqEsp.innerHTML = (tieneEspecial ? '✅' : '❌') + ' 1 carácter especial (@ # $ % ! & * etc.)';
+    }
+
     const selectCiudad = document.getElementById('ciudad');
     const campoLibre = document.getElementById('campo_ciudad_libre');
     selectCiudad.addEventListener('change', () => {
@@ -556,27 +617,40 @@
       return await reducirFoto(archivo);
     }
 
-    // === CONTADOR DE VISITAS — CARGAR ===
     async function contarCargar() {
       const sb = await getSupabase();
       try {
         const { data } = await sb.from('visitas').select('cantidad').eq('pagina', 'cargar');
         if (data && data.length > 0) {
-          const nuevaCantidad = data[0].cantidad + 1;
-          await sb.from('visitas').update({ cantidad: nuevaCantidad }).eq('pagina', 'cargar');
-          console.log('✅ Cargar → visitas:', nuevaCantidad);
+          await sb.from('visitas').update({ cantidad: data[0].cantidad + 1 }).eq('pagina', 'cargar');
         }
       } catch (err) {
         console.log('⚠️ Error contador:', err.message);
       }
     }
-    // Contamos al entrar a la página
     getSupabase().then(() => contarCargar());
 
     document.getElementById('formAuto').addEventListener('submit', async e => {
       e.preventDefault();
       const btn = document.getElementById('btnGuardar');
       const mensaje = document.getElementById('mensaje');
+      
+      const codigo = document.getElementById('codigo_seguridad').value;
+      const valido = (
+        codigo.length === 6 &&
+        /[A-Z]/.test(codigo) &&
+        /[a-z]/.test(codigo) &&
+        /[0-9]/.test(codigo) &&
+        /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(codigo)
+      );
+      
+      if (!valido) {
+        mensaje.textContent = "❌ Completá correctamente el código de seguridad";
+        mensaje.className = "mensaje error";
+        mensaje.style.display = "block";
+        return;
+      }
+      
       btn.disabled = true;
       btn.textContent = "Guardando...";
       mensaje.style.display = "none";
@@ -589,24 +663,21 @@
           fotos[`foto${i}`] = await leerArchivoComoTexto(input.files[0]);
         }
 
-        // Obtener ciudad: lista o escrita
         let ciudadValor = selectCiudad.value;
         if (ciudadValor === 'Otra ciudad') {
           ciudadValor = document.getElementById('ciudad_libre').value.trim();
         }
 
         const datos = {
-          codigo_seguridad: document.getElementById('codigo_seguridad').value.trim(),
+          codigo_seguridad: codigo,
           tipo_vehiculo: document.getElementById('tipo_vehiculo').value,
           marca: document.getElementById('marca').value.trim(),
           modelo: document.getElementById('modelo').value.trim(),
           version: document.getElementById('version').value.trim(),
           combustible: document.getElementById('combustible').value,
-          anio: parseInt(document.getElementById('anio').value),
+          anio: parseInt(document.getElementById('anio').value) || null,
           transmision: document.getElementById('transmision').value,
-          kilometraje: document.getElementById('kilometraje').value 
-            ? parseInt(document.getElementById('kilometraje').value) 
-            : null,
+          kilometraje: parseInt(document.getElementById('kilometraje').value) || null,
           precio: document.getElementById('precio').value.trim(),
           dueno: document.getElementById('dueno').value.trim(),
           direccion: document.getElementById('direccion').value.trim(),
@@ -626,16 +697,17 @@
         mensaje.className = "mensaje exito";
         mensaje.style.display = "block";
         document.getElementById('formAuto').reset();
-        
-        // Ocultar campo ciudad libre al reiniciar
         campoLibre.style.display = 'none';
         
         for (let i = 1; i <= 12; i++) {
           document.getElementById(`img${i}`).style.display = 'none';
           document.getElementById(`sin${i}`).style.display = 'block';
         }
+        validarCodigo();
+        document.getElementById('codigo_seguridad').type = 'password';
+        document.getElementById('iconoOjo').textContent = '👁️';
+        
       } catch (err) {
-        console.error("Error:", err);
         mensaje.textContent = "❌ Error: " + err.message;
         mensaje.className = "mensaje error";
         mensaje.style.display = "block";
