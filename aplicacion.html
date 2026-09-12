@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>❤ Mis Vehículos — Vehículos en Venta</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Vehículos en Venta">
+  <meta name="theme-color" content="#1565C0">
+  <title>Instalar — Vehículos en Venta</title>
+  <link rel="manifest" href="app.webmanifest">
   <style>
     * {
       box-sizing: border-box;
@@ -12,7 +16,6 @@
       padding: 0;
       font-family: 'Segoe UI', Roboto, 'Open Sans', sans-serif;
     }
-
     body {
       background: linear-gradient(135deg, #dceaf5 0%, #cfe0ee 100%);
       min-height: 100vh;
@@ -21,94 +24,118 @@
       align-items: center;
       padding: 20px;
     }
-
-    .caja-principal {
+    .caja {
       background: linear-gradient(135deg, #f7f3eb 0%, #eee9dd 100%);
       border-radius: 28px;
-      padding: 55px 40px;
+      padding: 50px 35px;
       width: 100%;
-      max-width: 540px;
-      box-shadow: 0 10px 30px rgba(44, 82, 130, 0.08);
+      max-width: 500px;
       text-align: center;
-      animation: entradaSuave 0.7s ease-out;
+      box-shadow: 0 10px 30px rgba(44, 82, 130, 0.08);
       border: 1px solid #e2d9c8;
     }
-
-    @keyframes entradaSuave {
-      from { opacity: 0; transform: translateY(25px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     h1 {
       color: #2c5282;
-      font-size: 30px;
-      font-weight: 800;
+      font-size: 28px;
       margin-bottom: 15px;
     }
-
-    .icono {
-      font-size: 60px;
-      margin-bottom: 20px;
-    }
-
     .mensaje {
       color: #5a6872;
       font-size: 17px;
+      margin-bottom: 30px;
       line-height: 1.6;
-      margin-bottom: 35px;
     }
-
-    .boton {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
+    .boton-instalar {
       background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
-      color: #ffffff;
-      text-decoration: none;
+      color: white;
+      border: none;
       font-size: 20px;
       font-weight: 700;
-      padding: 20px 26px;
+      padding: 20px 30px;
       border-radius: 16px;
-      margin-bottom: 16px;
-      transition: all 0.35s ease;
-      border: none;
-      box-shadow: 0 6px 16px rgba(49, 130, 206, 0.18);
-      cursor: pointer;
       width: 100%;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(49, 130, 206, 0.18);
+      transition: all 0.3s ease;
     }
-
-    .boton:hover {
+    .boton-instalar:hover {
       transform: translateY(-2px);
-      background: linear-gradient(135deg, #4a90d9 0%, #3182ce 100%);
       box-shadow: 0 8px 20px rgba(49, 130, 206, 0.25);
     }
-
-    .pie-pagina {
-      margin-top: 30px;
-      font-size: 13px;
-      color: #718096;
+    .boton-instalar:disabled {
+      background: #b0bec5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .volver {
+      margin-top: 25px;
+      color: #3182ce;
+      text-decoration: none;
+      font-size: 16px;
+      display: inline-block;
+    }
+    .oculto {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <div class="caja-principal">
-    
-    <h1>Mis Vehículos</h1>
-    
-    <p class="mensaje">
-      Estamos preparando todo <br>
-      Esta sección está en desarrollo.<br>
-  
+  <div class="caja">
+    <h1>📱 Instalar la Aplicación</h1>
+    <p class="mensaje" id="texto-estado">
+      Tocá el botón de abajo para agregar la aplicación a tu pantalla de inicio.<br>
+      Así la tendrás siempre a mano, rápida y sin barras.
     </p>
 
-    <a href="index.html" class="boton">
-      🏠 <span>Volver al Inicio</span>
-    </a>
+    <button id="boton-instalar" class="boton-instalar">
+      ⬇️ Instalar Aplicación
+    </button>
 
-    <p class="pie-pagina">Hecho para Rosario y toda la región.</p>
+    <p id="ya-instalada" class="mensaje oculto">
+      ✅ La aplicación ya está instalada en tu celular.<br>
+      Buscá el ícono en tu pantalla de inicio.
+    </p>
+
+    <a href="index.html" class="volver">← Volver al inicio</a>
   </div>
+
+<script>
+  let eventoInstalacionPendiente;
+
+  // Guardamos el evento cuando el navegador está listo para instalar
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    eventoInstalacionPendiente = e;
+    // El botón ya está visible, listo para tocar
+  });
+
+  // Cuando tocan el botón → se abre la ventanita de instalar
+  document.getElementById('boton-instalar').addEventListener('click', async () => {
+    if (!eventoInstalacionPendiente) {
+      // Si no hay evento, mostramos cómo hacerlo manual
+      alert('🔧 Tocá los tres puntitos arriba → "Agregar a pantalla de inicio"');
+      return;
+    }
+
+    // Abrimos la ventana de instalación
+    const resultado = await eventoInstalacionPendiente.prompt();
+    
+    if (resultado.outcome === 'accepted') {
+      // Aceptó → ocultamos el botón y mostramos mensaje
+      document.getElementById('boton-instalar').classList.add('oculto');
+      document.getElementById('ya-instalada').classList.remove('oculto');
+    }
+    
+    eventoInstalacionPendiente = null;
+  });
+
+  // Si ya está instalada → ocultamos el botón
+  window.addEventListener('appinstalled', () => {
+    document.getElementById('boton-instalar').classList.add('oculto');
+    document.getElementById('ya-instalada').classList.remove('oculto');
+  });
+</script>
 
 </body>
 </html>
