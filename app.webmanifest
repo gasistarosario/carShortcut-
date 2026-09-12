@@ -1,0 +1,11 @@
+{
+  "name": "Vehículos en Venta",
+  "short_name": "Vehículos",
+  "description": "Plataforma de vehículos de Rosario y toda Argentina",
+  "start_url": "https://gustarosario.github.io/carShortcut-/index.html",
+  "display": "standalone",
+  "background_color": "#dceaf5",
+  "theme_color": "#1565C0",
+  "scope": "/carShortcut-/",
+  "orientation": "portrait-primary"
+}
