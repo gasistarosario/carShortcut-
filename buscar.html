@@ -115,6 +115,71 @@
       color: #2c5282;
     }
 
+    .oculto {display: none !important;}
+
+    .boton-favorito {
+      display: block;
+      width: 100%;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 0 0 18px 0;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      transition: all 0.2s;
+    }
+    .boton-favorito:hover {transform: translateY(-2px);}
+
+    .caja-codigo {
+      background: #f0f7ff;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 15px 0;
+      border: 2px solid #bfdbfe;
+    }
+    .caja-codigo h3 {
+      color: #1e40af;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    .input-codigo {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      text-align: center;
+      letter-spacing: 4px;
+      border: 2px solid #93c5fd;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      font-weight: bold;
+    }
+    .boton-guardar {
+      background: #16a34a;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+    }
+    .boton-cancelar {
+      background: #e5e7eb;
+      color: #4b5563;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      margin-top: 10px;
+      cursor: pointer;
+      width: 100%;
+    }
+
     .tarjeta {
       background: linear-gradient(135deg, #f7f3eb 0%, #eee9dd 100%);
       padding: 25px;
@@ -362,7 +427,6 @@
     let sbClient = null;
     let idsFiltrados = [];
     let indiceActual = 0;
-    let vehiculoActual = null;
 
     async function getSupabase() {
       if (!sbClient) {
@@ -392,7 +456,6 @@
       caja.innerHTML = `<div class="cargando">🔄 Buscando vehículos...</div>`;
       idsFiltrados = [];
       indiceActual = 0;
-      vehiculoActual = null;
       btnAnt.disabled = true;
       btnSig.disabled = true;
       cajaNav.classList.remove('activa');
@@ -428,7 +491,6 @@
 
       let resultados = data;
       
-      // === FILTRO KILOMETRAJE MÍNIMO Y MÁXIMO ===
       if (kmMin) {
         const numKmMin = parseInt(kmMin);
         if (!isNaN(numKmMin)) {
@@ -446,7 +508,6 @@
         }
       }
       
-      // === FILTRO PRECIO MÍNIMO Y MÁXIMO ===
       if (precioMin) {
         const numPrecioMin = parseFloat(precioMin);
         if (!isNaN(numPrecioMin)) {
@@ -500,8 +561,6 @@
         return;
       }
 
-      vehiculoActual = vehiculo;
-
       let fotosHtml = '';
       for (let i = 1; i <= 12; i++) {
         const foto = vehiculo[`foto${i}`];
@@ -517,34 +576,113 @@
       const hayFotos = fotosHtml !== '';
 
       caja.innerHTML = `
-      <div class="tarjeta">
-        ${vehiculo.tipo_vehiculo ? `<span class="etiqueta-tipo">${vehiculo.tipo_vehiculo}</span>` : ''}
-        
-        <div class="titulo-vehiculo">${vehiculo.marca || ''} ${vehiculo.modelo || ''} — ${vehiculo.anio || ''}</div>
-        <div class="fila"><strong>Versión:</strong> ${vehiculo.version || '-'}</div>
-        <div class="fila"><strong>Ciudad:</strong> ${vehiculo.ciudad || '-'}</div>
-        <div class="fila"><strong>Kilometraje:</strong> ${vehiculo.kilometraje ? vehiculo.kilometraje.toLocaleString('es-AR') + ' km' : 'No indicado'}</div>
-        <div class="fila"><strong>Combustible:</strong> ${vehiculo.combustible || '-'}</div>
-        <div class="fila"><strong>Transmisión:</strong> ${vehiculo.transmision || '-'}</div>
-        <div class="fila"><strong>Precio:</strong> ${vehiculo.precio || '-'}</div>
-        <div class="fila"><strong>Dueño:</strong> ${vehiculo.dueno || '-'}</div>
-        <div class="fila"><strong>Dirección:</strong> ${vehiculo.direccion || '-'}</div>
-        <div class="fila"><strong>Teléfono:</strong> ${vehiculo.telefono || '-'}</div>
-        <div>
-          ${vehiculo.permuta ? '<span class="etiqueta permuta">✅ Acepta permuta</span>' : ''}
-          ${vehiculo.contado ? '<span class="etiqueta contado">💵 Solo contado</span>' : ''}
+        <button class="boton-favorito" onclick="mostrarCajaCodigo()">
+          💙 AGREGAR A MIS VEHÍCULOS
+        </button>
+
+        <div id="cajaCodigo" class="caja-codigo oculto">
+          <h3>🔐 Escribí tu código de 6 caracteres</h3>
+          <input type="text" id="codigoIngresado" class="input-codigo" placeholder="Tu código..." maxlength="6">
+          <button class="boton-guardar" onclick="guardarConCodigo()">✅ Guardar</button>
+          <button class="boton-cancelar" onclick="ocultarCajaCodigo()">❌ Cancelar</button>
         </div>
-        <div class="fila" style="margin-top: 10px;"><strong>Deuda:</strong> ${vehiculo.deuda || 'Sin deudas'}</div>
-        <div class="fila"><strong>Descripción:</strong> ${vehiculo.descripcion || '-'}</div>
         
-        ${hayFotos ? `
-        <div class="fotos-titulo">📸 Fotos del vehículo</div>
-        <div class="fotos-cuadricula">${fotosHtml}</div>
-        ` : ''}
-      </div>
+        <div class="tarjeta">
+          ${vehiculo.tipo_vehiculo ? `<span class="etiqueta-tipo">${vehiculo.tipo_vehiculo}</span>` : ''}
+          
+          <div class="titulo-vehiculo">${vehiculo.marca || ''} ${vehiculo.modelo || ''} — ${vehiculo.anio || ''}</div>
+          <div class="fila"><strong>Versión:</strong> ${vehiculo.version || '-'}</div>
+          <div class="fila"><strong>Ciudad:</strong> ${vehiculo.ciudad || '-'}</div>
+          <div class="fila"><strong>Kilometraje:</strong> ${vehiculo.kilometraje ? vehiculo.kilometraje.toLocaleString('es-AR') + ' km' : 'No indicado'}</div>
+          <div class="fila"><strong>Combustible:</strong> ${vehiculo.combustible || '-'}</div>
+          <div class="fila"><strong>Transmisión:</strong> ${vehiculo.transmision || '-'}</div>
+          <div class="fila"><strong>Precio:</strong> ${vehiculo.precio || '-'}</div>
+          <div class="fila"><strong>Dueño:</strong> ${vehiculo.dueno || '-'}</div>
+          <div class="fila"><strong>Dirección:</strong> ${vehiculo.direccion || '-'}</div>
+          <div class="fila"><strong>Teléfono:</strong> ${vehiculo.telefono || '-'}</div>
+          <div>
+            ${vehiculo.permuta ? '<span class="etiqueta permuta">✅ Acepta permuta</span>' : ''}
+            ${vehiculo.contado ? '<span class="etiqueta contado">💵 Solo contado</span>' : ''}
+          </div>
+          <div class="fila" style="margin-top: 10px;"><strong>Deuda:</strong> ${vehiculo.deuda || 'Sin deudas'}</div>
+          <div class="fila"><strong>Descripción:</strong> ${vehiculo.descripcion || '-'}</div>
+          
+          ${hayFotos ? `
+          <div class="fotos-titulo">📸 Fotos del vehículo</div>
+          <div class="fotos-cuadricula">${fotosHtml}</div>
+          ` : ''}
+        </div>
       `;
       document.getElementById('contador').textContent = 
         `${posicion + 1} de ${idsFiltrados.length}`;
+    }
+
+    function mostrarCajaCodigo() {
+      document.getElementById('cajaCodigo').classList.remove('oculto');
+      document.getElementById('codigoIngresado').value = '';
+      document.getElementById('codigoIngresado').focus();
+    }
+
+    function ocultarCajaCodigo() {
+      document.getElementById('cajaCodigo').classList.add('oculto');
+    }
+
+    async function guardarConCodigo() {
+      const codigo = document.getElementById('codigoIngresado').value.trim();
+      
+      if (!codigo || codigo.length < 6) {
+        alert('⚠️ El código debe tener 6 caracteres');
+        return;
+      }
+
+      const sb = await getSupabase();
+      
+      // ✅ BUSCAMOS EL CÓDIGO EN LA TABLA autos → SU FILA, SU CONTADOR
+      const { data: vehiculo, error: errorBuscar } = await sb
+        .from('autos')
+        .select('id, contador')
+        .eq('codigo_seguridad', codigo)
+        .maybeSingle();
+
+      if (errorBuscar || !vehiculo) {
+        alert('❌ Código no encontrado. Verificá bien.');
+        return;
+      }
+
+      // ✅ TOMAMOS EL CONTADOR DE ESA MISMA FILA
+      const contadorActual = vehiculo.contador || 0;
+
+      if (contadorActual >= 10) {
+        alert('⛔ Este código ya llegó a 10 usos. No se puede agregar más.');
+        return;
+      }
+
+      const nuevoContador = contadorActual + 1;
+
+      // ✅ Guardamos en "mis_vehiculos"
+      const { error: errorGuardar } = await sb.from('mis_vehiculos').insert({
+        id_auto: vehiculo.id,
+        codigo: codigo
+      });
+
+      if (errorGuardar) {
+        alert('❌ Error al guardar: ' + errorGuardar.message);
+        return;
+      }
+
+      // ✅ SUMAMOS EN EL CONTADOR DE ESA MISMA FILA DEL CÓDIGO
+      const { error: errorContador } = await sb
+        .from('autos')
+        .update({ contador: nuevoContador })
+        .eq('id', vehiculo.id);
+
+      if (errorContador) {
+        alert('⚠️ Se guardó pero no se pudo actualizar el contador: ' + errorContador.message);
+        return;
+      }
+
+      alert(`✅ Agregado correctamente! Este código lleva ${nuevoContador} de 10 usos 🎉`);
+      ocultarCajaCodigo();
     }
 
     async function vehiculoAnterior() {
@@ -570,7 +708,6 @@
     document.getElementById('btnAnterior').addEventListener('click', vehiculoAnterior);
     document.getElementById('btnSiguiente').addEventListener('click', vehiculoSiguiente);
 
-    // === CONTADOR DE VISITAS ===
     async function contarBuscar() {
       try {
         const sb = await getSupabase();
@@ -578,12 +715,12 @@
         if (data && data.length) {
           const nuevaCantidad = data[0].cantidad + 1;
           await sb.from('visitas').update({ cantidad: nuevaCantidad }).eq('pagina', 'buscar');
-          console.log('✅ Buscar →', nuevaCantidad);
         }
       } catch (err) {
-        console.log('⚠️ Error contador buscar:', err.message);
+        console.log('⚠️ Contador:', err.message);
       }
     }
+
     getSupabase().then(() => contarBuscar());
   </script>
 
