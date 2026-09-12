@@ -3,112 +3,407 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>❤ Mis Vehículos — Vehículos en Venta</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <title>Mis Vehículos</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Roboto, 'Open Sans', sans-serif;
-    }
-
+    * {box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif;}
     body {
-      background: linear-gradient(135deg, #dceaf5 0%, #cfe0ee 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
+      background: #87c5e8;
+      padding: 15px;
+      max-width: 900px;
+      margin: 0 auto;
     }
-
-    .caja-principal {
-      background: linear-gradient(135deg, #f7f3eb 0%, #eee9dd 100%);
-      border-radius: 28px;
-      padding: 55px 40px;
-      width: 100%;
-      max-width: 540px;
-      box-shadow: 0 10px 30px rgba(44, 82, 130, 0.08);
-      text-align: center;
-      animation: entradaSuave 0.7s ease-out;
-      border: 1px solid #e2d9c8;
-    }
-
-    @keyframes entradaSuave {
-      from { opacity: 0; transform: translateY(25px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     h1 {
-      color: #2c5282;
-      font-size: 30px;
-      font-weight: 800;
-      margin-bottom: 15px;
-    }
-
-    .icono {
-      font-size: 60px;
+      text-align: center;
+      color: #1565C0;
       margin-bottom: 20px;
+      font-size: 22px;
     }
 
-    .mensaje {
-      color: #5a6872;
-      font-size: 17px;
-      line-height: 1.6;
-      margin-bottom: 35px;
-    }
-
-    .boton {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 20px;
-      font-weight: 700;
-      padding: 20px 26px;
+    .caja-acceso {
+      background: #fffaf0;
+      padding: 30px 25px;
       border-radius: 16px;
-      margin-bottom: 16px;
-      transition: all 0.35s ease;
+      box-shadow: 0 4px 12px rgba(21, 101, 192, 0.12);
+      max-width: 450px;
+      margin: 30px auto;
+      text-align: center;
+    }
+    .caja-acceso h2 {
+      color: #1565C0;
+      margin-bottom: 20px;
+      font-size: 19px;
+    }
+    .input-codigo {
+      width: 100%;
+      padding: 15px;
+      font-size: 20px;
+      text-align: center;
+      letter-spacing: 5px;
+      border: 2px solid #93c5fd;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+    .boton-entrar {
+      background: #1976D2;
+      color: white;
       border: none;
-      box-shadow: 0 6px 16px rgba(49, 130, 206, 0.18);
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 17px;
+      font-weight: 700;
       cursor: pointer;
       width: 100%;
+      transition: all 0.2s;
     }
-
-    .boton:hover {
-      transform: translateY(-2px);
-      background: linear-gradient(135deg, #4a90d9 0%, #3182ce 100%);
-      box-shadow: 0 8px 20px rgba(49, 130, 206, 0.25);
+    .boton-entrar:hover {
+      background: #1565C0;
+      transform: translateY(-1px);
     }
+    .mensaje-error {
+      color: #dc2626;
+      margin-top: 12px;
+      font-weight: 600;
+      display: none;
+    }
+    .mensaje-error.visible {display: block;}
+    .mensaje-exito {
+      color: #16a34a;
+      margin-top: 12px;
+      font-weight: 600;
+      display: none;
+    }
+    .mensaje-exito.visible {display: block;}
 
-    .pie-pagina {
-      margin-top: 30px;
+    .contenido-guardado {display: none;}
+    .contenido-guardado.visible {display: block;}
+
+    .navegacion {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 15px 0 20px;
+      padding: 12px;
+      background: #fffaf0;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(21, 101, 192, 0.12);
+    }
+    .navegacion button {
+      padding: 10px 20px;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background: #1976D2;
+      color: white;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .navegacion button:hover {
+      background: #1565C0;
+      transform: translateY(-1px);
+    }
+    .contador {font-size: 16px; font-weight: bold; color: #2d3748;}
+
+    .tarjeta {
+      background: #fffaf0;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(21, 101, 192, 0.12);
+      margin-bottom: 15px;
+      animation: aparecer 0.3s ease;
+    }
+    @keyframes aparecer {
+      from {opacity: 0; transform: translateY(6px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    .titulo-auto {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1565C0;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e3f2fd;
+    }
+    .fila {
+      margin-bottom: 10px;
+      color: #2d3748;
+      line-height: 1.6;
+    }
+    .fila strong {
+      color: #2c5282;
+      min-width: 130px;
+      display: inline-block;
+    }
+    .contador-badge {
+      display: inline-block;
+      background: #e3f2fd;
+      color: #1565C0;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-left: 10px;
+    }
+    .etiqueta {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
       font-size: 13px;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+
+    .boton-eliminar {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 15px 0;
+      transition: all 0.2s;
+    }
+    .boton-eliminar:hover {
+      background: #dc2626;
+      transform: translateY(-1px);
+    }
+
+    .volver {
+      display: inline-block;
+      margin-top: 10px;
+      color: #1976D2;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 20px;
+      background: #fffaf0;
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+    .volver:hover {
+      background: #e3f2fd;
+      text-decoration: none;
+    }
+    .vacio {
+      text-align: center;
+      padding: 60px 20px;
       color: #718096;
+      font-size: 17px;
     }
   </style>
 </head>
 <body>
 
-  <div class="caja-principal">
-    
-    <h1>Mis Vehículos</h1>
-    
-    <p class="mensaje">
-      Estamos preparando todo <br>
-      Esta sección está en desarrollo.<br>
-  
-    </p>
+  <h1>💙 Mis Vehículos Guardados</h1>
 
-    <a href="index.html" class="boton">
-      🏠 <span>Volver al Inicio</span>
-    </a>
-
-    <p class="pie-pagina">Hecho para Rosario y toda la región.</p>
+  <!-- CAJA DE INGRESO DEL CÓDIGO -->
+  <div id="cajaIngreso" class="caja-acceso">
+    <h2>🔐 Escribí tu código para entrar</h2>
+    <input type="text" id="codigoAcceso" class="input-codigo" placeholder="Tu código..." maxlength="6">
+    <button class="boton-entrar" onclick="verificarCodigo()">✅ Entrar</button>
+    <div id="mensajeError" class="mensaje-error">❌ Código incorrecto, probá de nuevo</div>
+    <div id="mensajeExito" class="mensaje-exito"></div>
   </div>
+
+  <!-- NAVEGACIÓN, TARJETA Y BOTONES -->
+  <div id="contenidoGuardado" class="contenido-guardado">
+    <div class="navegacion">
+      <button id="btnAnterior">◀ Anterior</button>
+      <span id="contador" class="contador"></span>
+      <button id="btnSiguiente">Siguiente ▶</button>
+    </div>
+
+    <div id="unAuto"></div>
+
+    <button id="btnEliminar" class="boton-eliminar" onclick="eliminarVehiculo()">🗑️ Eliminar de Mis Vehículos</button>
+
+    <a href="index.html" class="volver">← Volver a la página principal</a>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
+
+    let sbClient = null;
+    let misAutos = [];
+    let misVehiculos = [];
+    let indiceActual = 0;
+
+    async function getSupabase() {
+      if (!sbClient) {
+        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      }
+      return sbClient;
+    }
+
+    async function verificarCodigo() {
+      const codigo = document.getElementById('codigoAcceso').value.trim();
+      const cajaError = document.getElementById('mensajeError');
+      const cajaExito = document.getElementById('mensajeExito');
+      const cajaIngreso = document.getElementById('cajaIngreso');
+      const contenido = document.getElementById('contenidoGuardado');
+
+      cajaError.classList.remove('visible');
+      cajaExito.classList.remove('visible');
+
+      if (!codigo) {
+        cajaError.textContent = '⚠️ Escribí tu código';
+        cajaError.classList.add('visible');
+        return;
+      }
+
+      const sb = await getSupabase();
+
+      // 1️⃣ Buscamos en mis_vehiculos
+      const { data: lista, error: errorLista } = await sb
+        .from('mis_vehiculos')
+        .select(`id, id_auto, codigo`)
+        .eq('codigo', codigo);
+
+      if (errorLista) {
+        cajaError.textContent = '❌ Error: ' + errorLista.message;
+        cajaError.classList.add('visible');
+        return;
+      }
+
+      if (!lista || lista.length === 0) {
+        cajaError.textContent = '❌ Código incorrecto, probá de nuevo';
+        cajaError.classList.add('visible');
+        return;
+      }
+
+      misVehiculos = lista;
+      const ids = lista.map(item => item.id_auto);
+
+      // 2️⃣ Buscamos los autos completos
+      const { data: autosCompletos, error: errorAutos } = await sb
+        .from('autos')
+        .select(`
+          id, marca, modelo, anio, version, ciudad, kilometraje,
+          combustible, transmision, precio, dueno, direccion, telefono,
+          permuta, contado, deuda, descripcion, contador
+        `)
+        .in('id', ids);
+
+      if (errorAutos || !autosCompletos || autosCompletos.length === 0) {
+        cajaError.textContent = '❌ No se encontraron vehículos';
+        cajaError.classList.add('visible');
+        return;
+      }
+
+      misAutos = autosCompletos;
+      indiceActual = 0;
+
+      cajaIngreso.style.display = 'none';
+      contenido.classList.add('visible');
+
+      mostrarUno(0);
+    }
+
+    function mostrarUno(pos) {
+      const caja = document.getElementById('unAuto');
+      const total = misAutos.length;
+
+      if (total === 0) {
+        caja.innerHTML = `<div class="vacio">📭 Todavía no tenés vehículos guardados</div>`;
+        document.getElementById('btnEliminar').style.display = 'none';
+        return;
+      }
+
+      document.getElementById('btnEliminar').style.display = 'inline-block';
+      const auto = misAutos[pos];
+
+      caja.innerHTML = `
+      <div class="tarjeta">
+        <div class="titulo-auto">
+          ${auto.marca || ''} ${auto.modelo || ''} — ${auto.anio || ''}
+          <span class="contador-badge">${auto.contador || 0}/10</span>
+        </div>
+        <div class="fila"><strong>Versión:</strong> ${auto.version || '-'}</div>
+        <div class="fila"><strong>Ciudad:</strong> ${auto.ciudad || '-'}</div>
+        <div class="fila"><strong>Kilometraje:</strong> ${auto.kilometraje ? auto.kilometraje.toLocaleString('es-AR') + ' km' : 'No indicado'}</div>
+        <div class="fila"><strong>Combustible:</strong> ${auto.combustible || '-'}</div>
+        <div class="fila"><strong>Transmisión:</strong> ${auto.transmision || '-'}</div>
+        <div class="fila"><strong>Precio:</strong> ${auto.precio || '-'}</div>
+        <div class="fila"><strong>Dueño:</strong> ${auto.dueno || '-'}</div>
+        <div class="fila"><strong>Dirección:</strong> ${auto.direccion || '-'}</div>
+        <div class="fila"><strong>Teléfono:</strong> ${auto.telefono || '-'}</div>
+        
+        <div style="margin: 8px 0;">
+          ${auto.permuta ? '<span class="etiqueta" style="background:#fef5e7; color:#975a16;">✅ Acepta permuta</span>' : ''}
+          ${auto.contado ? '<span class="etiqueta" style="background:#e6fffa; color:#047857;">💵 Solo contado</span>' : ''}
+        </div>
+        
+        <div class="fila"><strong>Deuda:</strong> ${auto.deuda || 'Sin deudas'}</div>
+        <div class="fila"><strong>Descripción:</strong> ${auto.descripcion || '-'}</div>
+      </div>
+      `;
+
+      document.getElementById('contador').textContent = `${pos+1} de ${total}`;
+    }
+
+    function autoAnterior() {
+      if (misAutos.length === 0) return;
+      indiceActual = indiceActual === 0 ? misAutos.length - 1 : indiceActual - 1;
+      mostrarUno(indiceActual);
+    }
+
+    function autoSiguiente() {
+      if (misAutos.length === 0) return;
+      indiceActual = indiceActual === misAutos.length - 1 ? 0 : indiceActual + 1;
+      mostrarUno(indiceActual);
+    }
+
+    async function eliminarVehiculo() {
+      if (!confirm('¿Estás seguro de eliminar este vehículo de tu lista?')) {
+        return;
+      }
+
+      const sb = await getSupabase();
+      const autoActual = misAutos[indiceActual];
+
+      // Buscamos el id de mis_vehiculos que corresponde a este auto
+      const registro = misVehiculos.find(item => item.id_auto === autoActual.id);
+      if (!registro) {
+        alert('No se encuentra el registro para eliminar');
+        return;
+      }
+
+      // ✅ Eliminamos SOLO de mis_vehiculos, el auto queda en la tabla autos
+      const { error } = await sb
+        .from('mis_vehiculos')
+        .delete()
+        .eq('id', registro.id);
+
+      if (error) {
+        alert('❌ No se pudo eliminar: ' + error.message);
+        return;
+      }
+
+      // ✅ Sacamos de la lista y actualizamos vista
+      misAutos.splice(indiceActual, 1);
+      misVehiculos = misVehiculos.filter(item => item.id !== registro.id);
+
+      if (misAutos.length === 0) {
+        mostrarUno(0);
+        return;
+      }
+
+      // Si era el último, vamos al anterior
+      if (indiceActual >= misAutos.length) {
+        indiceActual = misAutos.length - 1;
+      }
+
+      mostrarUno(indiceActual);
+      alert('✅ Eliminado de tu lista correctamente');
+    }
+
+    document.getElementById('btnAnterior').addEventListener('click', autoAnterior);
+    document.getElementById('btnSiguiente').addEventListener('click', autoSiguiente);
+  </script>
 
 </body>
 </html>
