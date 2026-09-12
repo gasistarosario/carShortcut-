@@ -23,186 +23,211 @@
     h1 {
       text-align: center;
       color: #2c5282;
-      margin-bottom: 20px;
-      font-size: 24px;
+      margin-bottom: 25px;
+      font-size: 26px;
       font-weight: 800;
     }
     .aviso-seguridad {
       background: rgba(255,255,255,0.6);
-      padding: 16px 20px;
+      padding: 18px 22px;
       border-radius: 14px;
-      margin-bottom: 22px;
+      margin-bottom: 25px;
       color: #5a4210;
       border-left: 4px solid #ed8936;
-      font-size: 14px;
-      line-height: 1.6;
+      font-size: 15px;
+      line-height: 1.7;
     }
-    .requisitos { margin-top: 10px; padding-left: 5px; }
+    .requisitos { margin-top: 12px; padding-left: 5px; }
     .req {
       color: #c53030;
-      transition: color 0.3s ease;
-      margin: 4px 0;
+      margin: 5px 0;
       font-weight: 500;
+      font-size: 14px;
     }
     .req.ok { color: #276749; }
     .form-container {
       background: linear-gradient(135deg, #f7f3eb 0%, #eee9dd 100%);
-      padding: 25px;
-      border-radius: 18px;
-      box-shadow: 0 6px 16px rgba(44,82,130,0.08);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(44,82,130,0.1);
       border: 1px solid #e2d9c8;
     }
-    .fila { display: flex; gap: 15px; margin-bottom: 18px; flex-wrap: wrap; }
-    .campo { flex: 1 1 45%; min-width: 160px; }
-    .campo-completo { flex: 1 1 100%; margin-bottom: 18px; }
+    .fila { display: flex; gap: 20px; margin-bottom: 22px; flex-wrap: wrap; }
+    .campo { flex: 1 1 45%; min-width: 200px; }
+    .campo-completo { flex: 1 1 100%; margin-bottom: 22px; }
     label {
       display: block;
-      margin-bottom: 7px;
+      margin-bottom: 9px;
       font-weight: 600;
       color: #4a5568;
-      font-size: 14px;
+      font-size: 15px;
     }
-    .contenedor-input {
-      position: relative;
-      width: 100%;
-    }
+    .contenedor-input { position: relative; }
     .contenedor-input input {
       width: 100%;
-      padding: 12px 45px 12px 15px;
+      padding: 15px 50px 15px 18px;
       border: 2px solid #c5d6e8;
-      border-radius: 10px;
-      font-size: 15px;
+      border-radius: 12px;
+      font-size: 16px;
       background: #fff;
       color: #4a5568;
-      transition: all 0.2s ease;
     }
     .contenedor-input input:focus {
       outline: none;
       border-color: #3182ce;
       box-shadow: 0 0 0 3px rgba(49,130,206,0.12);
     }
-    .ojo {
+    .boton-ojo {
       position: absolute;
-      right: 12px;
+      right: 15px;
       top: 50%;
       transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      font-size: 22px;
       cursor: pointer;
-      font-size: 20px;
       color: #718096;
-      user-select: none;
-      transition: color 0.2s ease;
+      padding: 0;
+      line-height: 1;
     }
-    .ojo:hover { color: #2c5282; }
+    .boton-ojo:hover { color: #2c5282; }
     input, select, textarea {
-      padding: 12px 15px;
+      width: 100%;
+      padding: 15px 18px;
       border: 2px solid #c5d6e8;
-      border-radius: 10px;
-      font-size: 15px;
+      border-radius: 12px;
+      font-size: 16px;
       background: #fff;
       color: #4a5568;
-      transition: all 0.2s ease;
-      width: 100%;
     }
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-    input::placeholder, textarea::placeholder { color: #90aec9; }
     input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: #3182ce;
       box-shadow: 0 0 0 3px rgba(49,130,206,0.12);
     }
-    .fila-chk { display: flex; gap: 30px; margin-bottom: 18px; flex-wrap: wrap; }
-    .campo-chk { display: flex; align-items: center; gap: 8px; }
-    .campo-chk input { width: auto; margin: 0; }
+    select { height: 52px; }
+    textarea { min-height: 100px; resize: vertical; }
+    .terminos-boton {
+      width: 100%;
+      padding: 16px 20px;
+      background: #ebf4fb;
+      border: 2px solid #3182ce;
+      border-radius: 14px;
+      color: #2c5282;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: left;
+      margin-bottom: 15px;
+    }
+    .terminos-contenido {
+      background: #fff;
+      border: 1px solid #c5d6e8;
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 18px;
+      display: none;
+      font-size: 15px;
+      line-height: 1.8;
+      color: #4a5568;
+    }
+    .terminos-contenido.visible { display: block; }
+    .terminos-contenido h3 { color: #2c5282; margin-bottom: 15px; font-size: 18px; }
+    .advertencia { color: #c53030; font-weight: 600; margin: 12px 0; }
+    .caja-aceptar {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      padding: 18px;
+      background: #fff;
+      border-radius: 12px;
+      border: 2px solid #e2d9c8;
+      margin-bottom: 25px;
+    }
+    .caja-aceptar input[type="checkbox"] {
+      width: 24px;
+      height: 24px;
+      margin: 2px 0 0 0;
+      cursor: pointer;
+    }
+    .caja-aceptar label {
+      margin: 0;
+      cursor: pointer;
+      line-height: 1.6;
+      font-size: 15px;
+    }
     .boton {
       width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+      padding: 16px;
+      background: #a0aec0;
       color: #fff;
       border: none;
-      border-radius: 12px;
-      font-size: 17px;
+      border-radius: 14px;
+      font-size: 18px;
       font-weight: 700;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(49,130,206,0.15);
-    }
-    .boton:hover { 
-      background: linear-gradient(135deg, #4a90d9 0%, #3182ce 100%);
-      transform: translateY(-1px);
-    }
-    .boton:disabled { 
-      background: #a0aec0; 
       cursor: not-allowed;
-      transform: none;
-      opacity: 0.7;
+      opacity: 0.6;
+      transition: all 0.3s ease;
     }
+    .boton.habilitado {
+      background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+      cursor: pointer;
+      opacity: 1;
+    }
+    .boton.habilitado:hover { transform: translateY(-2px); }
     .mensaje {
-      margin-top: 20px;
-      padding: 15px;
+      margin-top: 18px;
+      padding: 15px 18px;
       border-radius: 12px;
       display: none;
       font-weight: 600;
       font-size: 15px;
-      line-height: 1.5;
     }
     .exito { background: #f0f7ee; color: #276749; border: 1px solid #b8d8b9; }
     .error { background: #fef2f2; color: #c53030; border: 1px solid #feb2b2; }
     .volver {
       display: inline-block;
-      margin-top: 22px;
+      margin-top: 25px;
       color: #3182ce;
       text-decoration: none;
       font-weight: 600;
-      padding: 10px 18px;
+      padding: 12px 20px;
       background: rgba(255,255,255,0.6);
-      border-radius: 10px;
-      transition: all 0.2s ease;
+      border-radius: 12px;
+      font-size: 15px;
     }
-    .volver:hover { background: #ebf4fb; text-decoration: none; }
-    .foto-seccion { margin: 28px 0 15px; }
+    .foto-seccion { margin: 30px 0 20px; }
     .foto-titulo-seccion {
-      font-size: 19px;
+      font-size: 20px;
       font-weight: 700;
       color: #2c5282;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
     .foto-tarjeta {
       display: flex;
       align-items: center;
-      gap: 14px;
-      padding: 15px 18px;
-      margin-bottom: 12px;
+      gap: 15px;
+      padding: 18px 20px;
+      margin-bottom: 15px;
       background: #fff;
       border-radius: 14px;
       border: 2px solid #c5d6e8;
-      transition: all 0.2s ease;
       cursor: pointer;
+      transition: border-color 0.2s;
     }
-    .foto-tarjeta:hover { border-color: #3182ce; background: #ebf4fb; }
-    .foto-tarjeta:active { transform: scale(0.98); }
-    .foto-nombre {
-      font-weight: 700;
-      font-size: 15px;
-      color: #2c5282;
-      flex: 1;
-    }
+    .foto-tarjeta:hover { border-color: #3182ce; }
+    .foto-nombre { font-weight: 700; font-size: 16px; color: #2c5282; flex: 1; }
     .foto-mini {
-      width: 80px; height: 60px;
-      border-radius: 10px;
-      overflow: hidden;
+      width: 90px; height: 65px;
+      border-radius: 12px;
       background: #f7fafc;
       border: 2px dashed #cbd5e0;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
     }
-    .foto-mini-img { width: 100%; height: 100%; object-fit: cover; display: none; }
-    .foto-sin { font-size: 11px; color: #a0aec0; }
+    .foto-mini-img { width: 100%; height: 100%; object-fit: cover; display: none; border-radius: 10px; }
+    .foto-sin { font-size: 12px; color: #a0aec0; }
     .foto-input-oculto { display: none; }
   </style>
 </head>
@@ -211,7 +236,7 @@
   <h1>🚗 Ingresar Vehículo</h1>
 
   <div class="aviso-seguridad">
-    🔐 <strong>Importante:</strong> Escribí acá tu código de seguridad. Lo vas a necesitar después para poder eliminar este vehículo desde <strong>Mis Vehículos</strong> cuando lo desees. Guárdalo bien.
+    🔐 <strong>Importante:</strong> Escribí tu código de seguridad. Guárdalo bien, no hay recuperación. <strong>Este código te servirá para agregar a tu favorito e ingresar un vehículo nuevo las veces que quieras.</strong>
   </div>
 
   <div class="form-container">
@@ -220,16 +245,17 @@
       <div class="campo-completo">
         <label>🔑 Código de Seguridad *</label>
         <div class="contenedor-input">
-          <input type="password" id="codigo_seguridad" maxlength="6" placeholder="Solo 6 caracteres" required oninput="validarCodigo()">
-          <span class="ojo" id="iconoOjo" onclick="toggleVerCodigo()">👁️</span>
+          <input type="password" id="codigo_seguridad" maxlength="6" placeholder="6 caracteres" required oninput="validarCodigo()">
+          <button type="button" class="boton-ojo" id="botonOjo" onclick="alternarVista()">👁️</button>
         </div>
         <div class="requisitos">
           <div id="req-long" class="req">❌ 6 caracteres</div>
-          <div id="req-mayus" class="req">❌ 1 letra mayúscula</div>
-          <div id="req-minus" class="req">❌ 1 letra minúscula</div>
+          <div id="req-mayus" class="req">❌ 1 mayúscula</div>
+          <div id="req-minus" class="req">❌ 1 minúscula</div>
           <div id="req-num" class="req">❌ 1 número</div>
-          <div id="req-esp" class="req">❌ 1 carácter especial (@ # $ % ! & * etc.)</div>
+          <div id="req-esp" class="req">❌ 1 especial (@ # $ etc.)</div>
         </div>
+        <div id="mensaje-codigo" class="mensaje" style="display:none;"></div>
       </div>
 
       <div class="fila">
@@ -237,34 +263,34 @@
           <label>Tipo de Vehículo *</label>
           <select id="tipo_vehiculo" required>
             <option value="">Seleccionar...</option>
-            <option value="Auto">🚗 Auto</option>
-            <option value="Camioneta">🚙 Camioneta / Pick-up</option>
-            <option value="4x4">⛰️ 4x4 / Todoterreno</option>
-            <option value="SUV">🏔️ SUV / Crossover</option>
-            <option value="Furgon">📦 Furgón / Utilitario</option>
-            <option value="Cuatriciclo">🏍️ Cuatriciclo</option>
+            <option>Auto</option>
+            <option>Camioneta / Pick-up</option>
+            <option>4x4 / Todoterreno</option>
+            <option>SUV / Crossover</option>
+            <option>Furgón / Utilitario</option>
+            <option>Cuatriciclo</option>
           </select>
         </div>
       </div>
 
       <div class="fila">
         <div class="campo">
-          <label>Marca</label>
-          <input type="text" id="marca" placeholder="Ej: Toyota, Ford, Chevrolet" required>
+          <label>Marca *</label>
+          <input type="text" id="marca" required placeholder="Ej: Toyota, Ford, Chevrolet...">
         </div>
         <div class="campo">
-          <label>Modelo</label>
-          <input type="text" id="modelo" placeholder="Ej: Corolla, Fiesta, Cruze" required>
+          <label>Modelo *</label>
+          <input type="text" id="modelo" required placeholder="Ej: Corolla, Fiesta...">
         </div>
       </div>
 
       <div class="fila">
         <div class="campo">
-          <label>Versión</label>
-          <input type="text" id="version" placeholder="Ej: XEi, 1.6 LT, Limited" required>
+          <label>Versión Exacta</label>
+          <input type="text" id="version" placeholder="Ej: 1.8 XEI, Limited 4x4...">
         </div>
         <div class="campo">
-          <label>⛽ Combustible</label>
+          <label>Combustible</label>
           <select id="combustible">
             <option value="">Seleccionar...</option>
             <option>Nafta</option>
@@ -277,11 +303,11 @@
 
       <div class="fila">
         <div class="campo">
-          <label>Año</label>
-          <input type="number" id="anio" placeholder="Solo 4 dígitos" min="1900" max="2100" oninput="limitarAnio(this)" required>
+          <label>Año *</label>
+          <input type="text" id="anio" oninput="soloNumeros(this)" required placeholder="Ej: 2015">
         </div>
         <div class="campo">
-          <label>🔄 Transmisión</label>
+          <label>Transmisión</label>
           <select id="transmision">
             <option value="">Seleccionar...</option>
             <option>Manual</option>
@@ -293,210 +319,121 @@
       <div class="fila">
         <div class="campo">
           <label>Kilometraje</label>
-          <input type="text" id="kilometraje" placeholder="Solo números" oninput="soloNumeros(this)">
+          <input type="text" id="kilometraje" oninput="soloNumeros(this)" placeholder="Ej: 85000">
         </div>
         <div class="campo">
-          <label>Precio</label>
-          <input type="text" id="precio" placeholder="Solo números" oninput="soloNumeros(this)" required>
-        </div>
-      </div>
-
-      <div class="fila">
-        <div class="campo">
-          <label>Dueño / Agencia</label>
-          <input type="text" id="dueno" placeholder="Ej: Juan Pérez o Autos SRL" required>
-        </div>
-        <div class="campo">
-          <label>Dirección</label>
-          <input type="text" id="direccion" placeholder="Ej: Av. San Martín 1234, Rosario" required>
+          <label>Precio *</label>
+          <input type="text" id="precio" oninput="soloNumeros(this)" required placeholder="Solo números">
         </div>
       </div>
 
       <div class="fila">
         <div class="campo">
-          <label>🏙️ Ciudad</label>
+          <label>Dueño / Agencia *</label>
+          <input type="text" id="dueno" required placeholder="Nombre o razón social">
+        </div>
+        <div class="campo">
+          <label>Dirección *</label>
+          <input type="text" id="direccion" required placeholder="Calle y número">
+        </div>
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label>Ciudad</label>
           <select id="ciudad">
             <option value="">Seleccionar...</option>
-            <option>Acebal</option>
-            <option>Álvarez</option>
-            <option>Arroyo Seco</option>
-            <option>Capitán Bermúdez</option>
-            <option>Coronda</option>
-            <option>Fray Luis Beltrán</option>
-            <option>Funes</option>
-            <option>Granadero Baigorria</option>
-            <option>Ibarlucea</option>
-            <option>Pérez</option>
-            <option>Puerto General San Martín</option>
-            <option>Pueblo Esther</option>
-            <option>Roldán</option>
             <option>Rosario</option>
-            <option>San Lorenzo</option>
             <option>Santa Fe</option>
-            <option>Soldini</option>
-            <option>Villa Constitución</option>
-            <option>Villa Gobernador Gálvez</option>
+            <option>San Lorenzo</option>
             <option>Otra ciudad</option>
           </select>
         </div>
         <div class="campo" id="campo_ciudad_libre" style="display:none;">
-          <label>✍️ Escribí tu ciudad</label>
-          <input type="text" id="ciudad_libre" placeholder="Tu ciudad...">
+          <label>Tu ciudad</label>
+          <input type="text" id="ciudad_libre" placeholder="Escribí tu ciudad">
         </div>
       </div>
 
       <div class="fila">
         <div class="campo">
-          <label>Teléfono / WhatsApp</label>
-          <input type="tel" id="telefono" placeholder="Ej: +54 9 341 123-4567" required>
+          <label>Teléfono / WhatsApp *</label>
+          <input type="tel" id="telefono" required placeholder="Ej: 0341 12345678">
         </div>
-        <div class="fila-chk">
-          <div class="campo-chk">
-            <input type="checkbox" id="permuta">
-            <label for="permuta">Acepta permuta</label>
-          </div>
-          <div class="campo-chk">
-            <input type="checkbox" id="contado">
-            <label for="contado">Solo contado</label>
-          </div>
+        <div class="campo" style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
+          <label style="display:flex; gap:8px; align-items:center; margin:0; cursor:pointer;">
+            <input type="checkbox" id="permuta"> Acepta permuta
+          </label>
+          <label style="display:flex; gap:8px; align-items:center; margin:0; cursor:pointer;">
+            <input type="checkbox" id="contado"> Solo contado
+          </label>
         </div>
       </div>
 
       <div class="campo-completo">
-        <label>💸 Deuda / Patentes / Multas</label>
-        <textarea id="deuda" rows="3" placeholder="Ej: Sin deudas / Patente al día / Deuda de $... / Multas pendientes..."></textarea>
+        <label>Deuda / Patentes / Multas</label>
+        <textarea id="deuda" rows="3" placeholder="Detectar si tiene deudas..."></textarea>
       </div>
 
       <div class="campo-completo">
-        <label>📝 Descripción del vehículo</label>
-        <textarea id="descripcion" rows="5" placeholder="Ej: Único dueño, aire acondicionado, alarma, cubiertas nuevas, servicios al día, sin golpes, etc..."></textarea>
+        <label>Descripción</label>
+        <textarea id="descripcion" rows="5" placeholder="Estado, detalles, equipamiento..."></textarea>
       </div>
 
       <div class="foto-seccion">
         <div class="foto-titulo-seccion">📸 Fotos del vehículo</div>
-
+        ${Array.from({length:12}, (_,i) => `
         <label class="foto-tarjeta">
-          <div class="foto-nombre">📷 Motor
-            <input type="file" class="foto-input-oculto" id="foto1" accept="image/*" capture="environment" onchange="verFoto(1, this)">
+          <div class="foto-nombre">📷 Foto ${i+1}
+            <input type="file" class="foto-input-oculto" id="foto${i+1}" accept="image/*" onchange="verFoto(${i+1}, this)">
           </div>
           <div class="foto-mini">
-            <img id="img1" class="foto-mini-img">
-            <span id="sin1" class="foto-sin">Sin foto</span>
+            <img id="img${i+1}" class="foto-mini-img">
+            <span id="sin${i+1}" class="foto-sin">Sin foto</span>
           </div>
-        </label>
+        </label>`).join('')}
+      </div>
 
-        <label class="foto-tarjeta">
-          <div class="foto-nombre">📷 Frente
-            <input type="file" class="foto-input-oculto" id="foto2" accept="image/*" capture="environment" onchange="verFoto(2, this)">
-          </div>
-          <div class="foto-mini">
-            <img id="img2" class="foto-mini-img">
-            <span id="sin2" class="foto-sin">Sin foto</span>
-          </div>
-        </label>
+      <button type="button" class="terminos-boton" id="btnTerminos" onclick="mostrarOcultar()">
+        [+] TÉRMINOS Y CONDICIONES — Tocar para leer
+      </button>
+      
+      <div class="terminos-contenido" id="contenidoTerminos">
+        <h3>📄 Términos y Condiciones — Ventas de Vehículos</h3>
+        
+        <p><strong>1. Tu código de seguridad</strong></p>
+        <p>El código que elegís e ingresás es <strong>personal y tuyo</strong>. Te servirá para agregar todos los vehículos que quieras, las veces que lo necesites.</p>
+        <p class="advertencia">⚠️ VENTAS DE VEHÍCULOS NO SE HACE RESPONSABLE</p>
+        <p>• No nos hacemos responsables por la pérdida de tu código. Si lo olvidás o lo perdés, es responsabilidad exclusivamente tuya.</p>
+        <p>• Sin tu código no podrás modificar ni retirar tus publicaciones.</p>
+        <p><strong>Guardalo bien en un lugar seguro.</strong></p>
 
-        <label class="foto-tarjeta">
-          <div class="foto-nombre">📷 Lateral izquierdo
-            <input type="file" class="foto-input-oculto" id="foto3" accept="image/*" capture="environment" onchange="verFoto(3, this)">
-          </div>
-          <div class="foto-mini">
-            <img id="img3" class="foto-mini-img">
-            <span id="sin3" class="foto-sin">Sin foto</span>
-          </div>
-        </label>
+        <p style="margin-top:15px;"><strong>2. Veracidad de los datos</strong></p>
+        <p>El usuario declara que toda la información publicada —marca, modelo, precio, estado, kilometraje, documentos y demás datos— es veraz, completa y ajustada a la realidad. Queda prohibido publicar información falsa, engañosa o que no corresponda al vehículo.</p>
 
-        <label class="foto-tarjeta">
-          <div class="foto-nombre">📷 Lateral derecho
-            <input type="file" class="foto-input-oculto" id="foto4" accept="image/*" capture="environment" onchange="verFoto(4, this)">
-          </div>
-          <div class="foto-mini">
-            <img id="img4" class="foto-mini-img">
-            <span id="sin4" class="foto-sin">Sin foto</span>
-          </div>
-        </label>
+        <p style="margin-top:15px;"><strong>3. Contenido de la publicación</strong></p>
+        <p>El usuario se compromete a que todas las fotos, descripciones y materiales que comparta sean propios, respeten la ley y se relacionen exclusivamente con el vehículo publicado. Queda prohibido incluir contenido explícito, inapropiado, ofensivo o ajeno al vehículo.</p>
+        <p><strong>Venta de Vehículos se reserva el derecho de eliminar sin aviso previo</strong> cualquier aviso que contenga material indebido, inapropiado o que no corresponda al vehículo, sin que esto genere derecho a reclamo de ningún tipo.</p>
 
-        <label class="foto-tarjeta">
-          <div class="foto-nombre">📷 Parte trasera
-            <input type="file" class="foto-input-oculto" id="foto5" accept="image/*" capture="environment" onchange="verFoto(5, this)">
-          </div>
-          <div class="foto-mini">
-            <img id="img5" class="foto-mini-img">
-            <span id="sin5" class="foto-sin">Sin foto</span>
-          </div>
-        </label>
+        <p style="margin-top:15px;"><strong>4. Responsabilidad entre partes</strong></p>
+        <p>Venta de Vehículos actúa únicamente como espacio de publicación. No interviene en las negociaciones, no es parte del contrato ni asume responsabilidad por acuerdos, pagos, condiciones de venta o incumplimientos que surjan entre quien publica y quien consulta. Las partes resuelven directamente entre ellas.</p>
 
-        <label class="foto-tarjeta">
-          <div class="foto-nombre">📷 Interior 1
-            <input type="file" class="foto-input-oculto" id="foto6" accept="image/*" capture="environment" onchange="verFoto(6, this)">
-          </div>
-          <div class="foto-mini">
-            <img id="img6" class="foto-mini-img">
-            <span id="sin6" class="foto-sin">Sin foto</span>
-          </div>
-        </label>
-
-        <label class="foto-tarjeta">
-          <div class="foto-nombre">📷 Interior 2
-            <input type="file" class="foto-input-oculto" id="foto7" accept="image/*" capture="environment" onchange="verFoto(7, this)">
-          </div>
-          <div class="foto-mini">
-            <img id="img7" class="foto-mini-img">
-            <span id="sin7" class="foto-sin">Sin foto</span>
-          </div>
-        </label>
-
-        <label class="foto-tarjeta">
-          <div class="foto-nombre">📷 Interior 3
-            <input type="file" class="foto-input-oculto" id="foto8" accept="image/*" capture="environment" onchange="verFoto(8, this)">
-          </div>
-          <div class="foto-mini">
-            <img id="img8" class="foto-mini-img">
-            <span id="sin8" class="foto-sin">Sin foto</span>
-          </div>
-        </label>
-
-        <label class="foto-tarjeta">
-          <div class="foto-nombre">📷 Interior 4
-            <input type="file" class="foto-input-oculto" id="foto9" accept="image/*" capture="environment" onchange="verFoto(9, this)">
-          </div>
-          <div class="foto-mini">
-            <img id="img9" class="foto-mini-img">
-            <span id="sin9" class="foto-sin">Sin foto</span>
-          </div>
-        </label>
-
-        <label class="foto-tarjeta">
-          <div class="foto-nombre">📷 Ruedas
-            <input type="file" class="foto-input-oculto" id="foto10" accept="image/*" capture="environment" onchange="verFoto(10, this)">
-          </div>
-          <div class="foto-mini">
-            <img id="img10" class="foto-mini-img">
-            <span id="sin10" class="foto-sin">Sin foto</span>
-          </div>
-        </label>
-
-        <label class="foto-tarjeta">
-          <div class="foto-nombre">📷 Extras 1
-            <input type="file" class="foto-input-oculto" id="foto11" accept="image/*" capture="environment" onchange="verFoto(11, this)">
-          </div>
-          <div class="foto-mini">
-            <img id="img11" class="foto-mini-img">
-            <span id="sin11" class="foto-sin">Sin foto</span>
-          </div>
-        </label>
-
-        <label class="foto-tarjeta">
-          <div class="foto-nombre">📷 Extras 2
-            <input type="file" class="foto-input-oculto" id="foto12" accept="image/*" capture="environment" onchange="verFoto(12, this)">
-          </div>
-          <div class="foto-mini">
-            <img id="img12" class="foto-mini-img">
-            <span id="sin12" class="foto-sin">Sin foto</span>
-          </div>
+        <p style="margin-top:15px;"><strong>5. Modificación y retiro del aviso</strong></p>
+        <p>• Podrás actualizar tus publicaciones ingresando tu código de seguridad. Sin el código no podrás modificar ni retirar tus avisos.</p>
+        <p>• Una vez concretada la venta de un vehículo, te comprometés a retirar o dar aviso para dar de baja esa publicación. Mantené tus datos actualizados para evitar consultas sobre vehículos ya vendidos.</p>
+      </div>
+      
+      <div class="caja-aceptar">
+        <input type="checkbox" id="aceptoTerminos" onchange="verificarAceptacion()">
+        <label for="aceptoTerminos">
+          <strong>He leído y acepto los Términos y Condiciones.</strong><br>
+          Sin aceptar esto no podrás publicar tu vehículo.
         </label>
       </div>
 
-      <button type="submit" class="boton" id="btnGuardar">💾 Guardar Vehículo</button>
+      <button type="submit" class="boton" id="btnGuardar" disabled>
+        💾 Guardar Vehículo
+      </button>
       <div id="mensaje" class="mensaje"></div>
     </form>
 
@@ -509,148 +446,122 @@
 
     let sbClient = null;
     async function getSupabase() {
-      if (!sbClient) {
-        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { timeout: 30000 });
-      }
+      if (!sbClient) sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {timeout:30000});
       return sbClient;
     }
 
-    // === OJITO VER / OCULTAR CÓDIGO ===
-    function toggleVerCodigo() {
+    function alternarVista() {
       const input = document.getElementById('codigo_seguridad');
-      const icono = document.getElementById('iconoOjo');
-      if (input.type === 'password') {
-        input.type = 'text';
-        icono.textContent = '🙈';
+      const boton = document.getElementById('botonOjo');
+      input.type = input.type === 'password' ? 'text' : 'password';
+      boton.textContent = input.type === 'password' ? '👁️' : '🙈';
+    }
+
+    async function validarCodigo() {
+      const c = document.getElementById('codigo_seguridad').value;
+      const ok = {
+        long: c.length === 6,
+        may: /[A-Z]/.test(c),
+        min: /[a-z]/.test(c),
+        num: /[0-9]/.test(c),
+        esp: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(c)
+      };
+
+      const mensajeCod = document.getElementById('mensaje-codigo');
+      if (Object.values(ok).every(v => v)) {
+        mensajeCod.style.display = 'none';
       } else {
-        input.type = 'password';
-        icono.textContent = '👁️';
+        mensajeCod.style.display = 'none';
+      }
+
+      const ids = {
+        long:'req-long', may:'req-mayus', min:'req-minus', 
+        num:'req-num', esp:'req-esp'
+      };
+      for (const [k, id] of Object.entries(ids)) {
+        const el = document.getElementById(id);
+        el.className = 'req' + (ok[k] ? ' ok' : '');
+        el.innerHTML = (ok[k] ? '✅' : '❌') + ' ' + el.textContent.slice(2);
       }
     }
 
-    // === SOLO NÚMEROS ===
+    function mostrarOcultar() {
+      const c = document.getElementById('contenidoTerminos');
+      const b = document.getElementById('btnTerminos');
+      c.classList.toggle('visible');
+      b.textContent = c.classList.contains('visible') 
+        ? "[−] TÉRMINOS Y CONDICIONES — Cerrar" 
+        : "[+] TÉRMINOS Y CONDICIONES — Tocar para leer";
+    }
+
+    function verificarAceptacion() {
+      const acepto = document.getElementById('aceptoTerminos').checked;
+      document.getElementById('btnGuardar').disabled = !acepto;
+      document.getElementById('btnGuardar').classList.toggle('habilitado', acepto);
+    }
+
     function soloNumeros(campo) {
       campo.value = campo.value.replace(/[^0-9]/g, '');
     }
 
-    // === LIMITAR AÑO A 4 DÍGITOS ===
-    function limitarAnio(campo) {
-      soloNumeros(campo);
-      if (campo.value.length > 4) {
-        campo.value = campo.value.slice(0, 4);
-      }
-    }
-
-    // === VALIDACIÓN DEL CÓDIGO ===
-    function validarCodigo() {
-      const codigo = document.getElementById('codigo_seguridad').value;
-      const tieneLongitud = codigo.length === 6;
-      const tieneMayus = /[A-Z]/.test(codigo);
-      const tieneMinus = /[a-z]/.test(codigo);
-      const tieneNum = /[0-9]/.test(codigo);
-      const tieneEspecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(codigo);
-
-      const reqLong = document.getElementById('req-long');
-      const reqMayus = document.getElementById('req-mayus');
-      const reqMinus = document.getElementById('req-minus');
-      const reqNum = document.getElementById('req-num');
-      const reqEsp = document.getElementById('req-esp');
-
-      reqLong.className = 'req' + (tieneLongitud ? ' ok' : '');
-      reqLong.innerHTML = (tieneLongitud ? '✅' : '❌') + ' 6 caracteres';
-      
-      reqMayus.className = 'req' + (tieneMayus ? ' ok' : '');
-      reqMayus.innerHTML = (tieneMayus ? '✅' : '❌') + ' 1 letra mayúscula';
-      
-      reqMinus.className = 'req' + (tieneMinus ? ' ok' : '');
-      reqMinus.innerHTML = (tieneMinus ? '✅' : '❌') + ' 1 letra minúscula';
-      
-      reqNum.className = 'req' + (tieneNum ? ' ok' : '');
-      reqNum.innerHTML = (tieneNum ? '✅' : '❌') + ' 1 número';
-      
-      reqEsp.className = 'req' + (tieneEspecial ? ' ok' : '');
-      reqEsp.innerHTML = (tieneEspecial ? '✅' : '❌') + ' 1 carácter especial (@ # $ % ! & * etc.)';
-    }
-
-    const selectCiudad = document.getElementById('ciudad');
-    const campoLibre = document.getElementById('campo_ciudad_libre');
-    selectCiudad.addEventListener('change', () => {
-      campoLibre.style.display = selectCiudad.value === 'Otra ciudad' ? 'block' : 'none';
+    document.getElementById('ciudad').addEventListener('change', function() {
+      document.getElementById('campo_ciudad_libre').style.display = 
+        this.value === 'Otra ciudad' ? 'block' : 'none';
     });
 
-    function verFoto(numero, input) {
-      const img = document.getElementById(`img${numero}`);
-      const sin = document.getElementById(`sin${numero}`);
-      if (input.files && input.files[0]) {
-        const lector = new FileReader();
-        lector.onload = e => {
-          img.src = e.target.result;
-          img.style.display = 'block';
-          sin.style.display = 'none';
-        };
-        lector.readAsDataURL(input.files[0]);
-      }
+    function verFoto(n, input) {
+      if (!input.files[0]) return;
+      const r = new FileReader();
+      r.onload = e => {
+        document.getElementById(`img${n}`).src = e.target.result;
+        document.getElementById(`img${n}`).style.display = 'block';
+        document.getElementById(`sin${n}`).style.display = 'none';
+      };
+      r.readAsDataURL(input.files[0]);
     }
 
-    function reducirFoto(archivo, maxAncho = 900, calidad = 0.75) {
-      return new Promise(resolver => {
-        const lector = new FileReader();
-        lector.onload = e => {
+    async function reducirFoto(archivo) {
+      return new Promise(res => {
+        const r = new FileReader();
+        r.onload = e => {
           const img = new Image();
           img.onload = () => {
-            const lienzo = document.createElement('canvas');
-            let ancho = img.width, alto = img.height;
-            if (ancho > maxAncho) { alto = alto * (maxAncho / ancho); ancho = maxAncho; }
-            lienzo.width = ancho; lienzo.height = alto;
-            const ctx = lienzo.getContext('2d');
-            ctx.drawImage(img, 0, 0, ancho, alto);
-            resolver(lienzo.toDataURL('image/jpeg', calidad));
+            const c = document.createElement('canvas');
+            let w = img.width, h = img.height;
+            if (w > 900) { h = h * 900 / w; w = 900; }
+            c.width = w; c.height = h;
+            c.getContext('2d').drawImage(img, 0, 0, w, h);
+            res(c.toDataURL('image/jpeg', 0.75));
           };
           img.src = e.target.result;
         };
-        lector.readAsDataURL(archivo);
+        r.readAsDataURL(archivo);
       });
     }
 
-    async function leerArchivoComoTexto(archivo) {
-      if (!archivo) return null;
-      return await reducirFoto(archivo);
-    }
-
-    async function contarCargar() {
-      const sb = await getSupabase();
-      try {
-        const { data } = await sb.from('visitas').select('cantidad').eq('pagina', 'cargar');
-        if (data && data.length > 0) {
-          await sb.from('visitas').update({ cantidad: data[0].cantidad + 1 }).eq('pagina', 'cargar');
-        }
-      } catch (err) {
-        console.log('⚠️ Error contador:', err.message);
-      }
-    }
-    getSupabase().then(() => contarCargar());
-
     document.getElementById('formAuto').addEventListener('submit', async e => {
       e.preventDefault();
-      const btn = document.getElementById('btnGuardar');
-      const mensaje = document.getElementById('mensaje');
       
-      const codigo = document.getElementById('codigo_seguridad').value;
-      const valido = (
-        codigo.length === 6 &&
-        /[A-Z]/.test(codigo) &&
-        /[a-z]/.test(codigo) &&
-        /[0-9]/.test(codigo) &&
-        /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(codigo)
-      );
-      
-      if (!valido) {
-        mensaje.textContent = "❌ Completá correctamente el código de seguridad";
-        mensaje.className = "mensaje error";
-        mensaje.style.display = "block";
+      if (!document.getElementById('aceptoTerminos').checked) {
+        alert('Tenés que aceptar los Términos y Condiciones');
         return;
       }
+
+      const codigo = document.getElementById('codigo_seguridad').value;
+      const codValido = codigo.length === 6 &&
+        /[A-Z]/.test(codigo) && /[a-z]/.test(codigo) &&
+        /[0-9]/.test(codigo) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(codigo);
       
+      if (!codValido) {
+        const m = document.getElementById('mensaje');
+        m.textContent = "❌ Completá bien el código de seguridad";
+        m.className = "mensaje error";
+        m.style.display = "block";
+        return;
+      }
+
+      const btn = document.getElementById('btnGuardar');
+      const mensaje = document.getElementById('mensaje');
       btn.disabled = true;
       btn.textContent = "Guardando...";
       mensaje.style.display = "none";
@@ -658,15 +569,13 @@
       try {
         const supabase = await getSupabase();
         const fotos = {};
-        for (let i = 1; i <= 12; i++) {
-          const input = document.getElementById(`foto${i}`);
-          fotos[`foto${i}`] = await leerArchivoComoTexto(input.files[0]);
+        for (let i=1; i<=12; i++) {
+          const f = document.getElementById(`foto${i}`).files[0];
+          fotos[`foto${i}`] = f ? await reducirFoto(f) : null;
         }
 
-        let ciudadValor = selectCiudad.value;
-        if (ciudadValor === 'Otra ciudad') {
-          ciudadValor = document.getElementById('ciudad_libre').value.trim();
-        }
+        let ciudad = document.getElementById('ciudad').value;
+        if (ciudad === 'Otra ciudad') ciudad = document.getElementById('ciudad_libre').value.trim();
 
         const datos = {
           codigo_seguridad: codigo,
@@ -681,7 +590,7 @@
           precio: document.getElementById('precio').value.trim(),
           dueno: document.getElementById('dueno').value.trim(),
           direccion: document.getElementById('direccion').value.trim(),
-          ciudad: ciudadValor,
+          ciudad: ciudad,
           telefono: document.getElementById('telefono').value.trim(),
           permuta: document.getElementById('permuta').checked,
           contado: document.getElementById('contado').checked,
@@ -693,19 +602,19 @@
         const { error } = await supabase.from('autos').insert([datos]);
         if (error) throw error;
 
-        mensaje.textContent = "✅ Vehículo guardado correctamente";
+        mensaje.textContent = "✅ Vehículo guardado correctamente. Podés usar tu código para ingresar otro.";
         mensaje.className = "mensaje exito";
         mensaje.style.display = "block";
         document.getElementById('formAuto').reset();
-        campoLibre.style.display = 'none';
         
-        for (let i = 1; i <= 12; i++) {
+        verificarAceptacion();
+        document.getElementById('contenidoTerminos').classList.remove('visible');
+        document.getElementById('btnTerminos').textContent = "[+] TÉRMINOS Y CONDICIONES — Tocar para leer";
+        document.getElementById('campo_ciudad_libre').style.display = 'none';
+        for (let i=1; i<=12; i++) {
           document.getElementById(`img${i}`).style.display = 'none';
           document.getElementById(`sin${i}`).style.display = 'block';
         }
-        validarCodigo();
-        document.getElementById('codigo_seguridad').type = 'password';
-        document.getElementById('iconoOjo').textContent = '👁️';
         
       } catch (err) {
         mensaje.textContent = "❌ Error: " + err.message;
@@ -714,6 +623,10 @@
       } finally {
         btn.disabled = false;
         btn.textContent = "💾 Guardar Vehículo";
+        if (!document.getElementById('aceptoTerminos').checked) {
+          btn.disabled = true;
+          btn.classList.remove('habilitado');
+        }
       }
     });
   </script>
