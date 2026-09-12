@@ -9,7 +9,7 @@
   <style>
     * {box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif;}
     body {
-      background: #87c5e8; /* Celeste más suave 💙 */
+      background: #87c5e8;
       padding: 15px;
       max-width: 900px;
       margin: 0 auto;
@@ -17,17 +17,84 @@
     h1 {
       text-align: center;
       color: #1565C0;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       font-size: 22px;
     }
     
+    /* BOTÓN SIEMPRE VISIBLE — ARRIBA DE TODO */
+    .boton-favorito {
+      display: block !important;
+      width: 100%;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 0 0 18px 0;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      transition: all 0.2s;
+    }
+    .boton-favorito:hover {transform: translateY(-2px);}
+
+    /* CAJA DEL CÓDIGO */
+    .caja-codigo {
+      background: #f0f7ff;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 0 0 18px 0;
+      border: 2px solid #bfdbfe;
+      display: none;
+    }
+    .caja-codigo.mostrar {display: block;}
+    .caja-codigo h3 {
+      color: #1e40af;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    .input-codigo {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      text-align: center;
+      letter-spacing: 4px;
+      border: 2px solid #93c5fd;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      font-weight: bold;
+    }
+    .boton-guardar {
+      background: #16a34a;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 8px;
+    }
+    .boton-cancelar {
+      background: #e5e7eb;
+      color: #4b5563;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      width: 100%;
+    }
+
     .navegacion {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin: 15px 0 20px;
       padding: 12px;
-      background: #fffaf0; /* Cremita suave 🌸 */
+      background: #fffaf0;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(21, 101, 192, 0.12);
     }
@@ -50,7 +117,7 @@
     .contador {font-size: 16px; font-weight: bold; color: #2d3748;}
 
     .tarjeta {
-      background: #fffaf0; /* Cremita suave 🌸 */
+      background: #fffaf0;
       padding: 25px;
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(21, 101, 192, 0.12);
@@ -172,6 +239,19 @@
 
   <h1>📋 Vehículos Cargados</h1>
 
+  <!-- BOTÓN SIEMPRE VISIBLE — ARRIBA DE TODO 💙 -->
+  <button class="boton-favorito" onclick="mostrarCajaCodigo()">
+    💙 AGREGAR A MIS VEHÍCULOS
+  </button>
+
+  <!-- CAJA PARA INGRESAR CÓDIGO -->
+  <div id="cajaCodigo" class="caja-codigo">
+    <h3>🔐 Escribí tu código</h3>
+    <input type="text" id="codigoIngresado" class="input-codigo" placeholder="Tu código..." maxlength="6">
+    <button class="boton-guardar" onclick="guardarConCodigo()">✅ Guardar</button>
+    <button class="boton-cancelar" onclick="ocultarCajaCodigo()">❌ Cancelar</button>
+  </div>
+
   <div class="navegacion">
     <button id="btnAnterior">◀ Anterior</button>
     <span id="contador" class="contador"></span>
@@ -198,6 +278,7 @@
     let totalAutos = 0;
     let indiceActual = 0;
     let idsOrdenados = [];
+    let idVehiculoActual = null;
 
     async function getSupabase() {
       if (!sbClient) {
@@ -206,7 +287,6 @@
       return sbClient;
     }
 
-    // === CONTADOR DE VISITAS — VER ===
     async function contarVer() {
       const sb = await getSupabase();
       try {
@@ -214,11 +294,87 @@
         if (data && data.length > 0) {
           const nuevaCantidad = data[0].cantidad + 1;
           await sb.from('visitas').update({ cantidad: nuevaCantidad }).eq('pagina', 'ver');
-          console.log('✅ Ver → visitas:', nuevaCantidad);
         }
       } catch (err) {
         console.log('⚠️ Error contador:', err.message);
       }
+    }
+
+    // MOSTRAR Y OCULTAR CAJA DE CÓDIGO
+    function mostrarCajaCodigo() {
+      document.getElementById('cajaCodigo').classList.add('mostrar');
+      document.getElementById('codigoIngresado').value = '';
+      document.getElementById('codigoIngresado').focus();
+    }
+
+    function ocultarCajaCodigo() {
+      document.getElementById('cajaCodigo').classList.remove('mostrar');
+    }
+
+    // GUARDAR CON CÓDIGO — SIN COMPARAR, DIRECTO ✅
+    async function guardarConCodigo() {
+      const codigo = document.getElementById('codigoIngresado').value.trim();
+      
+      if (!codigo) {
+        alert('⚠️ Escribí tu código');
+        return;
+      }
+      if (!idVehiculoActual) {
+        alert('⚠️ No hay vehículo para guardar');
+        return;
+      }
+
+      const sb = await getSupabase();
+
+      // Obtenemos el contador actual del vehículo
+      const { data: vehiculo, error: errorBusqueda } = await sb
+        .from('autos')
+        .select('contador')
+        .eq('id', idVehiculoActual)
+        .single();
+
+      if (errorBusqueda || !vehiculo) {
+        alert('❌ No se encuentra el vehículo');
+        return;
+      }
+
+      const contadorActual = vehiculo.contador || 0;
+
+      if (contadorActual >= 10) {
+        alert('⛔ Este vehículo ya llegó al límite de 10 veces.');
+        return;
+      }
+
+      const nuevoContador = contadorActual + 1;
+
+      // Guardamos en mis_vehiculos con el código ingresado
+      const { error: errorGuardar } = await sb.from('mis_vehiculos').insert({
+        id_auto: idVehiculoActual,
+        codigo: codigo
+      });
+
+      if (errorGuardar) {
+        if (errorGuardar.code === '23505') {
+          alert('ℹ️ Este vehículo ya está en tus favoritos');
+        } else {
+          alert('❌ Error al guardar: ' + errorGuardar.message);
+        }
+        return;
+      }
+
+      // Actualizamos el contador
+      const { error: errorContador } = await sb
+        .from('autos')
+        .update({ contador: nuevoContador })
+        .eq('id', idVehiculoActual);
+
+      if (errorContador) {
+        alert('⚠️ Se guardó pero no se pudo actualizar el contador');
+        return;
+      }
+
+      alert(`✅ Guardado correctamente! Llevás ${nuevoContador} de 10 veces 🎉`);
+      ocultarCajaCodigo();
     }
 
     async function contarYListar() {
@@ -255,6 +411,8 @@
         caja.innerHTML = `<div class="vacio">❌ Error al cargar el vehículo</div>`;
         return;
       }
+
+      idVehiculoActual = auto.id; // Guardamos el ID del auto que se está viendo
 
       let fotosHtml = '';
       for (let i = 1; i <= 12; i++) {
@@ -324,7 +482,6 @@
     }
 
     async function iniciar() {
-      // Contamos la visita apenas entra
       getSupabase().then(() => contarVer());
       
       const hayDatos = await contarYListar();
