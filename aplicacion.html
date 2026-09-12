@@ -83,9 +83,9 @@
 
   <div class="caja">
     <h1>📱 Instalar la Aplicación</h1>
-    <p class="mensaje" id="texto-estado">
-      Tocá el botón de abajo para agregar la aplicación a tu pantalla de inicio.<br>
-      Así la tendrás siempre a mano, rápida y sin barras.
+    <p class="mensaje">
+      Tocá el botón de abajo para agregar la aplicación<br>
+      a tu pantalla de inicio y usarla como app.
     </p>
 
     <button id="boton-instalar" class="boton-instalar">
@@ -93,44 +93,39 @@
     </button>
 
     <p id="ya-instalada" class="mensaje oculto">
-      ✅ La aplicación ya está instalada en tu celular.<br>
-      Buscá el ícono en tu pantalla de inicio.
+      ✅ ¡Listo! La aplicación ya está en tu pantalla.
     </p>
 
     <a href="index.html" class="volver">← Volver al inicio</a>
   </div>
 
 <script>
-  let eventoInstalacionPendiente;
+  let eventoPendiente = null;
 
-  // Guardamos el evento cuando el navegador está listo para instalar
+  // Cuando el navegador permita instalar, guardamos la oportunidad
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
-    eventoInstalacionPendiente = e;
-    // El botón ya está visible, listo para tocar
+    eventoPendiente = e;
   });
 
-  // Cuando tocan el botón → se abre la ventanita de instalar
+  // Al tocar el botón → se abre la ventanita de instalar
   document.getElementById('boton-instalar').addEventListener('click', async () => {
-    if (!eventoInstalacionPendiente) {
-      // Si no hay evento, mostramos cómo hacerlo manual
-      alert('🔧 Tocá los tres puntitos arriba → "Agregar a pantalla de inicio"');
+    if (!eventoPendiente) {
+      alert('✅ La aplicación ya está disponible. Buscá el ícono en tu pantalla de inicio.');
       return;
     }
 
-    // Abrimos la ventana de instalación
-    const resultado = await eventoInstalacionPendiente.prompt();
+    const resultado = await eventoPendiente.prompt();
     
     if (resultado.outcome === 'accepted') {
-      // Aceptó → ocultamos el botón y mostramos mensaje
       document.getElementById('boton-instalar').classList.add('oculto');
       document.getElementById('ya-instalada').classList.remove('oculto');
     }
     
-    eventoInstalacionPendiente = null;
+    eventoPendiente = null;
   });
 
-  // Si ya está instalada → ocultamos el botón
+  // Cuando ya esté instalada → avisamos
   window.addEventListener('appinstalled', () => {
     document.getElementById('boton-instalar').classList.add('oculto');
     document.getElementById('ya-instalada').classList.remove('oculto');
