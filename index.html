@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Vehículos en Venta">
+  <meta name="theme-color" content="#1565C0">
+  <title>Vehículos en Venta</title>
+  <link rel="manifest" href="app.webmanifest">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #dceaf5 0%, #cfe0ee 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* --- BOTONES ARRIBA A LA DERECHA --- */
+    .barra-superior {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+    .boton-sesion {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-left: 10px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .boton-registrar {
+      background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+      color: #fff;
+      border: none;
+    }
+    .boton-registrar:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(49,130,206,0.2);
+    }
+    .boton-entrar {
+      background: #fff;
+      color: #3182ce;
+      border: 2px solid #3182ce;
+    }
+    .boton-entrar:hover {
+      background: #ebf4fb;
+      transform: translateY(-1px);
+    }
+
+    .caja-principal {
+      background: linear-gradient(135deg, #f7f3eb 0%, #eee9dd 100%);
+      border-radius: 28px;
+      padding: 55px 40px;
+      width: 100%;
+      max-width: 540px;
+      margin: 0 auto;
+      box-shadow: 0 10px 30px rgba(44, 82, 130, 0.08);
+      text-align: center;
+      animation: entradaSuave 0.7s ease-out;
+      border: 1px solid #e2d9c8;
+    }
+
+    @keyframes entradaSuave {
+      from { opacity: 0; transform: translateY(25px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      color: #2c5282;
+      font-size: 34px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .subtitulo {
+      color: #5a6872;
+      font-size: 17px;
+      margin-bottom: 35px;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .boton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 700;
+      padding: 20px 26px;
+      border-radius: 16px;
+      margin-bottom: 16px;
+      transition: all 0.35s ease;
+      border: none;
+      box-shadow: 0 6px 16px rgba(49, 130, 206, 0.18);
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .boton:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #4a90d9 0%, #3182ce 100%);
+      box-shadow: 0 8px 20px rgba(49, 130, 206, 0.25);
+    }
+
+    .enlace-olvidada {
+      display: inline-block;
+      margin-top: 25px;
+      color: #3182ce;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .enlace-olvidada:hover {
+      color: #2b6cb0;
+      text-decoration: underline;
+    }
+
+    .pie-pagina {
+      margin-top: 30px;
+      font-size: 13px;
+      color: #718096;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BOTONES ARRIBA A LA DERECHA -->
+  <div class="barra-superior">
+    <a href="registrarse.html" class="boton-sesion boton-registrar">✨ Registrarse</a>
+    <a href="iniciar-sesion.html" class="boton-sesion boton-entrar">🔐 Iniciar sesión</a>
+  </div>
+
+  <div class="caja-principal">
+    <h1>🚗 Vehículos en Venta</h1>
+    <p class="subtitulo">Publicá • Buscá • Vendé con total confianza<br>
+    La plataforma de vehículos de Rosario y la región</p>
+
+    <a href="cargar.html" class="boton">
+      📄 <span>Ingresar Vehículo</span>
+    </a>
+    <a href="ver.html" class="boton">
+      📋 <span>Ver Vehículos — Catálogo</span>
+    </a>
+    <a href="buscar.html" class="boton">
+      🔍 <span>Buscar Vehículo</span>
+    </a>
+    <a href="mis-vehiculos.html" class="boton">
+      ❤️ <span>Mis Vehículos</span>
+    </a>
+
+    <a href="recuperar-contraseña.html" class="enlace-olvidada">¿Olvidaste tu contraseña?</a>
+
+    <p class="pie-pagina">Hecho para Rosario y toda la región.</p>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://cgwdahvstitjksphucqk.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr';
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  </script>
+
+<!-- === CONTADOR DE VISITAS === -->
+<script>
+async function contarVisitaPrincipal() {
+  try {
+    const { data, error } = await supabaseClient
+      .from('visitas')
+      .select('cantidad')
+      .eq('pagina', 'principal');
+
+    if (error) return;
+
+    if (data.length === 0) {
+      await supabaseClient
+        .from('visitas')
+        .insert([{ pagina: 'principal', cantidad: 1 }]);
+    } else {
+      await supabaseClient
+        .from('visitas')
+        .update({ cantidad: data[0].cantidad + 1 })
+        .eq('pagina', 'principal');
+    }
+  } catch (err) {
+    console.log('Error:', err.message);
+  }
+}
+contarVisitaPrincipal();
+</script>
+
+</body>
+</html>

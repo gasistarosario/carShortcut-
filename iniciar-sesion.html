@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión - Vehículos en Venta</title>
+  <link rel="manifest" href="app.webmanifest">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #dceaf5 0%, #cfe0ee 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .caja {
+      background: linear-gradient(135deg, #f7f3eb 0%, #eee9dd 100%);
+      border-radius: 28px;
+      padding: 45px 35px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 10px 30px rgba(44,82,130,0.08);
+      border: 1px solid #e2d9c8;
+      animation: entradaSuave 0.7s ease-out;
+    }
+    @keyframes entradaSuave {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 {
+      color: #2c5282;
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .subtitulo {
+      color: #5a6872;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 15px;
+    }
+    .campo {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #4a5568;
+      font-size: 14px;
+    }
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #c5d6e8;
+      border-radius: 12px;
+      font-size: 16px;
+      background: #fff;
+      transition: all 0.2s ease;
+    }
+    input:focus {
+      outline: none;
+      border-color: #3182ce;
+      box-shadow: 0 0 0 3px rgba(49,130,206,0.12);
+    }
+    .boton {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(49,130,206,0.15);
+    }
+    .boton:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #4a90d9 0%, #3182ce 100%);
+    }
+    .boton:disabled {
+      background: #a0aec0;
+      cursor: not-allowed;
+      transform: none;
+      opacity: 0.7;
+    }
+    .mensaje {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 12px;
+      display: none;
+      font-weight: 600;
+      font-size: 14px;
+      text-align: center;
+    }
+    .exito {
+      background: #f0fff4;
+      border: 2px solid #9ae6b4;
+      color: #276749;
+    }
+    .error {
+      background: #fff5f5;
+      border: 2px solid #feb2b2;
+      color: #c53030;
+    }
+    .enlace {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #3182ce;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .enlace:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="caja">
+    <h1>🔐 Iniciar Sesión</h1>
+    <p class="subtitulo">Ingresá tus datos para entrar</p>
+
+    <form id="formLogin">
+      <div class="campo">
+        <label for="correo">Correo electrónico</label>
+        <input type="email" id="correo" required placeholder="tu@correo.com">
+      </div>
+
+      <div class="campo">
+        <label for="contrasena">Contraseña</label>
+        <input type="password" id="contrasena" required placeholder="Tu contraseña">
+      </div>
+
+      <button type="submit" id="btnEntrar" class="boton">Entrar ✅</button>
+    </form>
+
+    <div id="mensaje" class="mensaje"></div>
+
+    <a href="recuperar-contraseña.html" class="enlace">¿Olvidaste tu contraseña?</a>
+    <a href="registrarse.html" class="enlace">¿No tenés cuenta? Creá una</a>
+    <a href="index.html" class="enlace">← Volver al inicio</a>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://cgwdahvstitjksphucqk.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr';
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const formLogin = document.getElementById('formLogin');
+    const btnEntrar = document.getElementById('btnEntrar');
+    const mensaje = document.getElementById('mensaje');
+
+    formLogin.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btnEntrar.disabled = true;
+      mensaje.style.display = 'none';
+
+      const correo = document.getElementById('correo').value.trim();
+      const contrasena = document.getElementById('contrasena').value;
+
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: correo,
+          password: contrasena
+        });
+
+        if (error) throw error;
+
+        // Éxito — guardamos el ID del usuario
+        localStorage.setItem('usuario_id', data.user.id);
+
+        mensaje.className = 'mensaje exito';
+        mensaje.innerHTML = '✅ ¡Bienvenido! Redirigiendo...';
+        mensaje.style.display = 'block';
+
+        // Ir a la página principal ya conectado
+        setTimeout(() => {
+          window.location.href = 'cargar.html';
+        }, 1200);
+
+      } catch (err) {
+        mensaje.className = 'mensaje error';
+        mensaje.innerHTML = '❌ ' + err.message;
+        mensaje.style.display = 'block';
+      } finally {
+        btnEntrar.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+</html>

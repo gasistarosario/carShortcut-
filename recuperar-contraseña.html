@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recuperar Contraseña — Vehículos en Venta</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #dceaf5 0%, #cfe0ee 100%);
+      padding: 20px;
+      max-width: 500px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    h1 {
+      text-align: center;
+      color: #2c5282;
+      margin-bottom: 10px;
+      font-size: 24px;
+      font-weight: 800;
+    }
+    .subtitulo {
+      text-align: center;
+      color: #718096;
+      margin-bottom: 30px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .form-container {
+      background: #fff;
+      padding: 30px 25px;
+      border-radius: 18px;
+      box-shadow: 0 6px 20px rgba(44,82,130,0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #4a5568;
+      font-size: 15px;
+    }
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #c5d6e8;
+      border-radius: 12px;
+      font-size: 16px;
+      background: #fff;
+      color: #4a5568;
+      transition: all 0.25s ease;
+      margin-bottom: 20px;
+    }
+    input:focus {
+      outline: none;
+      border-color: #3182ce;
+      box-shadow: 0 0 0 4px rgba(49,130,206,0.12);
+    }
+    .boton {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(49,130,206,0.15);
+    }
+    .boton:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(49,130,206,0.2);
+    }
+    .boton:disabled {
+      background: #a0aec0;
+      cursor: not-allowed;
+      transform: none;
+      opacity: 0.7;
+    }
+    .mensaje {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 1.5;
+      display: none;
+    }
+    .exito {
+      background: #f0f7ee;
+      color: #276749;
+      border: 1px solid #b8d8b9;
+    }
+    .error {
+      background: #fef2f2;
+      color: #c53030;
+      border: 1px solid #feb2b2;
+    }
+    .volver {
+      display: block;
+      text-align: center;
+      margin-top: 25px;
+      color: #3182ce;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 12px;
+      transition: all 0.2s ease;
+    }
+    .volver:hover {
+      color: #2b6cb0;
+      text-decoration: underline;
+    }
+    .info {
+      background: #ebf8ff;
+      padding: 14px;
+      border-radius: 10px;
+      margin-bottom: 22px;
+      color: #2c5282;
+      font-size: 14px;
+      border-left: 4px solid #3182ce;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔑 Recuperar Contraseña</h1>
+  <p class="subtitulo">Te enviaremos un enlace para crear una contraseña nueva</p>
+
+  <div class="form-container">
+    <div class="info">
+      ✍️ Escribí el correo con el que te registraste y te mandamos el enlace para recuperar tu acceso.
+    </div>
+
+    <form id="formRecuperar">
+      <label for="correo">📧 Tu Correo Electrónico</label>
+      <input type="email" id="correo" placeholder="tu@email.com" required>
+
+      <button type="submit" class="boton" id="btnEnviar">📤 Enviar Enlace de Recuperación</button>
+      
+      <div id="mensaje" class="mensaje"></div>
+    </form>
+
+    <a href="iniciar-sesion.html" class="volver">← Volver a Iniciar Sesión</a>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { timeout: 30000 });
+
+    document.getElementById('formRecuperar').addEventListener('submit', async e => {
+      e.preventDefault();
+      
+      const correo = document.getElementById('correo').value.trim();
+      const btn = document.getElementById('btnEnviar');
+      const mensaje = document.getElementById('mensaje');
+
+      if (!correo) {
+        mensaje.textContent = "❌ Escribí tu correo electrónico";
+        mensaje.className = "mensaje error";
+        mensaje.style.display = "block";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Enviando...";
+      mensaje.style.display = "none";
+
+      try {
+        const { error } = await supabase.auth.resetPasswordForEmail(correo, {
+          redirectTo: window.location.origin + '/cambiar-contraseña.html'
+        });
+
+        if (error) throw error;
+
+        mensaje.textContent = "✅ ¡Enviado! Revisá tu correo (y la carpeta de Spam)";
+        mensaje.className = "mensaje exito";
+        mensaje.style.display = "block";
+        document.getElementById('formRecuperar').reset();
+        
+      } catch (err) {
+        mensaje.textContent = "❌ " + err.message;
+        mensaje.className = "mensaje error";
+        mensaje.style.display = "block";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "📤 Enviar Enlace de Recuperación";
+      }
+    });
+  </script>
+</body>
+</html>

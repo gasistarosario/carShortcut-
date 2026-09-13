@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💙 Mis Vehículos</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * {box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, 'Open Sans', sans-serif;}
+    body {
+      background: #87c5e8;
+      padding: 15px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ✅ BARRA DE SESIÓN */
+    .barra-superior {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid rgba(21, 101, 192, 0.15);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .titulo-pagina {
+      font-size: 18px;
+      font-weight: 800;
+      color: #1565C0;
+    }
+    .botones-sesion {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .btn-sesion {
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-iniciar {
+      background: #fff;
+      color: #1565C0;
+      border: 2px solid #1565C0;
+    }
+    .btn-iniciar:hover { background: #e3f2fd; }
+    .btn-registrar {
+      background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%);
+      color: #fff;
+    }
+    .btn-registrar:hover { transform: translateY(-1px); }
+    .btn-salir {
+      background: #fef2f2;
+      color: #c53030;
+      border: 2px solid #feb2b2;
+    }
+    .usuario-conectado {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .nombre-usuario {
+      font-weight: 600;
+      color: #276749;
+      font-size: 14px;
+    }
+    .olvido {
+      width: 100%;
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 15px;
+    }
+    .olvido a {
+      color: #4a5568;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .olvido a:hover {
+      color: #1565C0;
+      text-decoration: underline;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1565C0;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+
+    .aviso-limite {
+      background: #fffbeb;
+      border: 2px solid #fcd34d;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #92400e;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .navegacion {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 15px 0 20px;
+      padding: 12px;
+      background: #fffaf0;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(21, 101, 192, 0.12);
+    }
+    .navegacion button {
+      padding: 10px 20px;
+      font-size: 15px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background: #1976D2;
+      color: white;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .navegacion button:hover {
+      background: #1565C0;
+      transform: translateY(-1px);
+    }
+    .navegacion button:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .contador {font-size: 16px; font-weight: bold; color: #2d3748;}
+
+    .tarjeta {
+      background: #fffaf0;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(21, 101, 192, 0.12);
+      margin-bottom: 15px;
+      animation: aparecer 0.3s ease;
+    }
+    @keyframes aparecer {
+      from {opacity: 0; transform: translateY(6px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+    .titulo-auto {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1565C0;
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e3f2fd;
+    }
+    .fila {
+      margin-bottom: 10px;
+      color: #2d3748;
+      line-height: 1.6;
+    }
+    .fila strong {
+      color: #2c5282;
+      min-width: 130px;
+      display: inline-block;
+    }
+    .contador-badge {
+      display: inline-block;
+      background: #e3f2fd;
+      color: #1565C0;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-left: 10px;
+    }
+    .etiqueta {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+    .permuta {background: #fef5e7; color: #975a16;}
+    .contado {background: #e6fffa; color: #047857;}
+
+    .boton-eliminar {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 15px 0;
+      transition: all 0.2s;
+    }
+    .boton-eliminar:hover {
+      background: #dc2626;
+      transform: translateY(-1px);
+    }
+
+    .volver {
+      display: inline-block;
+      margin-top: 10px;
+      color: #1976D2;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 20px;
+      background: #fffaf0;
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+    .volver:hover {
+      background: #e3f2fd;
+      text-decoration: none;
+    }
+    .vacio {
+      text-align: center;
+      padding: 60px 20px;
+      color: #718096;
+      font-size: 17px;
+      background: #fffaf0;
+      border-radius: 16px;
+      margin-top: 20px;
+    }
+    .cargando {
+      text-align: center;
+      padding: 60px 20px;
+      color: #4a5568;
+      font-size: 17px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="barra-superior">
+    <div class="titulo-pagina">💙 Mis Vehículos</div>
+    <div id="zonaSesion" class="botones-sesion"></div>
+  </div>
+  <div id="zonaOlvido" class="olvido"></div>
+
+  <h1>Mis Vehículos Guardados</h1>
+
+  <div id="avisoLimite" class="aviso-limite" style="display: none;">
+    ⚠️ Tenés un máximo de 30 vehículos guardados
+  </div>
+
+  <div id="contenidoPrincipal">
+    <div class="cargando">🔄 Cargando...</div>
+  </div>
+
+  <a href="index.html" class="volver">← Volver a la página principal</a>
+
+  <script>
+    const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
+    const MAX_GUARDADOS = 30; // ✅ Límite de 30 vehículos
+
+    let sbClient = null;
+    let misAutos = [];
+    let misRegistros = [];
+    let indiceActual = 0;
+
+    async function getSupabase() {
+      if (!sbClient) {
+        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      }
+      return sbClient;
+    }
+
+    // ✅ GESTIONAR SESIÓN
+    function verificarSesion() {
+      const correo = localStorage.getItem('correo_usuario');
+      const nombre = localStorage.getItem('nombre_usuario');
+      const zonaSesion = document.getElementById('zonaSesion');
+      const zonaOlvido = document.getElementById('zonaOlvido');
+
+      if (correo && nombre) {
+        zonaSesion.innerHTML = `
+          <div class="usuario-conectado">
+            <span class="nombre-usuario">👤 ${nombre}</span>
+            <button onclick="cerrarSesion()" class="btn-sesion btn-salir">Cerrar sesión</button>
+          </div>`;
+        zonaOlvido.style.display = 'none';
+        return true;
+      } else {
+        zonaSesion.innerHTML = `
+          <a href="iniciar-sesion.html" class="btn-sesion btn-iniciar">Iniciar sesión</a>
+          <a href="registrarse.html" class="btn-sesion btn-registrarse">Crear usuario</a>`;
+        zonaOlvido.innerHTML = `<a href="recuperar-contraseña.html">Olvidé mi contraseña</a>`;
+        zonaOlvido.style.display = 'block';
+        document.getElementById('contenidoPrincipal').innerHTML = `
+          <div class="vacio">
+            🔐 Necesitás iniciar sesión para ver tus vehículos guardados<br><br>
+            <a href="iniciar-sesion.html" class="btn-sesion btn-iniciar" style="display:inline-block; text-decoration:none; margin-top:10px;">Iniciar sesión</a>
+          </div>`;
+        return false;
+      }
+    }
+
+    function cerrarSesion() {
+      localStorage.removeItem('correo_usuario');
+      localStorage.removeItem('nombre_usuario');
+      localStorage.removeItem('usuario_id');
+      window.location.reload();
+    }
+
+    async function obtenerUsuarioId(correo) {
+      if (!correo) return null;
+      const sb = await getSupabase();
+      const { data, error } = await sb
+        .from('usuarios')
+        .select('id')
+        .eq('correo', correo)
+        .single();
+      return error ? null : data?.id;
+    }
+
+    async function cargarMisVehiculos() {
+      const correo = localStorage.getItem('correo_usuario');
+      const usuario_id = await obtenerUsuarioId(correo);
+      
+      if (!usuario_id) {
+        document.getElementById('contenidoPrincipal').innerHTML = 
+          `<div class="vacio">❌ No se encontró tu cuenta</div>`;
+        return;
+      }
+
+      const sb = await getSupabase();
+
+      // ✅ Traer SOLO los vehículos de ESTE usuario
+      const { data: lista, error: errorLista } = await sb
+        .from('mis_vehiculos')
+        .select('*')
+        .eq('usuario_id', usuario_id)
+        .order('id', { ascending: false });
+
+      if (errorLista) {
+        document.getElementById('contenidoPrincipal').innerHTML = 
+          `<div class="vacio">❌ Error: ${errorLista.message}</div>`;
+        return;
+      }
+
+      if (!lista || lista.length === 0) {
+        document.getElementById('contenidoPrincipal').innerHTML = 
+          `<div class="vacio">📭 Todavía no tenés vehículos guardados<br><br>
+          Andá a "Buscar Vehículo" y agregá los que te interesen 💙</div>`;
+        return;
+      }
+
+      // ✅ Mostrar aviso si está cerca del límite
+      const aviso = document.getElementById('avisoLimite');
+      if (lista.length >= MAX_GUARDADOS) {
+        aviso.style.display = 'block';
+        aviso.textContent = `⚠️ Tenés ${lista.length} de ${MAX_GUARDADOS} — llegaste al límite máximo`;
+      } else if (lista.length >= MAX_GUARDADOS - 5) {
+        aviso.style.display = 'block';
+        aviso.textContent = `ℹ️ ${lista.length} de ${MAX_GUARDADOS} espacios disponibles`;
+      } else {
+        aviso.style.display = 'none';
+      }
+
+      misRegistros = lista;
+      const idsAutos = lista.map(item => item.vehiculo_id);
+
+      // ✅ Traer los datos completos de los autos
+      const { data: autosCompletos, error: errorAutos } = await sb
+        .from('autos')
+        .select('*')
+        .in('id', idsAutos);
+
+      if (errorAutos || !autosCompletos || autosCompletos.length === 0) {
+        document.getElementById('contenidoPrincipal').innerHTML = 
+          `<div class="vacio">❌ No se pudieron cargar los vehículos</div>`;
+        return;
+      }
+
+      misAutos = autosCompletos;
+      indiceActual = 0;
+      mostrarVista();
+    }
+
+    function mostrarVista() {
+      const caja = document.getElementById('contenidoPrincipal');
+      const total = misAutos.length;
+
+      if (total === 0) {
+        caja.innerHTML = `<div class="vacio">📭 Todavía no tenés vehículos guardados</div>`;
+        return;
+      }
+
+      mostrarUno(0);
+    }
+
+    function mostrarUno(pos) {
+      const caja = document.getElementById('contenidoPrincipal');
+      const total = misAutos.length;
+      const auto = misAutos[pos];
+
+      caja.innerHTML = `
+        <div class="navegacion">
+          <button id="btnAnterior">◀ Anterior</button>
+          <span id="contador" class="contador">${pos + 1} de ${total}</span>
+          <button id="btnSiguiente">Siguiente ▶</button>
+        </div>
+
+        <div class="tarjeta">
+          <div class="titulo-auto">
+            ${auto.marca || ''} ${auto.modelo || ''} — ${auto.anio || ''}
+            <span class="contador-badge">${auto.contador || 0}/10 usos</span>
+          </div>
+          <div class="fila"><strong>Versión:</strong> ${auto.version || '-'}</div>
+          <div class="fila"><strong>Ciudad:</strong> ${auto.ciudad || '-'}</div>
+          <div class="fila"><strong>Kilometraje:</strong> ${auto.kilometraje ? auto.kilometraje.toLocaleString('es-AR') + ' km' : 'No indicado'}</div>
+          <div class="fila"><strong>Combustible:</strong> ${auto.combustible || '-'}</div>
+          <div class="fila"><strong>Transmisión:</strong> ${auto.transmision || '-'}</div>
+          <div class="fila"><strong>Precio:</strong> ${auto.precio || '-'}</div>
+          <div class="fila"><strong>Dueño:</strong> ${auto.dueno || '-'}</div>
+          <div class="fila"><strong>Dirección:</strong> ${auto.direccion || '-'}</div>
+          <div class="fila"><strong>Teléfono:</strong> ${auto.telefono || '-'}</div>
+          
+          <div style="margin: 10px 0;">
+            ${auto.permuta ? '<span class="etiqueta permuta">✅ Acepta permuta</span>' : ''}
+            ${auto.contado ? '<span class="etiqueta contado">💵 Solo contado</span>' : ''}
+          </div>
+          
+          <div class="fila"><strong>Deuda:</strong> ${auto.deuda || 'Sin deudas'}</div>
+          <div class="fila"><strong>Descripción:</strong> ${auto.descripcion || '-'}</div>
+        </div>
+
+        <button class="boton-eliminar" onclick="eliminarVehiculo()">🗑️ Eliminar de Mi Lista</button>
+      `;
+
+      document.getElementById('btnAnterior').addEventListener('click', autoAnterior);
+      document.getElementById('btnSiguiente').addEventListener('click', autoSiguiente);
+    }
+
+    function autoAnterior() {
+      if (misAutos.length === 0) return;
+      indiceActual = indiceActual === 0 ? misAutos.length - 1 : indiceActual - 1;
+      mostrarUno(indiceActual);
+    }
+
+    function autoSiguiente() {
+      if (misAutos.length === 0) return;
+      indiceActual = indiceActual === misAutos.length - 1 ? 0 : indiceActual + 1;
+      mostrarUno(indiceActual);
+    }
+
+    async function eliminarVehiculo() {
+      if (!confirm('¿Estás seguro de sacar este vehículo de tu lista?')) {
+        return;
+      }
+
+      const correo = localStorage.getItem('correo_usuario');
+      const usuario_id = await obtenerUsuarioId(correo);
+      const autoActual = misAutos[indiceActual];
+
+      const registro = misRegistros.find(r => 
+        r.usuario_id === usuario_id && r.vehiculo_id === autoActual.id
+      );
+
+      if (!registro) {
+        alert('❌ No se encontró el registro para eliminar');
+        return;
+      }
+
+      const sb = await getSupabase();
+      const { error } = await sb
+        .from('mis_vehiculos')
+        .delete()
+        .eq('id', registro.id);
+
+      if (error) {
+        alert('❌ Error al eliminar: ' + error.message);
+        return;
+      }
+
+      misAutos.splice(indiceActual, 1);
+      misRegistros = misRegistros.filter(r => r.id !== registro.id);
+
+      if (misAutos.length === 0) {
+        mostrarVista();
+        return;
+      }
+
+      if (indiceActual >= misAutos.length) {
+        indiceActual = misAutos.length - 1;
+      }
+
+      mostrarUno(indiceActual);
+      alert('✅ Eliminado de tu lista');
+    }
+
+    async function iniciar() {
+      const haySesion = verificarSesion();
+      if (haySesion) {
+        await cargarMisVehiculos();
+      }
+    }
+
+    iniciar();
+  </script>
+
+</body>
+</html>
