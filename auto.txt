@@ -1,0 +1,4 @@
+https://cgwdahvstitjksphucqk.supabase.co/rest/v1/autos
+sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr
+
+Resend supabase

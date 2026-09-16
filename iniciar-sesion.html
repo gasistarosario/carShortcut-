@@ -159,7 +159,10 @@
   <script>
     const SUPABASE_URL = 'https://cgwdahvstitjksphucqk.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr';
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    // ✅ Acá está la corrección: usamos la variable que ya existe
+    const { createClient } = supabase;
+    const supabaseCliente = createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const formLogin = document.getElementById('formLogin');
     const btnEntrar = document.getElementById('btnEntrar');
@@ -174,21 +177,19 @@
       const contrasena = document.getElementById('contrasena').value;
 
       try {
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabaseCliente.auth.signInWithPassword({
           email: correo,
           password: contrasena
         });
 
         if (error) throw error;
 
-        // Éxito — guardamos el ID del usuario
         localStorage.setItem('usuario_id', data.user.id);
 
         mensaje.className = 'mensaje exito';
         mensaje.innerHTML = '✅ ¡Bienvenido! Redirigiendo...';
         mensaje.style.display = 'block';
 
-        // Ir a la página principal ya conectado
         setTimeout(() => {
           window.location.href = 'cargar.html';
         }, 1200);

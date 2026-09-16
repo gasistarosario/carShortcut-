@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cambiar Contraseña — Vehículos en Venta</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, 'Open Sans', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #dceaf5 0%, #cfe0ee 100%);
+      padding: 20px;
+      max-width: 500px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    h1 {
+      text-align: center;
+      color: #2c5282;
+      margin-bottom: 10px;
+      font-size: 24px;
+      font-weight: 800;
+    }
+    .subtitulo {
+      text-align: center;
+      color: #718096;
+      margin-bottom: 30px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .form-container {
+      background: #fff;
+      padding: 30px 25px;
+      border-radius: 18px;
+      box-shadow: 0 6px 20px rgba(44,82,130,0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #4a5568;
+      font-size: 15px;
+    }
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #c5d6e8;
+      border-radius: 12px;
+      font-size: 16px;
+      background: #fff;
+      color: #4a5568;
+      transition: all 0.25s ease;
+      margin-bottom: 20px;
+    }
+    input:focus {
+      outline: none;
+      border-color: #3182ce;
+      box-shadow: 0 0 0 4px rgba(49,130,206,0.12);
+    }
+    .boton {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #3182ce 0%, #2b6cb0 100%);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(49,130,206,0.15);
+    }
+    .boton:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(49,130,206,0.2);
+    }
+    .boton:disabled {
+      background: #a0aec0;
+      cursor: not-allowed;
+      transform: none;
+      opacity: 0.7;
+    }
+    .mensaje {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 1.5;
+      display: none;
+    }
+    .exito {
+      background: #f0f7ee;
+      color: #276749;
+      border: 1px solid #b8d8b9;
+    }
+    .error {
+      background: #fef2f2;
+      color: #c53030;
+      border: 1px solid #feb2b2;
+    }
+    .volver {
+      display: block;
+      text-align: center;
+      margin-top: 25px;
+      color: #3182ce;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 12px;
+      transition: all 0.2s ease;
+    }
+    .volver:hover {
+      color: #2b6cb0;
+      text-decoration: underline;
+    }
+    .info {
+      background: #ebf8ff;
+      padding: 14px;
+      border-radius: 10px;
+      margin-bottom: 22px;
+      color: #2c5282;
+      font-size: 14px;
+      border-left: 4px solid #3182ce;
+      line-height: 1.6;
+    }
+    .requisitos {
+      background: #f7fafc;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      color: #4a5568;
+      font-size: 13px;
+      line-height: 1.5;
+      list-style-position: inside;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔑 Cambiar Contraseña</h1>
+  <p class="subtitulo">Crea una nueva contraseña para acceder a tu cuenta</p>
+
+  <div class="form-container">
+    <div class="info">
+      ✍️ Ingresá tu nueva contraseña y confirmala. El enlace expira después de un tiempo.
+    </div>
+
+    <ul class="requisitos">
+      <li>Al menos 8 caracteres</li>
+      <li>Una mayúscula y una minúscula</li>
+      <li>Al menos un número</li>
+    </ul>
+
+    <form id="formCambiar">
+      <label for="nuevaContraseña">Nueva Contraseña</label>
+      <input type="password" id="nuevaContraseña" placeholder="Tu nueva contraseña" required>
+
+      <label for="confirmarContraseña">Confirmar Contraseña</label>
+      <input type="password" id="confirmarContraseña" placeholder="Volvé a escribirla" required>
+
+      <button type="submit" class="boton" id="btnCambiar">✅ Guardar Nueva Contraseña</button>
+      
+      <div id="mensaje" class="mensaje"></div>
+    </form>
+
+    <a href="iniciar-sesion.html" class="volver">← Volver a Iniciar Sesión</a>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://cgwdahvstitjksphucqk.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_gQicOTNud-uR22ur4-TJQw_hAgmkBfr";
+
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { timeout: 30000 });
+
+    // Obtener el token del enlace que llega por correo
+    function obtenerTokenDelEnlace() {
+      const params = new URLSearchParams(window.location.search);
+      return {
+        access_token: params.get('access_token'),
+        refresh_token: params.get('refresh_token')
+      };
+    }
+
+    document.getElementById('formCambiar').addEventListener('submit', async e => {
+      e.preventDefault();
+      
+      const nuevaPass = document.getElementById('nuevaContraseña').value;
+      const confirmarPass = document.getElementById('confirmarContraseña').value;
+      const btn = document.getElementById('btnCambiar');
+      const mensaje = document.getElementById('mensaje');
+      const tokens = obtenerTokenDelEnlace();
+
+      // Validar que los tokens existan (que el enlace sea válido)
+      if (!tokens.access_token || !tokens.refresh_token) {
+        mensaje.textContent = "❌ El enlace de recuperación no es válido o ya expiró";
+        mensaje.className = "mensaje error";
+        mensaje.style.display = "block";
+        btn.disabled = true;
+        return;
+      }
+
+      // Validar que las contraseñas coincidan
+      if (nuevaPass !== confirmarPass) {
+        mensaje.textContent = "❌ Las contraseñas no coinciden";
+        mensaje.className = "mensaje error";
+        mensaje.style.display = "block";
+        return;
+      }
+
+      // Validar requisitos de la contraseña
+      const passValida = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{8,}$/.test(nuevaPass);
+      if (!passValida) {
+        mensaje.textContent = "❌ La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número";
+        mensaje.className = "mensaje error";
+        mensaje.style.display = "block";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Guardando...";
+      mensaje.style.display = "none";
+
+      try {
+        // Establecer los tokens para autenticar la solicitud
+        supabase.auth.setSession({
+          access_token: tokens.access_token,
+          refresh_token: tokens.refresh_token
+        });
+
+        // Cambiar la contraseña
+        const { error } = await supabase.auth.updateUser({
+          password: nuevaPass
+        });
+
+        if (error) throw error;
+
+        mensaje.textContent = "✅ ¡Contraseña cambiada con éxito! Ahora podés iniciar sesión";
+        mensaje.className = "mensaje exito";
+        mensaje.style.display = "block";
+        document.getElementById('formCambiar').reset();
+        
+      } catch (err) {
+        mensaje.textContent = "❌ " + err.message;
+        mensaje.className = "mensaje error";
+        mensaje.style.display = "block";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "✅ Guardar Nueva Contraseña";
+      }
+    });
+  </script>
+</body>
+</html>
